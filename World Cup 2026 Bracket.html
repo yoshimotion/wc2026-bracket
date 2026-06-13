@@ -172,7 +172,7 @@ body{
 /* live standings highlights */
 .row.lv-adv{background:rgba(168,129,47,.07);}
 .row.lv-adv .st:last-child{color:var(--gold);font-weight:800;}
-.mv-pts{font-family:"Saira Condensed";font-weight:800;font-size:10px;color:var(--gold);margin-left:auto;padding-right:2px;}
+.mv-pts{font-family:"Saira Condensed";font-weight:800;font-size:12px;color:var(--gold);grid-row:1;align-self:center;text-align:right;white-space:nowrap;}
 @keyframes lvblink{0%,100%{opacity:1}50%{opacity:.3}}
 
 /* ---------- print ---------- */
@@ -207,10 +207,48 @@ body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
 .mv-gh{display:flex;align-items:center;height:20px;background:var(--ink);}
 .mv-gl{background:var(--gold);color:var(--ink);font-family:"Saira Condensed";font-weight:800;font-size:11px;width:20px;display:flex;align-items:center;justify-content:center;height:100%;flex-shrink:0;}
 .mv-gn{font-family:"Saira Condensed";font-weight:600;font-size:9.5px;letter-spacing:.06em;color:#fff;padding-left:6px;}
-.mv-row{display:flex;align-items:center;gap:5px;height:22px;padding:0 5px;border-top:1px solid var(--line-soft);}
-.mv-row img{width:15px;height:10px;object-fit:cover;border:.5px solid var(--line);border-radius:1px;flex-shrink:0;}
+.mv-row{display:grid;grid-template-columns:15px 1fr auto;gap:4px 5px;min-height:38px;padding:5px 5px 4px;border-top:1px solid var(--line-soft);cursor:pointer;transition:background .1s;align-items:center;}
+.mv-row:active{background:rgba(168,129,47,.1);}
+.mv-row img{width:15px;height:10px;object-fit:cover;border:.5px solid var(--line);border-radius:1px;grid-row:1;align-self:center;}
+.mv-ri{display:flex;flex-direction:column;gap:2px;}
 .mv-row .nm{font-family:"Saira";font-weight:600;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink);}
 .mv-row .tg{font-family:"Saira Condensed";font-weight:700;font-size:7px;color:var(--red);border:1px solid var(--red);border-radius:2px;padding:0 2px;flex-shrink:0;}
+.mv-stats{display:flex;align-items:baseline;gap:1px;flex-wrap:nowrap;}
+.mv-sv{font-family:"Saira Condensed";font-weight:700;font-size:9px;color:var(--ink-2);min-width:8px;text-align:center;}
+.mv-sk{font-family:"Saira";font-weight:400;font-size:7px;color:rgba(21,36,63,.38);margin-right:3px;}
+.mv-sdot{color:rgba(21,36,63,.25);font-size:7px;margin:0 2px;}
+/* bottom sheet */
+.mv-sheet{position:fixed;inset:0;z-index:200;pointer-events:none;}
+.mv-sheet.open{pointer-events:all;}
+.mv-sheet-bg{position:absolute;inset:0;background:rgba(0,0,0,0);transition:background .25s;}
+.mv-sheet.open .mv-sheet-bg{background:rgba(0,0,0,.55);}
+.mv-sheet-panel{position:absolute;bottom:0;left:0;right:0;background:var(--paper);border-radius:14px 14px 0 0;padding:0 0 32px;transform:translateY(100%);transition:transform .32s cubic-bezier(.32,.72,0,1);max-height:82vh;overflow-y:auto;}
+.mv-sheet.open .mv-sheet-panel{transform:translateY(0);}
+.mv-sh-drag{width:36px;height:4px;border-radius:2px;background:rgba(21,36,63,.18);margin:10px auto 0;}
+.mv-sh-head{display:flex;align-items:center;gap:12px;padding:14px 16px 12px;}
+.mv-sh-flag{width:40px;height:27px;object-fit:cover;border:.5px solid var(--line);border-radius:3px;flex-shrink:0;}
+.mv-sh-info{flex:1;}
+.mv-sh-name{font-family:"Saira Condensed";font-weight:800;font-size:24px;color:var(--ink);text-transform:uppercase;line-height:1;}
+.mv-sh-sub{font-family:"Saira";font-weight:500;font-size:11px;color:rgba(21,36,63,.5);margin-top:3px;}
+.mv-sh-close{background:rgba(21,36,63,.08);border:none;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--ink-2);font-size:16px;cursor:pointer;flex-shrink:0;line-height:1;}
+.mv-sh-stats{display:grid;grid-template-columns:repeat(8,1fr);margin:0 12px 16px;border:1px solid var(--line);border-radius:6px;overflow:hidden;}
+.mv-sh-stat{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:9px 2px;border-right:1px solid var(--line);}
+.mv-sh-stat:last-child{border-right:none;}
+.mv-sh-stat b{font-family:"Saira Condensed";font-weight:800;font-size:18px;color:var(--ink);}
+.mv-sh-stat span{font-family:"Saira Condensed";font-weight:600;font-size:7px;letter-spacing:.08em;text-transform:uppercase;color:rgba(21,36,63,.4);margin-top:1px;}
+.mv-sh-pts b{color:var(--gold);}
+.mv-sh-sec{font-family:"Saira Condensed";font-weight:700;font-size:9px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;padding:0 12px 8px;}
+.mv-sh-fx{margin:0 12px 8px;border:1px solid var(--line);border-radius:6px;overflow:hidden;}
+.mv-sh-frow{display:grid;grid-template-columns:16px 1fr auto;align-items:center;gap:8px;min-height:34px;padding:5px 10px;border-top:1px solid rgba(21,36,63,.09);}
+.mv-sh-frow:first-child{border-top:none;}
+.mv-sh-frow img{width:16px;height:11px;object-fit:cover;border:.5px solid rgba(21,36,63,.2);border-radius:1.5px;}
+.mv-sh-fmu{font-family:"Saira Condensed";font-weight:600;font-size:11.5px;color:var(--ink);}
+.mv-sh-fmu b{font-weight:800;}
+.mv-sh-fsc{font-family:"Saira Condensed";font-weight:800;font-size:13px;color:var(--ink-2);white-space:nowrap;}
+.mv-sh-fsc.win{color:#2d7a3a;}
+.mv-sh-fsc.loss{color:var(--red);}
+.mv-sh-fsc.draw{color:var(--ink-2);}
+.mv-sh-fsc.tbd{font-weight:400;font-size:10px;color:rgba(21,36,63,.35);}
 .mv-rounds{padding:0 8px 4px;background:#0f1c2e;display:flex;flex-direction:column;gap:6px;}
 .mv-round{background:var(--card);border:1px solid var(--line);overflow:hidden;}
 .mv-rh{display:flex;align-items:center;justify-content:space-between;background:var(--ink);color:#fff;height:24px;padding:0 10px;font-family:"Saira Condensed";font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;}
@@ -301,6 +339,24 @@ body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
 </div>
 
 <div class="mv" id="mv"></div>
+
+<div class="mv-sheet" id="mv-sheet">
+  <div class="mv-sheet-bg" id="mv-sheet-bg"></div>
+  <div class="mv-sheet-panel">
+    <div class="mv-sh-drag"></div>
+    <div class="mv-sh-head">
+      <img class="mv-sh-flag" id="mv-sh-flag" src="" alt="">
+      <div class="mv-sh-info">
+        <div class="mv-sh-name" id="mv-sh-name"></div>
+        <div class="mv-sh-sub" id="mv-sh-sub"></div>
+      </div>
+      <button class="mv-sh-close" id="mv-sh-close">✕</button>
+    </div>
+    <div class="mv-sh-stats" id="mv-sh-stats"></div>
+    <div class="mv-sh-sec">Group Stage Fixtures</div>
+    <div class="mv-sh-fx" id="mv-sh-fx"></div>
+  </div>
+</div>
 
 <script>
 window.WC = (function () {
@@ -537,10 +593,13 @@ window.WC = (function () {
       card.className="mv-grp";
       const rows=g.teams.map(t=>{
         const tag=t.tag?`<span class="tg">${t.tag}</span>`:"";
-        return `<div class="mv-row" data-mvcode="${t.code}"><img src="${flagUrl(t.iso)}" alt="${t.name}" loading="lazy"><span class="nm">${t.name}${tag}</span><span class="mv-pts"></span></div>`;
+        return `<div class="mv-row" data-mvcode="${t.code}"><img src="${flagUrl(t.iso)}" alt="${t.name}" loading="lazy"><div class="mv-ri"><span class="nm">${t.name}${tag}</span><div class="mv-stats"><span class="mv-sv" data-sv="W">–</span><span class="mv-sk">W</span><span class="mv-sv" data-sv="D">–</span><span class="mv-sk">D</span><span class="mv-sv" data-sv="L">–</span><span class="mv-sk">L</span><span class="mv-sdot">·</span><span class="mv-sv" data-sv="GF">–</span><span class="mv-sk">GF</span><span class="mv-sv" data-sv="GA">–</span><span class="mv-sk">GA</span></div></div><span class="mv-pts">–</span></div>`;
       }).join("");
       card.innerHTML=`<div class="mv-gh"><div class="mv-gl">${letter}</div><div class="mv-gn">Group ${letter}</div></div>${rows}`;
       card.dataset.mvgroup=letter;
+      card.querySelectorAll(".mv-row[data-mvcode]").forEach(row=>{
+        row.addEventListener("click",()=>openCountrySheet(row.dataset.mvcode));
+      });
       grpEl.appendChild(card);
     });
     const rdEl=document.getElementById("mv-rounds");
@@ -584,14 +643,28 @@ window.WC = (function () {
     document.head.appendChild(st);return true;
   }
 
+  let _standingsData=null, _events=[];
+
   async function fetchAndUpdateLive(){
     const badge=document.getElementById("lv-badge");
     if(badge)badge.className="lv-badge fetching";
     try {
-      const res=await fetch("https://site.api.espn.com/apis/v2/sports/soccer/fifa.world/standings");
-      if(!res.ok)throw new Error(res.status);
-      const data=await res.json();
-      (data.children||[]).forEach(grp=>{
+      const pad=n=>String(n).padStart(2,"0");
+      const fmt=d=>`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}`;
+      const today=new Date(), yesterday=new Date(today-864e5);
+      const [stdRes,sb1,sb2]=await Promise.all([
+        fetch("https://site.api.espn.com/apis/v2/sports/soccer/fifa.world/standings"),
+        fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${fmt(yesterday)}`).then(r=>r.json()).catch(()=>null),
+        fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${fmt(today)}`).then(r=>r.json()).catch(()=>null),
+      ]);
+      if(!stdRes.ok)throw new Error(stdRes.status);
+      _standingsData=await stdRes.json();
+      const seen=new Set();
+      _events=[...(sb1?.events||[]),...(sb2?.events||[])].filter(e=>{if(seen.has(e.id))return false;seen.add(e.id);return true;});
+
+      const get=(stats,name)=>{const s=(stats||[]).find(x=>x.name===name);return s!=null?Math.round(s.value):"";};
+
+      (_standingsData.children||[]).forEach(grp=>{
         const letter=(grp.name||"").replace("Group ","");
         if(!letter||letter.length>1)return;
         const entries=grp.standings?.entries||[];
@@ -599,11 +672,6 @@ window.WC = (function () {
           const rv=n=>((n.stats||[]).find(s=>s.name==="rank")?.value)||99;
           return rv(a)-rv(b);
         });
-        const get=(stats,name)=>{
-          const s=(stats||[]).find(x=>x.name===name);
-          return s!=null?Math.round(s.value):"";
-        };
-        // Desktop card
         const card=document.querySelector(`.grp[data-group="${letter}"]`);
         ranked.forEach(entry=>{
           const code=entry.team?.abbreviation;
@@ -622,39 +690,71 @@ window.WC = (function () {
               row.classList.toggle("lv-adv",rank>=1&&rank<=2);
             }
           }
-          // Mobile row
           const mvrow=document.querySelector(`.mv-row[data-mvcode="${code}"]`);
           if(mvrow){
-            const ptsEl=mvrow.querySelector(".mv-pts");
+            const sv=k=>{const el=mvrow.querySelector(`.mv-sv[data-sv="${k}"]`);if(el)el.textContent=get(st,k==="W"?"wins":k==="D"?"ties":k==="L"?"losses":k==="GF"?"pointsFor":"pointsAgainst");};
+            sv("W");sv("D");sv("L");sv("GF");sv("GA");
             const pts=get(st,"points");
-            if(ptsEl)ptsEl.textContent=pts!==""?pts+"pts":"";
+            const ptsEl=mvrow.querySelector(".mv-pts");
+            if(ptsEl)ptsEl.textContent=pts!==""?pts+"p":"–";
           }
         });
-        // Reorder desktop rows by rank
-        if(card){
-          ranked.forEach(entry=>{
-            const row=card.querySelector(`.row[data-code="${entry.team?.abbreviation}"]`);
-            if(row)card.appendChild(row);
-          });
-        }
-        // Reorder mobile rows by rank
+        if(card)ranked.forEach(e=>{const r=card.querySelector(`.row[data-code="${e.team?.abbreviation}"]`);if(r)card.appendChild(r);});
         const mvcard=document.querySelector(`.mv-grp[data-mvgroup="${letter}"]`);
-        if(mvcard){
-          ranked.forEach(entry=>{
-            const row=mvcard.querySelector(`.mv-row[data-mvcode="${entry.team?.abbreviation}"]`);
-            if(row)mvcard.appendChild(row);
-          });
-        }
+        if(mvcard)ranked.forEach(e=>{const r=mvcard.querySelector(`.mv-row[data-mvcode="${e.team?.abbreviation}"]`);if(r)mvcard.appendChild(r);});
       });
-      if(badge){
-        const t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
-        badge.textContent="Updated "+t;
-        badge.className="lv-badge";
-      }
-    } catch(e){
-      if(badge){badge.textContent="Live data unavailable";badge.className="lv-badge";}
-    }
+      if(badge){const t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});badge.textContent="Updated "+t;badge.className="lv-badge";}
+    } catch(e){if(badge){badge.textContent="Live data unavailable";badge.className="lv-badge";}}
   }
+
+  function openCountrySheet(code){
+    let teamInfo=null,groupLetter=null;
+    for(const[l,g]of Object.entries(WC.groups)){
+      const t=g.teams.find(t=>t.code===code);
+      if(t){teamInfo=t;groupLetter=l;break;}
+    }
+    if(!teamInfo)return;
+    const grpData=(_standingsData?.children||[]).find(g=>g.name===`Group ${groupLetter}`);
+    const entry=(grpData?.standings?.entries||[]).find(e=>e.team?.abbreviation===code);
+    const st=entry?.stats||[];
+    const get=n=>{const s=st.find(x=>x.name===n);return s!=null?Math.round(s.value):"–";};
+    const w=get("wins"),d=get("ties"),l=get("losses"),gf=get("pointsFor"),ga=get("pointsAgainst"),pts=get("points");
+    const pld=(w!=="–"&&d!=="–"&&l!=="–")?(+w+ +d+ +l):"–";
+    const gd=(gf!=="–"&&ga!=="–")?(gf-ga>=0?"+":"")+(gf-ga):"–";
+    document.getElementById("mv-sh-flag").src=`https://flagcdn.com/${teamInfo.iso}.svg`;
+    document.getElementById("mv-sh-name").textContent=teamInfo.name;
+    const subs=["Group "+groupLetter];if(teamInfo.tag)subs.push(teamInfo.tag);
+    document.getElementById("mv-sh-sub").textContent=subs.join(" · ");
+    const cols=[{l:"PLD",v:pld},{l:"W",v:w},{l:"D",v:d},{l:"L",v:l},{l:"GF",v:gf},{l:"GA",v:ga},{l:"GD",v:gd},{l:"PTS",v:pts,gold:true}];
+    document.getElementById("mv-sh-stats").innerHTML=cols.map(c=>`<div class="mv-sh-stat${c.gold?" mv-sh-pts":""}"><b>${c.v}</b><span>${c.l}</span></div>`).join("");
+    const opponents=WC.groups[groupLetter].teams.filter(t=>t.code!==code);
+    document.getElementById("mv-sh-fx").innerHTML=opponents.map(opp=>{
+      const ev=_events.find(e=>{
+        const abbrs=(e.competitions?.[0]?.competitors||[]).map(c=>c.team?.abbreviation);
+        return abbrs.includes(code)&&abbrs.includes(opp.code);
+      });
+      let scHTML;
+      if(ev&&ev.competitions?.[0]?.status?.type?.completed){
+        const comps=ev.competitions[0].competitors;
+        const me=comps.find(c=>c.team?.abbreviation===code);
+        const them=comps.find(c=>c.team?.abbreviation===opp.code);
+        const ms=parseInt(me?.score||0),ts=parseInt(them?.score||0);
+        const cls=ms>ts?"win":ms<ts?"loss":"draw";
+        scHTML=`<span class="mv-sh-fsc ${cls}">${ms}–${ts}</span>`;
+      } else {
+        scHTML=`<span class="mv-sh-fsc tbd">Scheduled</span>`;
+      }
+      return `<div class="mv-sh-frow"><img src="https://flagcdn.com/${opp.iso}.svg" alt="${opp.name}"><span class="mv-sh-fmu"><b>${teamInfo.name}</b> vs ${opp.name}</span>${scHTML}</div>`;
+    }).join("");
+    document.getElementById("mv-sheet").classList.add("open");
+  }
+
+  (function(){
+    const sheet=document.getElementById("mv-sheet");
+    const close=()=>sheet?.classList.remove("open");
+    document.getElementById("mv-sheet-bg")?.addEventListener("click",close);
+    document.getElementById("mv-sh-close")?.addEventListener("click",close);
+  })();
 
   function init(){buildBracket();buildMobileView();if(applyPrintLock())return;fitStage();setSize("letter");fetchAndUpdateLive();setInterval(fetchAndUpdateLive,60000);}
   if(document.readyState==="complete")init();else window.addEventListener("load",init);
