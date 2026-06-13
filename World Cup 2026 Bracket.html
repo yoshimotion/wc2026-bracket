@@ -258,6 +258,9 @@ body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
 .mv-sh-fsc.loss{color:var(--red);}
 .mv-sh-fsc.draw{color:var(--ink-2);}
 .mv-sh-fsc.tbd{font-weight:400;font-size:10px;color:rgba(21,36,63,.35);}
+.mv-sh-fdt{display:flex;flex-direction:column;align-items:flex-end;line-height:1.15;white-space:nowrap;}
+.mv-sh-fdt b{font-family:"Saira Condensed";font-weight:700;font-size:12px;color:var(--ink-2);}
+.mv-sh-fdt span{font-family:"Saira";font-weight:400;font-size:9px;color:rgba(21,36,63,.45);}
 .mv-rounds{padding:0 8px 4px;background:#0f1c2e;display:flex;flex-direction:column;gap:6px;}
 .mv-round{background:var(--card);border:1px solid var(--line);overflow:hidden;}
 .mv-rh{display:flex;align-items:center;justify-content:space-between;background:var(--ink);color:#fff;height:24px;padding:0 10px;font-family:"Saira Condensed";font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;}
@@ -505,6 +508,9 @@ window.WC = (function () {
       else if(!on&&star){star.remove();}
     });
   }
+
+  /* ---- group-stage fixture dates (all times PT), keyed by sorted team pair ---- */
+  const GFIX={"MEX|RSA":"Jun 11 · 12:00 PM","CZE|KOR":"Jun 11 · 7:00 PM","BIH|CAN":"Jun 12 · 12:00 PM","PAR|USA":"Jun 12 · 6:00 PM","QAT|SUI":"Jun 13 · 12:00 PM","BRA|MAR":"Jun 13 · 3:00 PM","HAI|SCO":"Jun 13 · 6:00 PM","AUS|TUR":"Jun 13 · 9:00 PM","CUW|GER":"Jun 14 · 10:00 AM","JPN|NED":"Jun 14 · 1:00 PM","CIV|ECU":"Jun 14 · 4:00 PM","SWE|TUN":"Jun 14 · 7:00 PM","CPV|ESP":"Jun 15 · 9:00 AM","BEL|EGY":"Jun 15 · 12:00 PM","KSA|URU":"Jun 15 · 3:00 PM","IRN|NZL":"Jun 15 · 6:00 PM","FRA|SEN":"Jun 16 · 12:00 PM","IRQ|NOR":"Jun 16 · 3:00 PM","ALG|ARG":"Jun 16 · 6:00 PM","AUT|JOR":"Jun 16 · 9:00 PM","COD|POR":"Jun 17 · 10:00 AM","CRO|ENG":"Jun 17 · 1:00 PM","GHA|PAN":"Jun 17 · 4:00 PM","COL|UZB":"Jun 17 · 7:00 PM","CZE|RSA":"Jun 18 · 9:00 AM","BIH|SUI":"Jun 18 · 12:00 PM","CAN|QAT":"Jun 18 · 3:00 PM","KOR|MEX":"Jun 18 · 6:00 PM","AUS|USA":"Jun 19 · 12:00 PM","MAR|SCO":"Jun 19 · 3:00 PM","BRA|HAI":"Jun 19 · 6:00 PM","PAR|TUR":"Jun 19 · 9:00 PM","NED|SWE":"Jun 20 · 10:00 AM","CIV|GER":"Jun 20 · 1:00 PM","CUW|ECU":"Jun 20 · 5:00 PM","JPN|TUN":"Jun 20 · 9:00 PM","ESP|KSA":"Jun 21 · 9:00 AM","BEL|IRN":"Jun 21 · 12:00 PM","CPV|URU":"Jun 21 · 3:00 PM","EGY|NZL":"Jun 21 · 6:00 PM","NOR|SEN":"Jun 22 · 5:00 PM","FRA|IRQ":"Jun 22 · 2:00 PM","ARG|AUT":"Jun 22 · 10:00 AM","ALG|JOR":"Jun 22 · 8:00 PM","ENG|GHA":"Jun 23 · 1:00 PM","CRO|PAN":"Jun 23 · 4:00 PM","POR|UZB":"Jun 23 · 10:00 AM","COD|COL":"Jun 23 · 7:00 PM","BRA|SCO":"Jun 24 · 3:00 PM","HAI|MAR":"Jun 24 · 3:00 PM","CAN|SUI":"Jun 24 · 12:00 PM","BIH|QAT":"Jun 24 · 12:00 PM","CZE|MEX":"Jun 24 · 6:00 PM","KOR|RSA":"Jun 24 · 6:00 PM","CIV|CUW":"Jun 25 · 1:00 PM","ECU|GER":"Jun 25 · 1:00 PM","JPN|SWE":"Jun 25 · 4:00 PM","NED|TUN":"Jun 25 · 4:00 PM","TUR|USA":"Jun 25 · 7:00 PM","AUS|PAR":"Jun 25 · 7:00 PM","BEL|NZL":"Jun 26 · 8:00 PM","EGY|IRN":"Jun 26 · 8:00 PM","ESP|URU":"Jun 26 · 5:00 PM","CPV|KSA":"Jun 26 · 5:00 PM","FRA|NOR":"Jun 26 · 12:00 PM","IRQ|SEN":"Jun 26 · 12:00 PM","ENG|PAN":"Jun 27 · 2:00 PM","CRO|GHA":"Jun 27 · 2:00 PM","ARG|JOR":"Jun 27 · 7:00 PM","ALG|AUT":"Jun 27 · 7:00 PM","COL|POR":"Jun 27 · 4:30 PM","COD|UZB":"Jun 27 · 4:30 PM"};
 
   const hostsEl=document.getElementById("hosts");
   hostsEl.innerHTML=WC.hosts.map((h)=>flagImg(h.iso)).join('<span class="dot"></span>')+'<span class="dot"></span><span>Host Nations</span>';
@@ -758,15 +764,17 @@ window.WC = (function () {
         return abbrs.includes(code)&&abbrs.includes(opp.code);
       });
       let scHTML;
-      if(ev&&ev.competitions?.[0]?.status?.type?.completed){
+      const stype=ev&&ev.competitions?.[0]?.status?.type;
+      if(stype&&(stype.completed||stype.state==="in")){
         const comps=ev.competitions[0].competitors;
         const me=comps.find(c=>c.team?.abbreviation===code);
         const them=comps.find(c=>c.team?.abbreviation===opp.code);
         const ms=parseInt(me?.score||0),ts=parseInt(them?.score||0);
-        const cls=ms>ts?"win":ms<ts?"loss":"draw";
+        const cls=stype.state==="in"?"":(ms>ts?"win":ms<ts?"loss":"draw");
         scHTML=`<span class="mv-sh-fsc ${cls}">${ms}–${ts}</span>`;
       } else {
-        scHTML=`<span class="mv-sh-fsc tbd">Scheduled</span>`;
+        const fx=GFIX[[code,opp.code].sort().join("|")];
+        scHTML=fx?`<span class="mv-sh-fdt"><b>${fx.split(" · ")[0]}</b><span>${fx.split(" · ")[1]} PT</span></span>`:`<span class="mv-sh-fsc tbd">TBD</span>`;
       }
       return `<div class="mv-sh-frow"><img src="https://flagcdn.com/${opp.iso}.svg" alt="${opp.name}"><span class="mv-sh-fmu"><b>${teamInfo.name}</b> vs ${opp.name}</span>${scHTML}</div>`;
     }).join("");
