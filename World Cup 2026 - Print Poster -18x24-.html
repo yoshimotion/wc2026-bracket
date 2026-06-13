@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>World Cup 2026 — Poster 18×24</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=Saira:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --paper:#f4efe4;
+  --card:#fdfbf5;
+  --ink:#15243f;
+  --ink-2:#27395a;
+  --gold:#a8812f;
+  --gold-bright:#c6a24f;
+  --red:#a8392c;
+  --line:rgba(21,36,63,.20);
+  --line-soft:rgba(21,36,63,.11);
+  --slot:rgba(21,36,63,.30);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:#2a2a2a;
+  font-family:"Saira",system-ui,sans-serif;
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+}
+/* ---------- screen stage ---------- */
+.stage{
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.poster{
+  width:1400px;height:1000px;flex:none;
+  background:
+    radial-gradient(120% 90% at 50% -10%, rgba(255,255,255,.6), transparent 60%),
+    var(--paper);
+  position:relative;
+  transform-origin:center center;
+  box-shadow:0 30px 80px rgba(0,0,0,.5);
+  padding:26px 30px 22px;
+  display:flex;flex-direction:column;
+  color:var(--ink);
+  print-color-adjust:exact;-webkit-print-color-adjust:exact;
+}
+/* hairline frame */
+.poster::before{
+  content:"";position:absolute;inset:13px;border:1px solid var(--gold);
+  opacity:.5;pointer-events:none;
+}
+.poster::after{
+  content:"";position:absolute;inset:17px;border:1px solid var(--line-soft);
+  pointer-events:none;
+}
+
+/* ---------- header ---------- */
+.head{display:flex;align-items:flex-end;justify-content:space-between;height:86px;position:relative;z-index:2;}
+.brand{display:flex;flex-direction:column;line-height:.86;}
+.kicker{
+  font-family:"Saira Condensed";font-weight:600;letter-spacing:.3em;font-size:10px;
+  color:var(--gold);text-transform:uppercase;margin:0 0 7px 2px;white-space:nowrap;
+}
+.title{
+  font-family:"Saira Condensed";font-weight:800;font-size:53px;letter-spacing:-.005em;
+  color:var(--ink);text-transform:uppercase;margin:0;display:block;white-space:nowrap;line-height:.86;
+}
+.title .yr{color:var(--gold);margin-left:13px;}
+.subline{
+  display:flex;align-items:center;gap:9px;margin:8px 0 0 3px;flex-wrap:nowrap;white-space:nowrap;
+  font-family:"Saira Condensed";font-weight:600;letter-spacing:.2em;font-size:12px;
+  text-transform:uppercase;color:var(--ink-2);
+}
+.subline .dot{width:3px;height:3px;border-radius:50%;background:var(--gold);}
+.subline img{width:21px;height:14px;object-fit:cover;border:.5px solid var(--line);border-radius:1.5px;vertical-align:middle;}
+.facts{display:flex;gap:26px;align-items:flex-end;padding-bottom:4px;}
+.fact{text-align:right;line-height:.9;}
+.fact b{font-family:"Saira Condensed";font-weight:800;font-size:34px;color:var(--ink);display:block;}
+.fact span{font-family:"Saira Condensed";font-weight:600;letter-spacing:.18em;font-size:10px;text-transform:uppercase;color:var(--gold);}
+.fact.span2{border-left:1px solid var(--line);padding-left:24px;text-align:left;}
+.fact.span2 b{font-size:20px;}
+.fact.span2 .r{font-family:"Saira";font-weight:500;font-size:12px;color:var(--ink-2);letter-spacing:0;text-transform:none;display:block;margin-top:2px;}
+
+.rule{height:2px;background:var(--ink);margin:11px 0 12px;position:relative;z-index:2;}
+.rule::after{content:"";position:absolute;left:0;top:0;height:2px;width:120px;background:var(--gold);}
+
+/* ---------- main 3 cols ---------- */
+.main{flex:1;display:grid;grid-template-columns:266px 1fr 266px;gap:14px;min-height:0;position:relative;z-index:2;}
+.col{display:flex;flex-direction:column;gap:9px;}
+
+/* group card */
+.grp{background:var(--card);border:1px solid var(--line);flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.grp-h{display:grid;grid-template-columns:26px 1fr repeat(6,15px);align-items:center;background:var(--ink);color:#fff;height:21px;padding:0;}
+.grp-h .gl{background:var(--gold);color:var(--ink);font-family:"Saira Condensed";font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;height:100%;}
+.grp-h .gn{font-family:"Saira Condensed";font-weight:700;font-size:12px;letter-spacing:.13em;text-transform:uppercase;padding-left:8px;}
+.grp-h .from{font-family:"Saira";font-weight:400;font-size:8.5px;color:rgba(255,255,255,.6);letter-spacing:.02em;margin-left:6px;text-transform:uppercase;}
+.grp-h .ch{font-family:"Saira Condensed";font-weight:600;font-size:8px;text-align:center;color:var(--gold-bright);letter-spacing:-.02em;}
+.row{display:grid;grid-template-columns:26px 1fr repeat(6,15px);align-items:center;flex:1;border-top:1px solid var(--line-soft);font-size:12px;}
+.row:first-child{border-top:none;}
+.row .fl{display:flex;align-items:center;justify-content:center;}
+.row .fl img{width:19px;height:13px;object-fit:cover;border:.5px solid var(--line);border-radius:1.5px;}
+.row .nm{font-family:"Saira";font-weight:600;font-size:12px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:4px;}
+.row .nm .tg{font-family:"Saira Condensed";font-weight:700;font-size:7.5px;letter-spacing:.08em;color:var(--red);border:1px solid var(--red);border-radius:2px;padding:0 3px;margin-left:5px;vertical-align:1px;}
+.row .st{border-left:1px solid var(--line-soft);height:100%;}
+
+/* ---------- bracket ---------- */
+.bracket-wrap{position:relative;display:flex;flex-direction:column;min-height:0;}
+.rounds{display:flex;justify-content:space-between;padding:0 2px 5px;}
+.rlbl{font-family:"Saira Condensed";font-weight:700;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);text-align:center;flex:1;}
+.rlbl.mid{color:var(--ink);font-weight:800;font-size:11px;}
+#bracket{position:relative;flex:1;}
+#wires{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
+.match{position:absolute;width:66px;background:var(--card);border:1px solid var(--line);}
+.slot{height:22px;display:flex;align-items:center;border-bottom:1px solid var(--slot);position:relative;}
+.slot:last-child{border-bottom:none;}
+.slot.div{border-top:1px solid var(--line-soft);}
+.guide{font-family:"Saira Condensed";font-weight:600;font-size:8px;letter-spacing:.02em;color:var(--gold);padding-left:4px;white-space:nowrap;opacity:.9;}
+.score{position:absolute;right:0;top:0;bottom:0;width:13px;border-left:1px solid var(--line-soft);background:rgba(21,36,63,.025);}
+.mno{position:absolute;top:-9px;left:50%;transform:translateX(-50%);font-family:"Saira Condensed";font-weight:600;font-size:7px;color:var(--ink-2);background:var(--paper);padding:0 3px;letter-spacing:.04em;}
+
+.match.big{width:124px;border:1.5px solid var(--gold);background:#fff;box-shadow:0 3px 12px rgba(168,129,47,.18);}
+.match.big .slot{height:25px;}
+.final-cap{position:absolute;left:50%;transform:translateX(-50%);text-align:center;white-space:nowrap;}
+.final-cap .fl{font-family:"Saira Condensed";font-weight:800;font-size:15px;letter-spacing:.18em;color:var(--ink);}
+.final-cap .fd{font-family:"Saira";font-weight:500;font-size:8.5px;color:var(--gold);letter-spacing:.04em;margin-top:2px;}
+
+.champ{position:absolute;left:50%;transform:translateX(-50%);width:188px;text-align:center;}
+.champ .cl{font-family:"Saira Condensed";font-weight:700;font-size:9px;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:4px;}
+.champ .cb{height:36px;border:1.5px solid var(--ink);background:#fff;display:flex;align-items:center;justify-content:center;}
+.champ .star{color:var(--gold);font-size:9px;letter-spacing:.3em;}
+
+.third{position:absolute;left:50%;transform:translateX(-50%);width:120px;text-align:center;}
+.third .tl{font-family:"Saira Condensed";font-weight:700;font-size:8px;letter-spacing:.12em;color:var(--ink-2);text-transform:uppercase;margin-bottom:3px;}
+.third .tb{border:1px solid var(--line);background:var(--card);}
+
+/* ---------- footer ---------- */
+.foot{margin-top:11px;display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:stretch;position:relative;z-index:2;border-top:2px solid var(--ink);padding-top:8px;}
+.foot-block{padding-top:0;}
+.fb-title{font-family:"Saira Condensed";font-weight:700;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.legend{display:flex;flex-direction:column;gap:3px;width:228px;}
+.lg-rule{display:flex;align-items:center;gap:6px;font-family:"Saira";font-size:9.5px;color:var(--ink-2);}
+.lg-rule b{font-family:"Saira Condensed";font-weight:700;color:var(--ink);width:9px;text-align:center;}
+.lg-key{display:grid;grid-template-columns:1fr 1fr;gap:1px 12px;margin-top:5px;font-family:"Saira";font-size:8.5px;color:var(--ink-2);}
+.lg-key span b{color:var(--ink);font-weight:700;}
+
+.cities{display:grid;grid-template-columns:repeat(8,1fr);gap:5px 8px;}
+.city{display:flex;align-items:center;gap:5px;}
+.city img{width:17px;height:11px;object-fit:cover;border:.5px solid var(--line);border-radius:1px;flex:none;}
+.city span{font-family:"Saira";font-weight:500;font-size:9.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+.dates{display:flex;flex-direction:column;gap:5px;width:182px;}
+.dt{border-bottom:1px solid var(--line-soft);padding-bottom:3px;}
+.dt .dl{display:block;font-family:"Saira Condensed";font-weight:600;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);}
+.dt .dv{display:flex;align-items:baseline;justify-content:space-between;gap:8px;}
+.dt .dv b{font-family:"Saira Condensed";font-weight:800;font-size:14px;color:var(--ink);white-space:nowrap;}
+.dt .dv small{font-family:"Saira";font-weight:500;font-size:8.5px;color:var(--ink-2);white-space:nowrap;}
+
+/* ---------- control bar (screen only) ---------- */
+.bar{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:50;display:flex;gap:6px;align-items:center;
+  background:rgba(20,28,46,.92);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.12);border-radius:11px;padding:6px 7px;box-shadow:0 8px 30px rgba(0,0,0,.4);}
+.bar .lab{font-family:"Saira Condensed";font-weight:600;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.55);padding:0 6px 0 4px;}
+.bar button{font-family:"Saira Condensed";font-weight:700;font-size:12px;letter-spacing:.05em;color:rgba(255,255,255,.75);background:transparent;border:1px solid transparent;border-radius:7px;padding:6px 11px;cursor:pointer;text-transform:uppercase;transition:.15s;}
+.bar button:hover{color:#fff;background:rgba(255,255,255,.08);}
+.bar button.on{background:var(--gold);color:var(--ink);border-color:var(--gold);}
+.bar .sep{width:1px;height:20px;background:rgba(255,255,255,.15);margin:0 3px;}
+.bar .print{background:var(--gold);color:var(--ink);}
+.bar .print:hover{background:var(--gold-bright);color:var(--ink);}
+
+/* ---------- print ---------- */
+@media print{
+  body{background:#fff;}
+  .bar{display:none!important;}
+  .stage{position:static;display:block;overflow:visible;transform:none!important;}
+  .poster{margin:0;box-shadow:none;transform-origin:top left;position:absolute;top:0;left:0;}
+  body.size-letter  .poster{transform:translate(0,0) scale(.713)!important;}
+  body.size-tabloid .poster{transform:translate(88px,0) scale(.998)!important;}
+  body.size-poster  .poster{transform:translate(0,0) scale(1.605)!important;}
+}
+/* ---------- export mode (high-res capture) ---------- */
+body.exporting{background:#fff;}
+body.exporting .bar{display:none!important;}
+body.exporting .stage{position:static;display:block;overflow:visible;height:auto;align-items:flex-start;justify-content:flex-start;}
+body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
+</style>
+</head>
+<body class="size-letter">
+
+<div class="bar">
+  <span class="lab">Print size</span>
+  <button data-size="letter" class="on">Letter 8.5×11</button>
+  <button data-size="tabloid">Tabloid 11×17</button>
+  <button data-size="poster">Poster 18×24</button>
+  <span class="sep"></span>
+  <button class="print" onclick="window.print()">Print / PDF</button>
+</div>
+
+<div class="stage">
+  <div class="poster" id="poster">
+    <header class="head">
+      <div class="brand">
+        <p class="kicker">Official Wall Bracket &amp; Group Guide</p>
+        <h1 class="title"><span class="wc">World Cup</span> <span class="yr">2026</span></h1>
+        <div class="subline" id="hosts"></div>
+      </div>
+      <div class="facts">
+        <div class="fact"><b>48</b><span>Teams</span></div>
+        <div class="fact"><b>104</b><span>Matches</span></div>
+        <div class="fact"><b>16</b><span>Host Cities</span></div>
+        <div class="fact span2"><b>Jun 11 – Jul 19</b><span class="r">United States · Canada · Mexico</span></div>
+      </div>
+    </header>
+    <div class="rule"></div>
+
+    <div class="main">
+      <div class="col" id="colL"></div>
+
+      <div class="bracket-wrap">
+        <div class="rounds" id="rounds"></div>
+        <div id="bracket">
+          <svg id="wires"></svg>
+        </div>
+      </div>
+
+      <div class="col" id="colR"></div>
+    </div>
+
+    <footer class="foot">
+      <div class="foot-block">
+        <div class="fb-title">How it works</div>
+        <div class="legend">
+          <div class="lg-rule"><b>3</b> points for a win · <b>1</b> for a draw · <b>0</b> for a loss</div>
+          <div class="lg-rule" style="color:var(--ink)">Top 2 of each group + 8 best 3rd-place teams reach the Round of 32</div>
+          <div class="lg-key">
+            <span><b>W</b> Wins · <b>D</b> Draws · <b>L</b> Losses</span>
+            <span><b>GF</b> Goals For · <b>GA</b> Against</span>
+            <span><b>GD</b> Goal Difference</span>
+            <span><b>PTS</b> Points</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="foot-block">
+        <div class="fb-title">16 Host Cities</div>
+        <div class="cities" id="cities"></div>
+      </div>
+
+      <div class="foot-block">
+        <div class="fb-title">Key Dates</div>
+        <div class="dates" id="dates"></div>
+      </div>
+    </footer>
+  </div>
+</div>
+
+<script>window.__PRINTLOCK={size:"24in 18in",s:1.645714,tx:0,ty:41.143};</script>
+<script src="wc-data.js"></script>
+<script src="render.js"></script>
+</body>
+</html>

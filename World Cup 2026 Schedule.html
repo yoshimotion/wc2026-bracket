@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+<title>World Cup 2026 — Match Schedule</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=Saira:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --paper:#f4efe4; --card:#fdfbf5; --ink:#15243f; --ink-2:#27395a;
+  --gold:#a8812f; --gold-bright:#c6a24f; --red:#a8392c;
+  --line:rgba(21,36,63,.20); --line-soft:rgba(21,36,63,.11);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:#2a2a2a;font-family:"Saira",system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;}
+.stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.poster{
+  width:1400px;height:1000px;flex:none;
+  background:radial-gradient(120% 90% at 50% -10%, rgba(255,255,255,.6), transparent 60%),var(--paper);
+  position:relative;transform-origin:center center;box-shadow:0 30px 80px rgba(0,0,0,.5);
+  padding:26px 30px 22px;display:flex;flex-direction:column;color:var(--ink);
+  print-color-adjust:exact;-webkit-print-color-adjust:exact;
+}
+.poster::before{content:"";position:absolute;inset:13px;border:1px solid var(--gold);opacity:.5;pointer-events:none;}
+.poster::after{content:"";position:absolute;inset:17px;border:1px solid var(--line-soft);pointer-events:none;}
+
+/* header */
+.head{display:flex;align-items:flex-end;justify-content:space-between;height:80px;position:relative;z-index:2;}
+.brand{display:flex;flex-direction:column;line-height:.86;}
+.kicker{font-family:"Saira Condensed";font-weight:600;letter-spacing:.3em;font-size:10px;color:var(--gold);text-transform:uppercase;margin:0 0 7px 2px;white-space:nowrap;}
+.title{font-family:"Saira Condensed";font-weight:800;font-size:50px;letter-spacing:-.005em;color:var(--ink);text-transform:uppercase;margin:0;white-space:nowrap;line-height:.86;}
+.title .yr{color:var(--gold);margin-left:13px;}
+.subline{display:flex;align-items:center;gap:9px;margin:9px 0 0 3px;white-space:nowrap;font-family:"Saira Condensed";font-weight:600;letter-spacing:.2em;font-size:12px;text-transform:uppercase;color:var(--ink-2);}
+.subline .dot{width:3px;height:3px;border-radius:50%;background:var(--gold);}
+.subline img{width:21px;height:14px;object-fit:cover;border:.5px solid var(--line);border-radius:1.5px;}
+.facts{display:flex;gap:24px;align-items:flex-end;padding-bottom:4px;}
+.fact{text-align:right;line-height:.9;}
+.fact b{font-family:"Saira Condensed";font-weight:800;font-size:30px;color:var(--ink);display:block;}
+.fact span{font-family:"Saira Condensed";font-weight:600;letter-spacing:.16em;font-size:9.5px;text-transform:uppercase;color:var(--gold);}
+.fact.span2{border-left:1px solid var(--line);padding-left:22px;text-align:left;}
+.fact.span2 b{font-size:19px;}
+.fact.span2 .r{font-family:"Saira";font-weight:500;font-size:11px;color:var(--ink-2);letter-spacing:0;text-transform:none;display:block;margin-top:3px;}
+.rule{height:2px;background:var(--ink);margin:10px 0 9px;position:relative;z-index:2;}
+.rule::after{content:"";position:absolute;left:0;top:0;height:2px;width:120px;background:var(--gold);}
+
+/* body */
+.body{flex:1;display:flex;flex-direction:column;min-height:0;position:relative;z-index:2;gap:9px;}
+.sec-h{display:flex;align-items:baseline;gap:14px;margin-bottom:3px;}
+.sec-h .t{font-family:"Saira Condensed";font-weight:800;font-size:15px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);white-space:nowrap;flex:none;}
+.sec-h .s{font-family:"Saira";font-weight:500;font-size:10px;color:var(--ink-2);letter-spacing:.02em;}
+.sec-h .ln{flex:1;height:1px;background:var(--line);}
+
+/* group grid */
+.groups{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:1fr;gap:8px 10px;flex:none;}
+.gcard{background:var(--card);border:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden;}
+.gc-h{display:flex;align-items:center;background:var(--ink);color:#fff;height:19px;}
+.gc-h .gl{background:var(--gold);color:var(--ink);font-family:"Saira Condensed";font-weight:800;font-size:12px;width:22px;display:flex;align-items:center;justify-content:center;height:100%;}
+.gc-h .gn{font-family:"Saira Condensed";font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding-left:8px;white-space:nowrap;}
+.fx{display:grid;grid-template-columns:16px 104px 1fr auto;align-items:center;gap:5px;height:21px;border-top:1px solid var(--line-soft);padding:0 7px 0 5px;}
+.fx .mno{font-family:"Saira Condensed";font-weight:600;font-size:8px;color:var(--gold);text-align:center;}
+.fx .dt{display:flex;align-items:baseline;gap:6px;white-space:nowrap;line-height:1;}
+.fx .dt .d{font-family:"Saira Condensed";font-weight:700;font-size:9px;color:var(--ink);letter-spacing:.02em;}
+.fx .dt .tm{font-family:"Saira";font-weight:600;font-size:8.5px;color:var(--ink-2);display:inline;white-space:nowrap;margin-left:7px;}
+.fx .mu{display:flex;align-items:center;gap:4px;min-width:0;}
+.fx .mu img{width:16px;height:11px;object-fit:cover;border:.5px solid var(--line);border-radius:1.5px;flex:none;}
+.fx .mu .c{font-family:"Saira Condensed";font-weight:700;font-size:10px;color:var(--ink);letter-spacing:.02em;}
+.fx .mu .v{font-family:"Saira";font-weight:400;font-size:8px;color:var(--gold);font-style:italic;margin:0 1px;}
+.fx .cty{font-family:"Saira";font-weight:500;font-size:8.5px;color:var(--ink-2);white-space:nowrap;text-align:right;}
+
+/* knockout */
+.knock{display:grid;grid-template-columns:repeat(4,1fr);gap:8px 10px;flex:1;min-height:0;}
+.kcol{display:flex;flex-direction:column;gap:6px;}
+.kblock{background:var(--card);border:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden;}
+.kblock.feat{border:1.5px solid var(--gold);background:#fff;box-shadow:0 3px 12px rgba(168,129,47,.16);}
+.kb-h{display:flex;align-items:center;justify-content:space-between;gap:6px;background:var(--ink);color:#fff;height:19px;padding:0 8px;}
+.kblock.feat .kb-h{background:var(--gold);color:var(--ink);}
+.kb-h .kt{font-family:"Saira Condensed";font-weight:700;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;flex:none;}
+.kb-h .kd{font-family:"Saira";font-weight:500;font-size:8.5px;color:rgba(255,255,255,.6);letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kblock.feat .kb-h .kd{color:rgba(21,36,63,.65);}
+.kfx{display:grid;grid-template-columns:18px 100px 1fr auto;align-items:center;gap:5px;height:22px;border-top:1px solid var(--line-soft);padding:0 8px 0 5px;}
+.kfx .mno{font-family:"Saira Condensed";font-weight:700;font-size:8.5px;color:var(--gold);text-align:center;}
+.kfx .dt{display:flex;align-items:baseline;gap:6px;white-space:nowrap;line-height:1;}
+.kfx .dt .d{font-family:"Saira Condensed";font-weight:700;font-size:9px;color:var(--ink);}
+.kfx .dt .tm{font-family:"Saira";font-weight:600;font-size:8px;color:var(--ink-2);display:inline;white-space:nowrap;margin-left:7px;}
+.kfx .mu{font-family:"Saira Condensed";font-weight:700;font-size:9.5px;color:var(--ink);letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kfx .mu .v{color:var(--gold);font-weight:600;margin:0 3px;}
+.kfx .cty{font-family:"Saira";font-weight:500;font-size:8.5px;color:var(--ink-2);white-space:nowrap;text-align:right;}
+.kfx.tall{height:30px;}
+
+/* footer note */
+.note{margin-top:9px;display:flex;align-items:center;justify-content:space-between;gap:16px;border-top:2px solid var(--ink);padding-top:7px;position:relative;z-index:2;}
+.note .l{font-family:"Saira Condensed";font-weight:700;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);}
+.note .r{font-family:"Saira";font-weight:500;font-size:9px;color:var(--ink-2);letter-spacing:.02em;}
+
+/* control bar */
+.bar{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:50;display:flex;gap:6px;align-items:center;background:rgba(20,28,46,.92);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.12);border-radius:11px;padding:6px 7px;box-shadow:0 8px 30px rgba(0,0,0,.4);}
+.bar .lab{font-family:"Saira Condensed";font-weight:600;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.55);padding:0 6px 0 4px;}
+.bar button{font-family:"Saira Condensed";font-weight:700;font-size:12px;letter-spacing:.05em;color:rgba(255,255,255,.75);background:transparent;border:1px solid transparent;border-radius:7px;padding:6px 11px;cursor:pointer;text-transform:uppercase;transition:.15s;}
+.bar button:hover{color:#fff;background:rgba(255,255,255,.08);}
+.bar button.on{background:var(--gold);color:var(--ink);border-color:var(--gold);}
+.bar .sep{width:1px;height:20px;background:rgba(255,255,255,.15);margin:0 3px;}
+.bar .print{background:var(--gold);color:var(--ink);}
+.bar .print:hover{background:var(--gold-bright);color:var(--ink);}
+
+@media print{
+  body{background:#fff;}
+  .bar{display:none!important;}
+  .stage{position:static;display:block;overflow:visible;transform:none!important;}
+  .poster{margin:0;box-shadow:none;transform-origin:top left;position:absolute;top:0;left:0;}
+  body.size-letter  .poster{transform:translate(0,0) scale(.713)!important;}
+  body.size-tabloid .poster{transform:translate(88px,0) scale(.998)!important;}
+  body.size-poster  .poster{transform:translate(0,0) scale(1.605)!important;}
+}
+body.exporting{background:#fff;}
+body.exporting .bar{display:none!important;}
+body.exporting .stage{position:static;display:block;overflow:visible;height:auto;align-items:flex-start;justify-content:flex-start;}
+body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
+/* ---------- mobile ---------- */
+@media(max-width:899px){
+  html,body{overflow-x:hidden;overflow-y:auto;height:auto;}
+  .stage{position:static!important;display:block!important;overflow:visible!important;height:auto!important;}
+  .poster{transform:none!important;transform-origin:top left!important;box-shadow:0 4px 24px rgba(0,0,0,.35)!important;}
+  .bar{position:fixed;bottom:0;left:0;right:0;width:100%;border-radius:0;transform:none!important;
+    justify-content:center;flex-wrap:wrap;gap:3px;padding:6px 6px 8px;
+    background:rgba(15,22,40,.96);}
+  .bar .lab,.bar .sep{display:none;}
+  .bar button{padding:5px 10px;font-size:11px;}
+}
+</style>
+</head>
+<body class="size-letter">
+
+<div class="bar">
+  <span class="lab">Print size</span>
+  <button data-size="letter" class="on">Letter 8.5×11</button>
+  <button data-size="tabloid">Tabloid 11×17</button>
+  <button data-size="poster">Poster 18×24</button>
+  <span class="sep"></span>
+  <button class="print" onclick="window.print()">Print / PDF</button>
+</div>
+
+<div class="stage">
+  <div class="poster" id="poster">
+    <header class="head">
+      <div class="brand">
+        <p class="kicker">Complete Fixture List &amp; Kickoff Times</p>
+        <h1 class="title">World Cup <span class="yr">2026</span> · Schedule</h1>
+        <div class="subline" id="hosts"></div>
+      </div>
+      <div class="facts">
+        <div class="fact"><b>104</b><span>Matches</span></div>
+        <div class="fact"><b>39</b><span>Days</span></div>
+        <div class="fact span2"><b>All times Pacific (PT)</b><span class="r">Jun 11 – Jul 19, 2026 · USA · Canada · Mexico</span></div>
+      </div>
+    </header>
+    <div class="rule"></div>
+
+    <div class="body">
+      <div>
+        <div class="sec-h"><span class="t">Group Stage</span><span class="s">72 matches · Jun 11 – 27 · top 2 of each group + 8 best 3rd-place teams advance</span><span class="ln"></span></div>
+        <div class="groups" id="groups"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;flex:1;min-height:0;">
+        <div class="sec-h"><span class="t">Knockout Stage</span><span class="s">32 matches · Jun 28 – Jul 19 · single elimination</span><span class="ln"></span></div>
+        <div class="knock" id="knock"></div>
+      </div>
+    </div>
+
+    <div class="note">
+      <span class="l">★ Round-of-32 onward · winners advance · numbers = official FIFA match no.</span>
+      <span class="r" id="legend"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+window.WCS = (function () {
+  const ISO = {
+    MEX:"mx",RSA:"za",KOR:"kr",CZE:"cz",CAN:"ca",BIH:"ba",QAT:"qa",SUI:"ch",
+    BRA:"br",MAR:"ma",HAI:"ht",SCO:"gb-sct",USA:"us",PAR:"py",AUS:"au",TUR:"tr",
+    GER:"de",CUW:"cw",CIV:"ci",ECU:"ec",NED:"nl",JPN:"jp",SWE:"se",TUN:"tn",
+    BEL:"be",EGY:"eg",IRN:"ir",NZL:"nz",ESP:"es",CPV:"cv",KSA:"sa",URU:"uy",
+    FRA:"fr",SEN:"sn",IRQ:"iq",NOR:"no",ARG:"ar",ALG:"dz",AUT:"at",JOR:"jo",
+    POR:"pt",COD:"cd",UZB:"uz",COL:"co",ENG:"gb-eng",CRO:"hr",GHA:"gh",PAN:"pa",
+  };
+  const NAME = {
+    MEX:"Mexico",RSA:"South Africa",KOR:"South Korea",CZE:"Czechia",CAN:"Canada",
+    BIH:"Bosnia & H.",QAT:"Qatar",SUI:"Switzerland",BRA:"Brazil",MAR:"Morocco",
+    HAI:"Haiti",SCO:"Scotland",USA:"United States",PAR:"Paraguay",AUS:"Australia",
+    TUR:"Türkiye",GER:"Germany",CUW:"Curaçao",CIV:"Côte d'Ivoire",ECU:"Ecuador",
+    NED:"Netherlands",JPN:"Japan",SWE:"Sweden",TUN:"Tunisia",BEL:"Belgium",
+    EGY:"Egypt",IRN:"Iran",NZL:"New Zealand",ESP:"Spain",CPV:"Cabo Verde",
+    KSA:"Saudi Arabia",URU:"Uruguay",FRA:"France",SEN:"Senegal",IRQ:"Iraq",
+    NOR:"Norway",ARG:"Argentina",ALG:"Algeria",AUT:"Austria",JOR:"Jordan",
+    POR:"Portugal",COD:"DR Congo",UZB:"Uzbekistan",COL:"Colombia",ENG:"England",
+    CRO:"Croatia",GHA:"Ghana",PAN:"Panama",
+  };
+  const M = [
+    [1,"Jun 11","Thu","12:00 PM","A","MEX","RSA","Mexico City"],
+    [2,"Jun 11","Thu","7:00 PM","A","KOR","CZE","Guadalajara"],
+    [3,"Jun 12","Fri","12:00 PM","B","CAN","BIH","Toronto"],
+    [4,"Jun 12","Fri","6:00 PM","D","USA","PAR","Los Angeles"],
+    [5,"Jun 13","Sat","12:00 PM","B","QAT","SUI","SF Bay Area"],
+    [6,"Jun 13","Sat","3:00 PM","C","BRA","MAR","New York/NJ"],
+    [7,"Jun 13","Sat","6:00 PM","C","HAI","SCO","Boston"],
+    [8,"Jun 13","Sat","9:00 PM","D","AUS","TUR","Vancouver"],
+    [9,"Jun 14","Sun","10:00 AM","E","GER","CUW","Houston"],
+    [10,"Jun 14","Sun","1:00 PM","F","NED","JPN","Dallas"],
+    [11,"Jun 14","Sun","4:00 PM","E","CIV","ECU","Philadelphia"],
+    [12,"Jun 14","Sun","7:00 PM","F","SWE","TUN","Monterrey"],
+    [13,"Jun 15","Mon","9:00 AM","H","ESP","CPV","Atlanta"],
+    [14,"Jun 15","Mon","12:00 PM","G","BEL","EGY","Seattle"],
+    [15,"Jun 15","Mon","3:00 PM","H","KSA","URU","Miami"],
+    [16,"Jun 15","Mon","6:00 PM","G","IRN","NZL","Los Angeles"],
+    [17,"Jun 16","Tue","12:00 PM","I","FRA","SEN","New York/NJ"],
+    [18,"Jun 16","Tue","3:00 PM","I","IRQ","NOR","Boston"],
+    [19,"Jun 16","Tue","6:00 PM","J","ARG","ALG","Kansas City"],
+    [20,"Jun 16","Tue","9:00 PM","J","AUT","JOR","SF Bay Area"],
+    [21,"Jun 17","Wed","10:00 AM","K","POR","COD","Houston"],
+    [22,"Jun 17","Wed","1:00 PM","L","ENG","CRO","Dallas"],
+    [23,"Jun 17","Wed","4:00 PM","L","GHA","PAN","Toronto"],
+    [24,"Jun 17","Wed","7:00 PM","K","UZB","COL","Mexico City"],
+    [25,"Jun 18","Thu","9:00 AM","A","CZE","RSA","Atlanta"],
+    [26,"Jun 18","Thu","12:00 PM","B","SUI","BIH","Los Angeles"],
+    [27,"Jun 18","Thu","3:00 PM","B","CAN","QAT","Vancouver"],
+    [28,"Jun 18","Thu","6:00 PM","A","MEX","KOR","Guadalajara"],
+    [29,"Jun 19","Fri","12:00 PM","D","USA","AUS","Seattle"],
+    [30,"Jun 19","Fri","3:00 PM","C","SCO","MAR","Boston"],
+    [31,"Jun 19","Fri","6:00 PM","C","BRA","HAI","Philadelphia"],
+    [32,"Jun 19","Fri","9:00 PM","D","TUR","PAR","SF Bay Area"],
+    [33,"Jun 20","Sat","10:00 AM","F","NED","SWE","Houston"],
+    [34,"Jun 20","Sat","1:00 PM","E","GER","CIV","Toronto"],
+    [35,"Jun 20","Sat","5:00 PM","E","ECU","CUW","Kansas City"],
+    [36,"Jun 20","Sat","9:00 PM","F","TUN","JPN","Monterrey"],
+    [37,"Jun 21","Sun","9:00 AM","H","ESP","KSA","Atlanta"],
+    [38,"Jun 21","Sun","12:00 PM","G","BEL","IRN","Los Angeles"],
+    [39,"Jun 21","Sun","3:00 PM","H","URU","CPV","Miami"],
+    [40,"Jun 21","Sun","6:00 PM","G","NZL","EGY","Vancouver"],
+    [41,"Jun 22","Mon","5:00 PM","I","NOR","SEN","New York/NJ"],
+    [42,"Jun 22","Mon","2:00 PM","I","FRA","IRQ","Philadelphia"],
+    [43,"Jun 22","Mon","10:00 AM","J","ARG","AUT","Dallas"],
+    [44,"Jun 22","Mon","8:00 PM","J","JOR","ALG","SF Bay Area"],
+    [45,"Jun 23","Tue","1:00 PM","L","ENG","GHA","Boston"],
+    [46,"Jun 23","Tue","4:00 PM","L","PAN","CRO","Toronto"],
+    [47,"Jun 23","Tue","10:00 AM","K","POR","UZB","Houston"],
+    [48,"Jun 23","Tue","7:00 PM","K","COL","COD","Guadalajara"],
+    [49,"Jun 24","Wed","3:00 PM","C","SCO","BRA","Miami"],
+    [50,"Jun 24","Wed","3:00 PM","C","MAR","HAI","Atlanta"],
+    [51,"Jun 24","Wed","12:00 PM","B","SUI","CAN","Vancouver"],
+    [52,"Jun 24","Wed","12:00 PM","B","BIH","QAT","Seattle"],
+    [53,"Jun 24","Wed","6:00 PM","A","CZE","MEX","Mexico City"],
+    [54,"Jun 24","Wed","6:00 PM","A","RSA","KOR","Monterrey"],
+    [55,"Jun 25","Thu","1:00 PM","E","CUW","CIV","Philadelphia"],
+    [56,"Jun 25","Thu","1:00 PM","E","ECU","GER","New York/NJ"],
+    [57,"Jun 25","Thu","4:00 PM","F","JPN","SWE","Dallas"],
+    [58,"Jun 25","Thu","4:00 PM","F","TUN","NED","Kansas City"],
+    [59,"Jun 25","Thu","7:00 PM","D","TUR","USA","Los Angeles"],
+    [60,"Jun 25","Thu","7:00 PM","D","PAR","AUS","SF Bay Area"],
+    [61,"Jun 26","Fri","8:00 PM","G","NZL","BEL","Vancouver"],
+    [62,"Jun 26","Fri","8:00 PM","G","EGY","IRN","Seattle"],
+    [63,"Jun 26","Fri","5:00 PM","H","URU","ESP","Guadalajara"],
+    [64,"Jun 26","Fri","5:00 PM","H","CPV","KSA","Houston"],
+    [65,"Jun 26","Fri","12:00 PM","I","NOR","FRA","Boston"],
+    [66,"Jun 26","Fri","12:00 PM","I","SEN","IRQ","Toronto"],
+    [67,"Jun 27","Sat","2:00 PM","L","PAN","ENG","New York/NJ"],
+    [68,"Jun 27","Sat","2:00 PM","L","CRO","GHA","Philadelphia"],
+    [69,"Jun 27","Sat","7:00 PM","J","JOR","ARG","Dallas"],
+    [70,"Jun 27","Sat","7:00 PM","J","ALG","AUT","Kansas City"],
+    [71,"Jun 27","Sat","4:30 PM","K","COL","POR","Miami"],
+    [72,"Jun 27","Sat","4:30 PM","K","COD","UZB","Atlanta"],
+    [73,"Jun 28","Sun","12:00 PM","R32","2A","2B","Los Angeles"],
+    [74,"Jun 29","Mon","1:30 PM","R32","1E","3rd ABCDF","Boston"],
+    [75,"Jun 29","Mon","6:00 PM","R32","1F","2C","Monterrey"],
+    [76,"Jun 29","Mon","10:00 AM","R32","1C","2F","Houston"],
+    [77,"Jun 30","Tue","2:00 PM","R32","1I","3rd CDFGH","New York/NJ"],
+    [78,"Jun 30","Tue","10:00 AM","R32","2E","2I","Dallas"],
+    [79,"Jun 30","Tue","6:00 PM","R32","1A","3rd CEFHI","Mexico City"],
+    [80,"Jul 1","Wed","9:00 AM","R32","1L","3rd EHIJK","Atlanta"],
+    [81,"Jul 1","Wed","5:00 PM","R32","1D","3rd BEFIJ","SF Bay Area"],
+    [82,"Jul 1","Wed","1:00 PM","R32","1G","3rd AEHIJ","Seattle"],
+    [83,"Jul 2","Thu","4:00 PM","R32","2K","2L","Toronto"],
+    [84,"Jul 2","Thu","12:00 PM","R32","1H","2J","Los Angeles"],
+    [85,"Jul 2","Thu","8:00 PM","R32","1B","3rd EFGIJ","Vancouver"],
+    [86,"Jul 3","Fri","3:00 PM","R32","1J","2H","Miami"],
+    [87,"Jul 3","Fri","6:30 PM","R32","1K","3rd DEIJL","Kansas City"],
+    [88,"Jul 3","Fri","11:00 AM","R32","2D","2G","Dallas"],
+    [89,"Jul 4","Sat","2:00 PM","R16","W74","W77","Philadelphia"],
+    [90,"Jul 4","Sat","10:00 AM","R16","W73","W75","Houston"],
+    [91,"Jul 5","Sun","1:00 PM","R16","W76","W78","New York/NJ"],
+    [92,"Jul 5","Sun","5:00 PM","R16","W79","W80","Mexico City"],
+    [93,"Jul 6","Mon","12:00 PM","R16","W83","W84","Dallas"],
+    [94,"Jul 6","Mon","5:00 PM","R16","W81","W82","Seattle"],
+    [95,"Jul 7","Tue","9:00 AM","R16","W86","W88","Atlanta"],
+    [96,"Jul 7","Tue","1:00 PM","R16","W85","W87","Vancouver"],
+    [97,"Jul 9","Thu","1:00 PM","QF","W89","W90","Boston"],
+    [98,"Jul 10","Fri","12:00 PM","QF","W93","W94","Los Angeles"],
+    [99,"Jul 11","Sat","2:00 PM","QF","W91","W92","Miami"],
+    [100,"Jul 11","Sat","6:00 PM","QF","W95","W96","Kansas City"],
+    [101,"Jul 14","Tue","12:00 PM","SF","W97","W98","Dallas"],
+    [102,"Jul 15","Wed","12:00 PM","SF","W99","W100","Atlanta"],
+    [103,"Jul 18","Sat","2:00 PM","3RD","L101","L102","Miami"],
+    [104,"Jul 19","Sun","12:00 PM","FINAL","W101","W102","New York/NJ"],
+  ];
+  const matches = M.map((r) => ({
+    n:r[0],date:r[1],day:r[2],time:r[3],stage:r[4],t1:r[5],t2:r[6],city:r[7],
+  }));
+  return { matches, ISO, NAME };
+})();
+</script>
+<script>
+(function(){
+  const S = window.WCS, M = S.matches, ISO = S.ISO;
+  const EXPORT = location.search.indexOf("export") !== -1;
+  if (EXPORT) document.body.classList.add("exporting");
+  const flag = (code)=>`<img src="https://flagcdn.com/${ISO[code]}.svg" alt="" loading="eager" crossorigin="anonymous">`;
+  const esc=(s)=>String(s);
+
+  // hosts subline
+  document.getElementById("hosts").innerHTML =
+    ["us","ca","mx"].map(i=>`<img src="https://flagcdn.com/${i}.svg" alt="">`).join('<span class="dot"></span>')
+    + '<span class="dot"></span><span>104 Fixtures · 16 Cities</span>';
+
+  // group stage cards A..L
+  const groupsEl = document.getElementById("groups");
+  const LETTERS = ["A","B","C","D","E","F","G","H","I","J","K","L"];
+  LETTERS.forEach((L)=>{
+    const card = document.createElement("div"); card.className="gcard";
+    const fixtures = M.filter(m=>m.stage===L);
+    let rows = "";
+    fixtures.forEach(m=>{
+      rows += `<div class="fx">`
+        + `<span class="mno">${m.n}</span>`
+        + `<span class="dt"><span class="d">${m.date.replace(/^([A-Za-z]+) /,(x,mo)=>mo.toUpperCase().slice(0,3)+" ")}</span><span class="tm">${m.time}</span></span>`
+        + `<span class="mu">${flag(m.t1)}<span class="c">${m.t1}</span><span class="v">v</span><span class="c">${m.t2}</span>${flag(m.t2)}</span>`
+        + `<span class="cty">${m.city}</span>`
+        + `</div>`;
+    });
+    card.innerHTML = `<div class="gc-h"><span class="gl">${L}</span><span class="gn">Group ${L}</span></div>${rows}`;
+    groupsEl.appendChild(card);
+  });
+
+  // knockout — organized into 4 columns
+  const knockEl = document.getElementById("knock");
+  const byStage = (st)=>M.filter(m=>m.stage===st);
+  const krow = (m, tall)=>`<div class="kfx${tall?' tall':''}">`
+    + `<span class="mno">${m.n}</span>`
+    + `<span class="dt"><span class="d">${m.date.replace(/^([A-Za-z]+) /,(x,mo)=>mo.toUpperCase().slice(0,3)+" ")}</span><span class="tm">${m.time}</span></span>`
+    + `<span class="mu">${m.t1}<span class="v">v</span>${m.t2}</span>`
+    + `<span class="cty">${m.city}</span>`
+    + `</div>`;
+  const block = (cls,title,dates,matches,tall)=>{
+    return `<div class="kblock${cls}"><div class="kb-h"><span class="kt">${title}</span><span class="kd">${dates}</span></div>`
+      + matches.map(m=>krow(m,tall)).join("") + `</div>`;
+  };
+  const r32 = byStage("R32");
+  const col1 = document.createElement("div"); col1.className="kcol";
+  col1.innerHTML = block("","Round of 32","Jun 28 – 30", r32.slice(0,8));
+  const col2 = document.createElement("div"); col2.className="kcol";
+  col2.innerHTML = block("","Round of 32","Jul 1 – 3", r32.slice(8,16));
+  const col3 = document.createElement("div"); col3.className="kcol";
+  col3.innerHTML = block("","Round of 16","Jul 4 – 7", byStage("R16"));
+  const col4 = document.createElement("div"); col4.className="kcol";
+  col4.innerHTML = block("","Quarter-finals","Jul 9 – 11", byStage("QF"))
+    + block("","Semi-finals","Jul 14 – 15", byStage("SF"))
+    + block("","Third Place","Jul 18", byStage("3RD"))
+    + block(" feat","Final","Jul 19 · NY/NJ", byStage("FINAL"), true);
+  [col1,col2,col3,col4].forEach(c=>knockEl.appendChild(c));
+
+  document.getElementById("legend").textContent =
+    "Slots: 1/2 = group winner/runner-up · 3rd = best third-place · W/L = winner/loser of match no.";
+
+  /* ---- scaling + print sizes ---- */
+  function fitStage(){
+    const poster=document.getElementById("poster");
+    if(EXPORT){poster.style.transform="none";return;}
+    if(window.innerWidth<900){
+      poster.style.transform="none";
+      poster.style.zoom=window.innerWidth/1400;
+    } else {
+      poster.style.zoom="";
+      const s=Math.min((window.innerWidth-24)/1400,(window.innerHeight-24)/1000);
+      poster.style.transform=`scale(${s})`;
+    }
+  }
+  let pageStyle=document.createElement("style");pageStyle.id="pagesize";document.head.appendChild(pageStyle);
+  const PAGE={letter:"11in 8.5in",tabloid:"17in 11in",poster:"24in 18in"};
+  function setSize(size){
+    document.body.classList.remove("size-letter","size-tabloid","size-poster");
+    document.body.classList.add("size-"+size);
+    pageStyle.textContent=`@page{size:${PAGE[size]};margin:0.3in;}`;
+    document.querySelectorAll(".bar button[data-size]").forEach(b=>b.classList.toggle("on",b.dataset.size===size));
+  }
+  document.querySelectorAll(".bar button[data-size]").forEach(b=>b.addEventListener("click",()=>setSize(b.dataset.size)));
+  fitStage(); setSize("letter");
+  window.addEventListener("resize",fitStage);
+})();
+</script>
+</body>
+</html>
