@@ -167,6 +167,13 @@ body{
 .bar .sep{width:1px;height:20px;background:rgba(255,255,255,.15);margin:0 3px;}
 .bar .print{background:var(--gold);color:var(--ink);}
 .bar .print:hover{background:var(--gold-bright);color:var(--ink);}
+.lv-badge{font-family:"Saira";font-weight:600;font-size:9px;color:rgba(255,255,255,.45);letter-spacing:.03em;padding:0 6px;}
+.lv-badge.fetching{color:var(--gold);}
+/* live standings highlights */
+.row.lv-adv{background:rgba(168,129,47,.07);}
+.row.lv-adv .st:last-child{color:var(--gold);font-weight:800;}
+.mv-pts{font-family:"Saira Condensed";font-weight:800;font-size:10px;color:var(--gold);margin-left:auto;padding-right:2px;}
+@keyframes lvblink{0%,100%{opacity:1}50%{opacity:.3}}
 
 /* ---------- print ---------- */
 @media print{
@@ -231,6 +238,8 @@ body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
   <button data-size="poster">Poster 18×24</button>
   <span class="sep"></span>
   <button class="print" onclick="window.print()">Print / PDF</button>
+  <span class="sep"></span>
+  <span class="lv-badge" id="lv-badge">Loading scores…</span>
 </div>
 
 <div class="stage">
@@ -421,11 +430,13 @@ window.WC = (function () {
   function groupCard(letter){
     const g=WC.groups[letter];
     const card=el("div","grp");
+    card.dataset.group=letter;
     const head=el("div","grp-h");
     head.innerHTML=`<div class="gl">${letter}</div>`+`<div class="gn">Group ${letter}<span class="from">${g.from}</span></div>`+["W","D","L","GF","GA","PTS"].map((c)=>`<div class="ch">${c}</div>`).join("");
     card.appendChild(head);
     g.teams.forEach((t)=>{
       const row=el("div","row");
+      row.dataset.code=t.code;
       const tag=t.tag?`<span class="tg">${t.tag}</span>`:"";
       row.innerHTML=`<div class="fl">${flagImg(t.iso)}</div>`+`<div class="nm">${t.name}${tag}</div>`+'<div class="st"></div><div class="st"></div><div class="st"></div><div class="st"></div><div class="st"></div><div class="st"></div>';
       card.appendChild(row);
@@ -526,9 +537,10 @@ window.WC = (function () {
       card.className="mv-grp";
       const rows=g.teams.map(t=>{
         const tag=t.tag?`<span class="tg">${t.tag}</span>`:"";
-        return `<div class="mv-row"><img src="${flagUrl(t.iso)}" alt="${t.name}" loading="lazy"><span class="nm">${t.name}${tag}</span></div>`;
+        return `<div class="mv-row" data-mvcode="${t.code}"><img src="${flagUrl(t.iso)}" alt="${t.name}" loading="lazy"><span class="nm">${t.name}${tag}</span><span class="mv-pts"></span></div>`;
       }).join("");
       card.innerHTML=`<div class="mv-gh"><div class="mv-gl">${letter}</div><div class="mv-gn">Group ${letter}</div></div>${rows}`;
+      card.dataset.mvgroup=letter;
       grpEl.appendChild(card);
     });
     const rdEl=document.getElementById("mv-rounds");
@@ -572,7 +584,79 @@ window.WC = (function () {
     document.head.appendChild(st);return true;
   }
 
-  function init(){buildBracket();buildMobileView();if(applyPrintLock())return;fitStage();setSize("letter");}
+  async function fetchAndUpdateLive(){
+    const badge=document.getElementById("lv-badge");
+    if(badge)badge.className="lv-badge fetching";
+    try {
+      const res=await fetch("https://site.api.espn.com/apis/v2/sports/soccer/fifa.world/standings");
+      if(!res.ok)throw new Error(res.status);
+      const data=await res.json();
+      (data.children||[]).forEach(grp=>{
+        const letter=(grp.name||"").replace("Group ","");
+        if(!letter||letter.length>1)return;
+        const entries=grp.standings?.entries||[];
+        const ranked=[...entries].sort((a,b)=>{
+          const rv=n=>((n.stats||[]).find(s=>s.name==="rank")?.value)||99;
+          return rv(a)-rv(b);
+        });
+        const get=(stats,name)=>{
+          const s=(stats||[]).find(x=>x.name===name);
+          return s!=null?Math.round(s.value):"";
+        };
+        // Desktop card
+        const card=document.querySelector(`.grp[data-group="${letter}"]`);
+        ranked.forEach(entry=>{
+          const code=entry.team?.abbreviation;
+          const st=entry.stats||[];
+          const rank=get(st,"rank");
+          if(card){
+            const row=card.querySelector(`.row[data-code="${code}"]`);
+            if(row){
+              const cells=row.querySelectorAll(".st");
+              if(cells[0])cells[0].textContent=get(st,"wins");
+              if(cells[1])cells[1].textContent=get(st,"ties");
+              if(cells[2])cells[2].textContent=get(st,"losses");
+              if(cells[3])cells[3].textContent=get(st,"pointsFor");
+              if(cells[4])cells[4].textContent=get(st,"pointsAgainst");
+              if(cells[5])cells[5].textContent=get(st,"points");
+              row.classList.toggle("lv-adv",rank>=1&&rank<=2);
+            }
+          }
+          // Mobile row
+          const mvrow=document.querySelector(`.mv-row[data-mvcode="${code}"]`);
+          if(mvrow){
+            const ptsEl=mvrow.querySelector(".mv-pts");
+            const pts=get(st,"points");
+            if(ptsEl)ptsEl.textContent=pts!==""?pts+"pts":"";
+          }
+        });
+        // Reorder desktop rows by rank
+        if(card){
+          ranked.forEach(entry=>{
+            const row=card.querySelector(`.row[data-code="${entry.team?.abbreviation}"]`);
+            if(row)card.appendChild(row);
+          });
+        }
+        // Reorder mobile rows by rank
+        const mvcard=document.querySelector(`.mv-grp[data-mvgroup="${letter}"]`);
+        if(mvcard){
+          ranked.forEach(entry=>{
+            const row=mvcard.querySelector(`.mv-row[data-mvcode="${entry.team?.abbreviation}"]`);
+            if(row)mvcard.appendChild(row);
+          });
+        }
+      });
+      if(badge){
+        const t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+        badge.textContent="Updated "+t;
+        badge.className="lv-badge";
+      }
+    } catch(e){
+      if(badge){badge.textContent="Live data unavailable";badge.className="lv-badge";}
+    }
+  }
+
+  function init(){buildBracket();buildMobileView();if(applyPrintLock())return;fitStage();setSize("letter");fetchAndUpdateLive();setInterval(fetchAndUpdateLive,60000);}
   if(document.readyState==="complete")init();else window.addEventListener("load",init);
   window.addEventListener("resize",()=>{fitStage();buildBracket();});
 })();

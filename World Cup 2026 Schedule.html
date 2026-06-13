@@ -59,7 +59,7 @@ body{background:#2a2a2a;font-family:"Saira",system-ui,sans-serif;color:var(--ink
 .gc-h{display:flex;align-items:center;background:var(--ink);color:#fff;height:19px;}
 .gc-h .gl{background:var(--gold);color:var(--ink);font-family:"Saira Condensed";font-weight:800;font-size:12px;width:22px;display:flex;align-items:center;justify-content:center;height:100%;}
 .gc-h .gn{font-family:"Saira Condensed";font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding-left:8px;white-space:nowrap;}
-.fx{display:grid;grid-template-columns:16px 104px 1fr auto;align-items:center;gap:5px;height:21px;border-top:1px solid var(--line-soft);padding:0 7px 0 5px;}
+.fx{display:grid;grid-template-columns:16px 104px 1fr 42px auto;align-items:center;gap:5px;height:21px;border-top:1px solid var(--line-soft);padding:0 7px 0 5px;}
 .fx .mno{font-family:"Saira Condensed";font-weight:600;font-size:8px;color:var(--gold);text-align:center;}
 .fx .dt{display:flex;align-items:baseline;gap:6px;white-space:nowrap;line-height:1;}
 .fx .dt .d{font-family:"Saira Condensed";font-weight:700;font-size:9px;color:var(--ink);letter-spacing:.02em;}
@@ -80,7 +80,7 @@ body{background:#2a2a2a;font-family:"Saira",system-ui,sans-serif;color:var(--ink
 .kb-h .kt{font-family:"Saira Condensed";font-weight:700;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;flex:none;}
 .kb-h .kd{font-family:"Saira";font-weight:500;font-size:8.5px;color:rgba(255,255,255,.6);letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .kblock.feat .kb-h .kd{color:rgba(21,36,63,.65);}
-.kfx{display:grid;grid-template-columns:18px 100px 1fr auto;align-items:center;gap:5px;height:22px;border-top:1px solid var(--line-soft);padding:0 8px 0 5px;}
+.kfx{display:grid;grid-template-columns:18px 100px 1fr 42px auto;align-items:center;gap:5px;height:22px;border-top:1px solid var(--line-soft);padding:0 8px 0 5px;}
 .kfx .mno{font-family:"Saira Condensed";font-weight:700;font-size:8.5px;color:var(--gold);text-align:center;}
 .kfx .dt{display:flex;align-items:baseline;gap:6px;white-space:nowrap;line-height:1;}
 .kfx .dt .d{font-family:"Saira Condensed";font-weight:700;font-size:9px;color:var(--ink);}
@@ -89,6 +89,12 @@ body{background:#2a2a2a;font-family:"Saira",system-ui,sans-serif;color:var(--ink
 .kfx .mu .v{color:var(--gold);font-weight:600;margin:0 3px;}
 .kfx .cty{font-family:"Saira";font-weight:500;font-size:8.5px;color:var(--ink-2);white-space:nowrap;text-align:right;}
 .kfx.tall{height:30px;}
+.fx .sc,.kfx .sc{font-family:"Saira Condensed";font-weight:800;font-size:10px;color:var(--ink);text-align:center;white-space:nowrap;letter-spacing:.02em;}
+.fx .sc.lv,.kfx .sc.lv{color:var(--red);}
+@keyframes lvblink{0%,100%{opacity:1}50%{opacity:.3}}
+.fx .sc.lv,.kfx .sc.lv{animation:lvblink 1.2s infinite;}
+.lv-badge{font-family:"Saira";font-weight:600;font-size:9px;color:rgba(255,255,255,.45);letter-spacing:.03em;padding:0 6px;}
+.lv-badge.fetching{color:var(--gold);}
 
 /* footer note */
 .note{margin-top:9px;display:flex;align-items:center;justify-content:space-between;gap:16px;border-top:2px solid var(--ink);padding-top:7px;position:relative;z-index:2;}
@@ -134,7 +140,9 @@ body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
 .mv-round{background:var(--paper);border:1px solid var(--line);overflow:hidden;}
 .mv-rh{display:flex;align-items:center;justify-content:space-between;background:var(--ink);color:#fff;height:24px;padding:0 10px;font-family:"Saira Condensed";font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;}
 .mv-rh .mv-rd{font-size:9px;color:rgba(255,255,255,.5);font-weight:400;letter-spacing:0;font-family:"Saira";}
-.mv-match{display:grid;grid-template-columns:22px 1fr auto;align-items:center;gap:6px;min-height:28px;padding:4px 8px;border-top:1px solid rgba(21,36,63,.12);}
+.mv-match{display:grid;grid-template-columns:22px 1fr auto auto;align-items:center;gap:6px;min-height:28px;padding:4px 8px;border-top:1px solid rgba(21,36,63,.12);}
+.mv-match .mv-sc{font-family:"Saira Condensed";font-weight:800;font-size:11px;color:var(--ink);white-space:nowrap;}
+.mv-match .mv-sc.lv{color:var(--red);animation:lvblink 1.2s infinite;}
 .mv-match .mn{font-family:"Saira Condensed";font-weight:700;font-size:8px;color:var(--gold);}
 .mv-match .mt{font-family:"Saira Condensed";font-weight:600;font-size:11px;color:var(--ink);line-height:1.25;}
 .mv-match .mc{font-family:"Saira";font-weight:400;font-size:9px;color:rgba(21,36,63,.55);text-align:right;white-space:nowrap;}
@@ -157,6 +165,8 @@ body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
   <button data-size="poster">Poster 18×24</button>
   <span class="sep"></span>
   <button class="print" onclick="window.print()">Print / PDF</button>
+  <span class="sep"></span>
+  <span class="lv-badge" id="lv-badge">Loading scores…</span>
 </div>
 
 <div class="stage">
@@ -350,10 +360,11 @@ window.WCS = (function () {
     const fixtures = M.filter(m=>m.stage===L);
     let rows = "";
     fixtures.forEach(m=>{
-      rows += `<div class="fx">`
+      rows += `<div class="fx" data-n="${m.n}">`
         + `<span class="mno">${m.n}</span>`
         + `<span class="dt"><span class="d">${m.date.replace(/^([A-Za-z]+) /,(x,mo)=>mo.toUpperCase().slice(0,3)+" ")}</span><span class="tm">${m.time}</span></span>`
         + `<span class="mu">${flag(m.t1)}<span class="c">${m.t1}</span><span class="v">v</span><span class="c">${m.t2}</span>${flag(m.t2)}</span>`
+        + `<span class="sc"></span>`
         + `<span class="cty">${m.city}</span>`
         + `</div>`;
     });
@@ -364,10 +375,11 @@ window.WCS = (function () {
   // knockout — organized into 4 columns
   const knockEl = document.getElementById("knock");
   const byStage = (st)=>M.filter(m=>m.stage===st);
-  const krow = (m, tall)=>`<div class="kfx${tall?' tall':''}">`
+  const krow = (m, tall)=>`<div class="kfx${tall?' tall':''}" data-n="${m.n}">`
     + `<span class="mno">${m.n}</span>`
     + `<span class="dt"><span class="d">${m.date.replace(/^([A-Za-z]+) /,(x,mo)=>mo.toUpperCase().slice(0,3)+" ")}</span><span class="tm">${m.time}</span></span>`
     + `<span class="mu">${m.t1}<span class="v">v</span>${m.t2}</span>`
+    + `<span class="sc"></span>`
     + `<span class="cty">${m.city}</span>`
     + `</div>`;
   const block = (cls,title,dates,matches,tall)=>{
@@ -425,7 +437,7 @@ window.WCS = (function () {
     Object.keys(grpMatches).sort().forEach(letter=>{
       const div=document.createElement("div");
       div.className="mv-round";
-      const mh=grpMatches[letter].map(m=>`<div class="mv-match"><span class="mn">#${m.n}</span><span class="mt">${teamLabel(m.t1)} <span style="color:var(--gold);margin:0 2px">vs</span> ${teamLabel(m.t2)}</span><span class="mc">${m.date}<br>${m.time}</span></div>`).join("");
+      const mh=grpMatches[letter].map(m=>`<div class="mv-match" data-mvn="${m.n}"><span class="mn">#${m.n}</span><span class="mt">${teamLabel(m.t1)} <span style="color:var(--gold);margin:0 2px">vs</span> ${teamLabel(m.t2)}</span><span class="mv-sc"></span><span class="mc">${m.date}<br>${m.time}</span></div>`).join("");
       div.innerHTML=`<div class="mv-rh"><span>Group ${letter}</span><span class="mv-rd">${grpMatches[letter][0].date.replace("Jun ","Jun ")} – ${grpMatches[letter][grpMatches[letter].length-1].date}</span></div>${mh}`;
       grpEl.appendChild(div);
     });
@@ -434,7 +446,7 @@ window.WCS = (function () {
       if(!knockMatches[stage])return;
       const div=document.createElement("div");
       div.className="mv-round";
-      const mh=knockMatches[stage].map(m=>`<div class="mv-match"><span class="mn">#${m.n}</span><span class="mt">${m.t1} <span style="color:var(--gold);margin:0 2px">vs</span> ${m.t2}</span><span class="mc">${m.date}<br>${m.time}</span></div>`).join("");
+      const mh=knockMatches[stage].map(m=>`<div class="mv-match" data-mvn="${m.n}"><span class="mn">#${m.n}</span><span class="mt">${m.t1} <span style="color:var(--gold);margin:0 2px">vs</span> ${m.t2}</span><span class="mv-sc"></span><span class="mc">${m.date}<br>${m.time}</span></div>`).join("");
       div.innerHTML=`<div class="mv-rh"><span>${stageLabel[stage]||stage}</span><span class="mv-rd">${knockMatches[stage][0].date}</span></div>${mh}`;
       knockEl.appendChild(div);
     });
@@ -449,7 +461,63 @@ window.WCS = (function () {
     document.querySelectorAll(".bar button[data-size]").forEach(b=>b.classList.toggle("on",b.dataset.size===size));
   }
   document.querySelectorAll(".bar button[data-size]").forEach(b=>b.addEventListener("click",()=>setSize(b.dataset.size)));
-  buildMobileView(); fitStage(); setSize("letter");
+  async function fetchAndUpdateScores(){
+    const badge=document.getElementById("lv-badge");
+    if(badge)badge.className="lv-badge fetching";
+    try {
+      // Fetch a window: yesterday through today
+      const pad=n=>String(n).padStart(2,"0");
+      const fmt=d=>`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}`;
+      const today=new Date(), yesterday=new Date(today-864e5);
+      const urls=[
+        `https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${fmt(yesterday)}`,
+        `https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${fmt(today)}`,
+      ];
+      const responses=await Promise.all(urls.map(u=>fetch(u).then(r=>r.json()).catch(()=>null)));
+      const events=responses.flatMap(d=>d?.events||[]);
+      const seen=new Set();
+      events.filter(e=>{if(seen.has(e.id))return false;seen.add(e.id);return true;}).forEach(ev=>{
+        const comp=ev.competitions?.[0];
+        if(!comp)return;
+        const status=comp.status?.type;
+        const completed=status?.completed;
+        const live=status?.state==="in";
+        if(!completed&&!live)return;
+        const comps=comp.competitors||[];
+        const abbrs=comps.map(c=>c.team?.abbreviation).filter(Boolean);
+        const scores=comps.map(c=>c.score||"0");
+        // Map to home/away order for score display
+        const home=comps.find(c=>c.homeAway==="home");
+        const away=comps.find(c=>c.homeAway==="away");
+        if(!home||!away)return;
+        const scoreStr=`${home.score}–${away.score}`;
+        // Find our match by team abbreviations (order-independent)
+        const match=S.matches.find(m=>{
+          const a=abbrs[0],b=abbrs[1];
+          return (m.t1===a&&m.t2===b)||(m.t1===b&&m.t2===a);
+        });
+        if(!match)return;
+        // Update desktop row
+        const row=document.querySelector(`[data-n="${match.n}"] .sc`);
+        if(row){
+          row.textContent=live?`${home.score}–${away.score}`:scoreStr;
+          row.className=live?"sc lv":"sc";
+        }
+        // Update mobile row
+        const mvrow=document.querySelector(`.mv-match[data-mvn="${match.n}"] .mv-sc`);
+        if(mvrow){mvrow.textContent=scoreStr;mvrow.className="mv-sc"+(live?" lv":"");}
+      });
+      if(badge){
+        const t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+        badge.textContent="Updated "+t;badge.className="lv-badge";
+      }
+    } catch(e){
+      if(badge){badge.textContent="Live data unavailable";badge.className="lv-badge";}
+    }
+  }
+
+  buildMobileView(); fetchAndUpdateScores(); fitStage(); setSize("letter");
+  setInterval(fetchAndUpdateScores,60000);
   window.addEventListener("resize",fitStage);
 })();
 </script>
