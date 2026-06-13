@@ -2,8 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
 <title>World Cup 2026 — Match Schedule</title>
+<meta name="theme-color" content="#15243f" />
+<link rel="manifest" href="manifest.json" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="WC 2026" />
+<link rel="apple-touch-icon" href="icons/icon-180.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=Saira:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -150,10 +158,65 @@ body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
 .mv-match .mv-sc.done{color:var(--ink);}
 .mv-rh.mv-today{background:var(--gold);}
 .mv-rh.mv-today,.mv-rh.mv-today .mv-rd{color:var(--ink);}
-.mv-foot{padding:12px 8px 36px;background:#0f1c2e;display:flex;flex-direction:column;gap:8px;}
+.mv-match.fav{box-shadow:inset 3px 0 0 var(--gold);}
+.mv-match .star{color:var(--gold);font-size:11px;margin-left:5px;}
+.mv-foot{padding:12px 8px calc(36px + env(safe-area-inset-bottom));background:#0f1c2e;display:flex;flex-direction:column;gap:8px;}
 .mv-lnk{display:flex;align-items:center;justify-content:center;font-family:"Saira Condensed";font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:13px;border-radius:3px;text-decoration:none;}
 .mv-lnk-ghost{background:rgba(255,255,255,.07);color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.15);}
 .mv-lnk-gold{background:var(--gold);color:var(--ink);}
+
+/* timezone toggle + live status in head */
+.mv-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;}
+.mv-tz{display:inline-flex;border:1px solid rgba(255,255,255,.2);border-radius:20px;overflow:hidden;flex-shrink:0;}
+.mv-tz button{font-family:"Saira Condensed";font-weight:700;font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:transparent;color:rgba(255,255,255,.55);border:none;padding:6px 14px;cursor:pointer;}
+.mv-tz button.on{background:var(--gold);color:var(--ink);}
+.mv-status{font-family:"Saira";font-weight:500;font-size:10.5px;color:rgba(255,255,255,.45);letter-spacing:.02em;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;}
+.mv-status .dot-live{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;}
+.mv-status.fetching .dot-live{animation:lvblink 1s infinite;}
+.mv-status .rfh{font-size:13px;}
+
+/* your matches strip */
+.mv-fav-sec{font-family:"Saira Condensed";font-weight:800;font-size:11px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;padding:14px 12px 8px;background:#0f1c2e;display:flex;align-items:center;gap:6px;}
+.mv-fav-empty{font-family:"Saira";font-weight:400;font-size:11px;color:rgba(255,255,255,.4);padding:0 12px 6px;background:#0f1c2e;text-transform:none;letter-spacing:0;}
+
+/* collapse past results */
+.mv-collapse{font-family:"Saira Condensed";font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.65);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:3px;margin:8px;padding:12px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;}
+.mv-collapse .chev{transition:transform .2s;}
+.mv-collapse.open .chev{transform:rotate(180deg);}
+.mv-past{display:none;}
+.mv-past.open{display:flex;flex-direction:column;gap:6px;}
+
+/* match detail sheet */
+.ms-sheet{position:fixed;inset:0;z-index:200;pointer-events:none;}
+.ms-sheet.open{pointer-events:all;}
+.ms-bg{position:absolute;inset:0;background:rgba(0,0,0,0);transition:background .25s;}
+.ms-sheet.open .ms-bg{background:rgba(0,0,0,.55);}
+.ms-panel{position:absolute;bottom:0;left:0;right:0;background:var(--paper);border-radius:14px 14px 0 0;padding:0 0 calc(28px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .32s cubic-bezier(.32,.72,0,1);max-height:88vh;overflow-y:auto;}
+.ms-sheet.open .ms-panel{transform:translateY(0);}
+.ms-drag{width:36px;height:4px;border-radius:2px;background:rgba(21,36,63,.18);margin:10px auto 0;}
+.ms-top{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 6px;}
+.ms-chip{font-family:"Saira Condensed";font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);}
+.ms-close{background:rgba(21,36,63,.08);border:none;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--ink-2);font-size:16px;cursor:pointer;line-height:1;}
+.ms-teams{padding:4px 16px 8px;}
+.ms-team{display:flex;align-items:center;gap:12px;padding:9px 0;}
+.ms-team img{width:38px;height:26px;object-fit:cover;border:.5px solid var(--line);border-radius:3px;flex-shrink:0;}
+.ms-ph{width:38px;height:26px;border:1px dashed var(--line);border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:"Saira Condensed";font-weight:700;font-size:10px;color:rgba(21,36,63,.5);flex-shrink:0;}
+.ms-tn{flex:1;font-family:"Saira Condensed";font-weight:800;font-size:22px;color:var(--ink);text-transform:uppercase;line-height:1;}
+.ms-tn small{display:block;font-family:"Saira";font-weight:400;font-size:11px;letter-spacing:0;text-transform:none;color:rgba(21,36,63,.45);margin-top:3px;}
+.ms-tscore{font-family:"Saira Condensed";font-weight:800;font-size:30px;color:var(--ink);min-width:24px;text-align:center;}
+.ms-tscore.dim{color:rgba(21,36,63,.25);font-weight:600;}
+.ms-star{background:none;border:none;font-size:22px;color:var(--gold);cursor:pointer;padding:0 2px;line-height:1;flex-shrink:0;}
+.ms-vs{font-family:"Saira Condensed";font-weight:700;font-size:11px;letter-spacing:.2em;color:var(--gold);text-align:center;padding:2px 0;}
+.ms-status{text-align:center;font-family:"Saira Condensed";font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);padding:2px 16px 10px;}
+.ms-status.live{color:var(--red);animation:lvblink 1.2s infinite;}
+.ms-meta{margin:0 16px;border:1px solid var(--line);border-radius:8px;overflow:hidden;}
+.ms-mrow{display:flex;align-items:center;gap:10px;min-height:42px;padding:8px 14px;border-top:1px solid rgba(21,36,63,.09);}
+.ms-mrow:first-child{border-top:none;}
+.ms-mrow .ms-ic{font-size:14px;width:18px;text-align:center;flex-shrink:0;}
+.ms-mrow .ms-lb{font-family:"Saira Condensed";font-weight:700;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(21,36,63,.42);width:70px;flex-shrink:0;}
+.ms-mrow .ms-vl{font-family:"Saira";font-weight:600;font-size:13.5px;color:var(--ink);}
+.ms-mrow .ms-vl small{font-weight:400;color:rgba(21,36,63,.5);}
+
 @media(max-width:767px){
   .stage,.bar{display:none!important;}
   .mv{display:block!important;}
@@ -208,6 +271,20 @@ body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
 </div>
 
 <div class="mv" id="mv"></div>
+
+<div class="ms-sheet" id="ms-sheet">
+  <div class="ms-bg" id="ms-bg"></div>
+  <div class="ms-panel">
+    <div class="ms-drag"></div>
+    <div class="ms-top">
+      <span class="ms-chip" id="ms-chip"></span>
+      <button class="ms-close" id="ms-close">✕</button>
+    </div>
+    <div class="ms-teams" id="ms-teams"></div>
+    <div class="ms-status" id="ms-status"></div>
+    <div class="ms-meta" id="ms-meta"></div>
+  </div>
+</div>
 
 <script>
 window.WCS = (function () {
@@ -350,6 +427,68 @@ window.WCS = (function () {
   if (EXPORT) document.body.classList.add("exporting");
   const flag = (code)=>`<img src="https://flagcdn.com/${ISO[code]}.svg" alt="" loading="eager" crossorigin="anonymous">`;
   const esc=(s)=>String(s);
+  const NAME = S.NAME;
+
+  /* ---- time / timezone ---- */
+  // All matches fall in Jun–Jul 2026, firmly Pacific Daylight Time (UTC−7).
+  const PT_UTC_OFFSET = 7;
+  const MONTHS={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7};
+  const DOW={Mon:"Monday",Tue:"Tuesday",Wed:"Wednesday",Thu:"Thursday",Fri:"Friday",Sat:"Saturday",Sun:"Sunday"};
+  function parseDate(str){const[mo,dy]=str.split(" ");return new Date(2026,MONTHS[mo],parseInt(dy));}
+  function matchUTC(m){
+    const[mo,dy]=m.date.split(" ");
+    const[hm,ap]=m.time.split(" ");
+    let[h,min]=hm.split(":").map(Number);
+    if(ap==="PM"&&h!==12)h+=12; if(ap==="AM"&&h===12)h=0;
+    return new Date(Date.UTC(2026,MONTHS[mo],parseInt(dy),h+PT_UTC_OFFSET,min||0));
+  }
+  function tzAbbr(){
+    try{const p=new Intl.DateTimeFormat("en-US",{timeZoneName:"short"}).formatToParts(new Date());
+      const z=p.find(x=>x.type==="timeZoneName");return z?z.value:"Local";}catch(e){return "Local";}
+  }
+  const deviceIsPT=()=>/^P[DS]T$/.test(tzAbbr());
+  function localTimeStr(m){
+    const d=matchUTC(m);
+    let t=d.toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
+    // flag a roll into a different local calendar day
+    const[mo,dy]=m.date.split(" ");
+    const ptDate=new Date(2026,MONTHS[mo],parseInt(dy));
+    const lDate=new Date(d.getFullYear(),d.getMonth(),d.getDate());
+    const delta=Math.round((lDate-ptDate)/864e5);
+    if(delta>0)t+=" (+"+delta+")"; else if(delta<0)t+=" ("+delta+")";
+    return t;
+  }
+  let tzMode = (()=>{try{return localStorage.getItem("wc26_tz")||"local";}catch(e){return "local";}})();
+  function timeStr(m){return tzMode==="local"?localTimeStr(m):m.time;}
+  function kickoffStr(m){
+    if(deviceIsPT())return `${m.time} <small>PT</small>`;
+    return `${localTimeStr(m)} <small>${tzAbbr()}</small> · ${m.time} <small>PT</small>`;
+  }
+
+  /* ---- favorites ---- */
+  const FAV_KEY="wc26_favs";
+  function getFavs(){try{return JSON.parse(localStorage.getItem(FAV_KEY))||[];}catch(e){return[];}}
+  function setFavs(a){try{localStorage.setItem(FAV_KEY,JSON.stringify(a));}catch(e){}}
+  function isFav(code){return getFavs().indexOf(code)>=0;}
+  function toggleFav(code){const a=getFavs();const i=a.indexOf(code);if(i>=0)a.splice(i,1);else a.push(code);setFavs(a);}
+
+  /* ---- stage labels ---- */
+  const isGroup=stage=>stage.length===1&&stage>="A"&&stage<="L";
+  function stageFull(s){
+    if(isGroup(s))return "Group "+s;
+    return ({R32:"Round of 32",R16:"Round of 16",QF:"Quarter-final",SF:"Semi-final","3RD":"Third-place",FINAL:"Final"})[s]||s;
+  }
+  function slotLabel(code){
+    if(NAME[code])return NAME[code];
+    if(/^W\d+$/.test(code))return "Winner of #"+code.slice(1);
+    if(/^L\d+$/.test(code))return "Loser of #"+code.slice(1);
+    if(/^[12][A-L]$/.test(code))return (code[0]==="1"?"Winner ":"Runner-up ")+"Group "+code[1];
+    if(/^3rd/.test(code))return "Best 3rd · "+code.slice(3).trim();
+    return code;
+  }
+
+  const matchByN={}; M.forEach(m=>matchByN[m.n]=m);
+  let _statusTxt="Loading scores…";
 
   // hosts subline
   document.getElementById("hosts").innerHTML =
@@ -416,52 +555,91 @@ window.WCS = (function () {
     poster.style.transform=`scale(${s})`;
   }
 
+  const teamLabel=code=>NAME[code]||code;
+
+  function matchRowHTML(m,isPast){
+    const favHit=[m.t1,m.t2].some(c=>NAME[c]&&isFav(c));
+    const star=favHit?'<span class="star">★</span>':'';
+    const teams=isGroup(m.stage)
+      ?`${teamLabel(m.t1)} <span style="color:var(--gold);margin:0 2px">vs</span> ${teamLabel(m.t2)}`
+      :`${m.t1} <span style="color:var(--gold);margin:0 2px">vs</span> ${m.t2}`;
+    const right=isPast?"–":timeStr(m);
+    return `<div class="mv-match${favHit?" fav":""}" data-mvn="${m.n}"><span class="mn">#${m.n}</span><div class="mv-mt"><span class="mt">${teams}${star}</span><span class="mc">${m.city}</span></div><span class="mv-sc">${right}</span></div>`;
+  }
+
   function buildMobileView(){
     const mv=document.getElementById("mv");
     if(!mv)return;
-    const{matches,ISO,NAME}=WCS;
+    const matches=S.matches;
     const hostsHTML='<img src="https://flagcdn.com/us.svg" alt="USA"><span class="dot"></span><img src="https://flagcdn.com/ca.svg" alt="Canada"><span class="dot"></span><img src="https://flagcdn.com/mx.svg" alt="Mexico">';
-    mv.innerHTML=`<div class="mv-head"><div class="mv-brand"><div class="mv-kicker">FIFA World Cup · Match Schedule</div><div class="mv-title">World Cup<br><span>2026</span></div><div class="mv-sub">All times Pacific (PT) · 104 Matches</div><div class="mv-flags">${hostsHTML}</div></div><a class="mv-print-btn" href="?export" target="_blank">Print Poster</a></div><div class="mv-rounds" id="mv-days" style="padding:8px 8px 4px;gap:6px;"></div><div class="mv-foot"><a class="mv-lnk mv-lnk-ghost" href="World Cup 2026 Bracket.html">View Wall Bracket &rarr;</a><a class="mv-lnk mv-lnk-gold" href="?export" target="_blank">Print / Download Poster</a></div>`;
+    const tzLabel=tzMode==="local"?tzAbbr():"PT";
+    mv.innerHTML=`<div class="mv-head"><div class="mv-brand"><div class="mv-kicker">FIFA World Cup · Match Schedule</div><div class="mv-title">World Cup<br><span>2026</span></div><div class="mv-sub" id="mv-sub">All times ${tzLabel} · 104 Matches</div><div class="mv-flags">${hostsHTML}</div><div class="mv-controls"><div class="mv-tz"><button data-tz="local" class="${tzMode==="local"?"on":""}">Local</button><button data-tz="pt" class="${tzMode==="pt"?"on":""}">PT</button></div><div class="mv-status" id="mv-status"><span class="dot-live"></span><span id="mv-status-txt">${_statusTxt}</span><span class="rfh">⟳</span></div></div></div><a class="mv-print-btn" href="?export" target="_blank">Print</a></div><div id="mv-fav"></div><div class="mv-rounds" id="mv-days" style="padding:8px 8px 4px;gap:6px;"></div><div id="mv-past-wrap"></div><div class="mv-foot"><a class="mv-lnk mv-lnk-ghost" href="World Cup 2026 Bracket.html">View Wall Bracket &rarr;</a><a class="mv-lnk mv-lnk-gold" href="?export" target="_blank">Print / Download Poster</a></div>`;
 
-    const teamLabel=code=>NAME[code]||code;
-    const isGroup=stage=>stage.length===1&&stage>="A"&&stage<="L";
-    const MONTHS={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7};
-    const parseDate=str=>{const[mo,dy]=str.split(" ");return new Date(2026,MONTHS[mo],parseInt(dy));};
-
-    // Group by date
+    // group by date
     const byDate={};
     matches.forEach(m=>{if(!byDate[m.date])byDate[m.date]=[];byDate[m.date].push(m);});
-
     const now=new Date(); now.setHours(0,0,0,0);
     const allDates=Object.keys(byDate).sort((a,b)=>parseDate(a)-parseDate(b));
     const todayKey=allDates.find(d=>parseDate(d).getTime()===now.getTime());
     const future=allDates.filter(d=>parseDate(d)>now);
     const past=allDates.filter(d=>parseDate(d)<now).reverse();
-    const ordered=[...(todayKey?[todayKey]:[]),...future,...past];
 
-    const daysEl=document.getElementById("mv-days");
-    ordered.forEach(dateStr=>{
+    function dayRoundEl(dateStr){
       const isToday=dateStr===todayKey;
       const isPast=parseDate(dateStr)<now;
       const dayMatches=byDate[dateStr];
-      const dow=dayMatches[0].day; // "Thu"
-      const cnt=dayMatches.length;
+      const dow=dayMatches[0].day, cnt=dayMatches.length;
+      const rows=dayMatches.map(m=>matchRowHTML(m,isPast)).join("");
+      const label=isToday?`Today · ${dateStr}`:`${dateStr} · ${dow}`;
+      const sub=`${cnt} match${cnt!==1?"es":""}`;
+      const div=document.createElement("div"); div.className="mv-round";
+      div.innerHTML=`<div class="mv-rh${isToday?" mv-today":""}"><span>${label.toUpperCase()}</span><span class="mv-rd">${sub}</span></div>${rows}`;
+      return div;
+    }
 
-      const matchRows=dayMatches.map(m=>{
-        const teams=isGroup(m.stage)
-          ?`${teamLabel(m.t1)} <span style="color:var(--gold);margin:0 2px">vs</span> ${teamLabel(m.t2)}`
-          :`${m.t1} <span style="color:var(--gold);margin:0 2px">vs</span> ${m.t2}`;
-        return `<div class="mv-match" data-mvn="${m.n}"><span class="mn">#${m.n}</span><div class="mv-mt"><span class="mt">${teams}</span><span class="mc">${m.city}</span></div><span class="mv-sc">${isPast?"–":m.time}</span></div>`;
-      }).join("");
+    // your matches (favorites) strip
+    const favs=getFavs();
+    const favEl=document.getElementById("mv-fav");
+    if(favs.length){
+      const upcoming=matches.filter(m=>parseDate(m.date)>=now && [m.t1,m.t2].some(c=>favs.includes(c)))
+        .sort((a,b)=>matchUTC(a)-matchUTC(b)).slice(0,6);
+      const sec=document.createElement("div"); sec.className="mv-rounds"; sec.style.cssText="padding:8px 8px 0;gap:6px;";
+      const div=document.createElement("div"); div.className="mv-round";
+      const body=upcoming.length?upcoming.map(m=>matchRowHTML(m,false)).join("")
+        :`<div class="mv-fav-empty" style="padding:10px 12px;">No upcoming matches for your teams — they may be done or awaiting the knockouts.</div>`;
+      div.innerHTML=`<div class="mv-rh mv-today"><span>★ Your Matches</span><span class="mv-rd">${favs.length} team${favs.length!==1?"s":""}</span></div>${body}`;
+      sec.appendChild(div); favEl.appendChild(sec);
+    }
 
-      const label=isToday?`Today · ${dateStr.toUpperCase()}`:`${dateStr} · ${dow}`;
-      const sub=isToday&&cnt>1?`${cnt} matches`:isToday?`${cnt} match`:`${cnt} match${cnt!==1?"es":""}`;
-      const div=document.createElement("div");
-      div.className="mv-round";
-      div.innerHTML=`<div class="mv-rh${isToday?" mv-today":""}"><span>${label.toUpperCase()}</span><span class="mv-rd">${sub}</span></div>${matchRows}`;
-      daysEl.appendChild(div);
-    });
+    // today + upcoming
+    const daysEl=document.getElementById("mv-days");
+    [...(todayKey?[todayKey]:[]),...future].forEach(d=>daysEl.appendChild(dayRoundEl(d)));
+
+    // past results, collapsed
+    const pastWrap=document.getElementById("mv-past-wrap");
+    if(past.length){
+      const pastCount=past.reduce((s,d)=>s+byDate[d].length,0);
+      const btn=document.createElement("div"); btn.className="mv-collapse";
+      btn.innerHTML=`<span class="ct">Show ${pastCount} played</span><span class="chev">▾</span>`;
+      const cont=document.createElement("div"); cont.className="mv-past"; cont.style.cssText="padding:0 8px;";
+      past.forEach(d=>cont.appendChild(dayRoundEl(d)));
+      btn.addEventListener("click",()=>{
+        const open=cont.classList.toggle("open"); btn.classList.toggle("open",open);
+        btn.querySelector(".ct").textContent=open?`Hide ${pastCount} played`:`Show ${pastCount} played`;
+        renderScores();
+      });
+      pastWrap.appendChild(btn); pastWrap.appendChild(cont);
+    }
+
+    // wire controls + row taps
+    mv.querySelectorAll(".mv-tz button").forEach(b=>b.addEventListener("click",()=>{
+      tzMode=b.dataset.tz; try{localStorage.setItem("wc26_tz",tzMode);}catch(e){} rebuild();
+    }));
+    document.getElementById("mv-status").addEventListener("click",fetchAndUpdateScores);
+    mv.querySelectorAll(".mv-match[data-mvn]").forEach(row=>row.addEventListener("click",()=>openMatchSheet(+row.dataset.mvn)));
   }
+
+  function rebuild(){buildMobileView();renderScores();}
 
   let pageStyle=document.createElement("style");pageStyle.id="pagesize";document.head.appendChild(pageStyle);
   const PAGE={letter:"11in 8.5in",tabloid:"17in 11in",poster:"24in 18in"};
@@ -472,11 +650,38 @@ window.WCS = (function () {
     document.querySelectorAll(".bar button[data-size]").forEach(b=>b.classList.toggle("on",b.dataset.size===size));
   }
   document.querySelectorAll(".bar button[data-size]").forEach(b=>b.addEventListener("click",()=>setSize(b.dataset.size)));
-  async function fetchAndUpdateScores(){
+  let _lastEvents=[]; const _scoreByN={};
+
+  function setStatus(txt,fetching){
+    _statusTxt=txt;
+    const wrap=document.getElementById("mv-status");
+    if(wrap){wrap.classList.toggle("fetching",!!fetching);const t=document.getElementById("mv-status-txt");if(t)t.textContent=txt;}
     const badge=document.getElementById("lv-badge");
-    if(badge)badge.className="lv-badge fetching";
+    if(badge){badge.textContent=txt;badge.className="lv-badge"+(fetching?" fetching":"");}
+  }
+
+  function renderScores(){
+    _lastEvents.forEach(ev=>{
+      const comp=ev.competitions?.[0]; if(!comp)return;
+      const status=comp.status?.type, completed=status?.completed, live=status?.state==="in";
+      if(!completed&&!live)return;
+      const comps=comp.competitors||[];
+      const home=comps.find(c=>c.homeAway==="home"), away=comps.find(c=>c.homeAway==="away");
+      if(!home||!away)return;
+      const abbrs=comps.map(c=>c.team?.abbreviation);
+      const match=S.matches.find(m=>{const a=abbrs[0],b=abbrs[1];return (m.t1===a&&m.t2===b)||(m.t1===b&&m.t2===a);});
+      if(!match)return;
+      const scoreStr=`${home.score}–${away.score}`;
+      _scoreByN[match.n]={byCode:{[home.team?.abbreviation]:home.score,[away.team?.abbreviation]:away.score},live:!!live,completed:!!completed,detail:status?.shortDetail||status?.description||""};
+      const drow=document.querySelector(`[data-n="${match.n}"] .sc`);
+      if(drow){drow.textContent=scoreStr;drow.className=live?"sc lv":"sc";}
+      document.querySelectorAll(`.mv-match[data-mvn="${match.n}"] .mv-sc`).forEach(el=>{el.textContent=scoreStr;el.className="mv-sc "+(live?"lv":"done");});
+    });
+  }
+
+  async function fetchAndUpdateScores(){
+    setStatus(_statusTxt,true);
     try {
-      // Fetch a window: yesterday through today
       const pad=n=>String(n).padStart(2,"0");
       const fmt=d=>`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}`;
       const today=new Date(), yesterday=new Date(today-864e5);
@@ -487,45 +692,60 @@ window.WCS = (function () {
       const responses=await Promise.all(urls.map(u=>fetch(u).then(r=>r.json()).catch(()=>null)));
       const events=responses.flatMap(d=>d?.events||[]);
       const seen=new Set();
-      events.filter(e=>{if(seen.has(e.id))return false;seen.add(e.id);return true;}).forEach(ev=>{
-        const comp=ev.competitions?.[0];
-        if(!comp)return;
-        const status=comp.status?.type;
-        const completed=status?.completed;
-        const live=status?.state==="in";
-        if(!completed&&!live)return;
-        const comps=comp.competitors||[];
-        const abbrs=comps.map(c=>c.team?.abbreviation).filter(Boolean);
-        const scores=comps.map(c=>c.score||"0");
-        // Map to home/away order for score display
-        const home=comps.find(c=>c.homeAway==="home");
-        const away=comps.find(c=>c.homeAway==="away");
-        if(!home||!away)return;
-        const scoreStr=`${home.score}–${away.score}`;
-        // Find our match by team abbreviations (order-independent)
-        const match=S.matches.find(m=>{
-          const a=abbrs[0],b=abbrs[1];
-          return (m.t1===a&&m.t2===b)||(m.t1===b&&m.t2===a);
-        });
-        if(!match)return;
-        // Update desktop row
-        const row=document.querySelector(`[data-n="${match.n}"] .sc`);
-        if(row){
-          row.textContent=live?`${home.score}–${away.score}`:scoreStr;
-          row.className=live?"sc lv":"sc";
-        }
-        // Update mobile row
-        const mvrow=document.querySelector(`.mv-match[data-mvn="${match.n}"] .mv-sc`);
-        if(mvrow){mvrow.textContent=scoreStr;mvrow.className="mv-sc"+(live?" lv":"");}
-      });
-      if(badge){
-        const t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
-        badge.textContent="Updated "+t;badge.className="lv-badge";
-      }
+      _lastEvents=events.filter(e=>{if(seen.has(e.id))return false;seen.add(e.id);return true;});
+      renderScores();
+      const t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+      setStatus("Updated "+t,false);
     } catch(e){
-      if(badge){badge.textContent="Live data unavailable";badge.className="lv-badge";}
+      setStatus("Tap to retry",false);
     }
   }
+
+  /* ---- match detail sheet ---- */
+  function openMatchSheet(n){
+    const m=matchByN[n]; if(!m)return;
+    const s=_scoreByN[n];
+    document.getElementById("ms-chip").textContent=`${stageFull(m.stage)} · Match #${m.n}`;
+
+    const teamRowHTML=(code)=>{
+      const named=NAME[code];
+      const flagOrPh=named?`<img src="https://flagcdn.com/${ISO[code]}.svg" alt="">`:`<div class="ms-ph">${code.length<=3?code:"?"}</div>`;
+      const nameHTML=named?`<div class="ms-tn">${named}</div>`
+        :`<div class="ms-tn" style="font-size:15px;letter-spacing:0;text-transform:none;color:rgba(21,36,63,.55)">${slotLabel(code)}</div>`;
+      const sv=s&&s.byCode&&s.byCode[code]!=null?s.byCode[code]:null;
+      const scoreHTML=sv!=null?`<div class="ms-tscore">${sv}</div>`:`<div class="ms-tscore dim">–</div>`;
+      const starHTML=named?`<button class="ms-star" data-fav="${code}">${isFav(code)?"★":"☆"}</button>`:"";
+      return `<div class="ms-team">${flagOrPh}${nameHTML}${scoreHTML}${starHTML}</div>`;
+    };
+    document.getElementById("ms-teams").innerHTML=teamRowHTML(m.t1)+`<div class="ms-vs">vs</div>`+teamRowHTML(m.t2);
+
+    const st=document.getElementById("ms-status");
+    if(s&&s.live){st.textContent="● Live"+(s.detail?" · "+s.detail:"");st.className="ms-status live";st.style.display="";}
+    else if(s&&s.completed){st.textContent="Full Time";st.className="ms-status";st.style.display="";}
+    else{st.textContent="";st.className="ms-status";st.style.display="none";}
+
+    const metaRow=(ic,lb,vl)=>`<div class="ms-mrow"><span class="ms-ic">${ic}</span><span class="ms-lb">${lb}</span><span class="ms-vl">${vl}</span></div>`;
+    document.getElementById("ms-meta").innerHTML=
+      metaRow("📍","Venue",m.city)
+     +metaRow("📅","Date",`${DOW[m.day]||m.day}, ${m.date}`)
+     +((s&&s.completed)?"":metaRow("⏱","Kick-off",kickoffStr(m)))
+     +metaRow("🏆","Stage",stageFull(m.stage));
+
+    document.querySelectorAll("#ms-teams .ms-star").forEach(btn=>btn.addEventListener("click",e=>{
+      e.stopPropagation();
+      toggleFav(btn.dataset.fav);
+      btn.textContent=isFav(btn.dataset.fav)?"★":"☆";
+      rebuild();
+    }));
+    document.getElementById("ms-sheet").classList.add("open");
+  }
+
+  (function(){
+    const sheet=document.getElementById("ms-sheet");
+    const close=()=>sheet&&sheet.classList.remove("open");
+    document.getElementById("ms-bg").addEventListener("click",close);
+    document.getElementById("ms-close").addEventListener("click",close);
+  })();
 
   buildMobileView(); fetchAndUpdateScores(); fitStage(); setSize("letter");
   setInterval(fetchAndUpdateScores,60000);

@@ -2,8 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
 <title>World Cup 2026 — Wall Bracket</title>
+<meta name="theme-color" content="#15243f" />
+<link rel="manifest" href="manifest.json" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="WC 2026" />
+<link rel="apple-touch-icon" href="icons/icon-180.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=Saira:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -212,12 +220,18 @@ body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
 .mv-row img{width:15px;height:10px;object-fit:cover;border:.5px solid var(--line);border-radius:1px;flex-shrink:0;}
 .mv-row .nm{font-family:"Saira";font-weight:600;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink);}
 .mv-row .tg{font-family:"Saira Condensed";font-weight:700;font-size:7px;color:var(--red);border:1px solid var(--red);border-radius:2px;padding:0 2px;flex-shrink:0;}
+.mv-row.fav{background:rgba(168,129,47,.09);}
+.mv-row .fstar{color:var(--gold);font-size:9px;flex-shrink:0;margin-left:3px;}
+.mv-row.fav .nm{color:var(--ink);}
+.mv-sh-follow{display:flex;align-items:center;justify-content:center;gap:7px;margin:0 12px 14px;padding:11px;width:calc(100% - 24px);border:1.5px solid var(--gold);background:transparent;color:var(--gold);border-radius:6px;font-family:"Saira Condensed";font-weight:800;font-size:13px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;}
+.mv-sh-follow.on{background:var(--gold);color:var(--ink);}
+.mv-sh-follow .fstar{font-size:15px;line-height:1;}
 /* bottom sheet */
 .mv-sheet{position:fixed;inset:0;z-index:200;pointer-events:none;}
 .mv-sheet.open{pointer-events:all;}
 .mv-sheet-bg{position:absolute;inset:0;background:rgba(0,0,0,0);transition:background .25s;}
 .mv-sheet.open .mv-sheet-bg{background:rgba(0,0,0,.55);}
-.mv-sheet-panel{position:absolute;bottom:0;left:0;right:0;background:var(--paper);border-radius:14px 14px 0 0;padding:0 0 32px;transform:translateY(100%);transition:transform .32s cubic-bezier(.32,.72,0,1);max-height:82vh;overflow-y:auto;}
+.mv-sheet-panel{position:absolute;bottom:0;left:0;right:0;background:var(--paper);border-radius:14px 14px 0 0;padding:0 0 calc(32px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .32s cubic-bezier(.32,.72,0,1);max-height:82vh;overflow-y:auto;}
 .mv-sheet.open .mv-sheet-panel{transform:translateY(0);}
 .mv-sh-drag{width:36px;height:4px;border-radius:2px;background:rgba(21,36,63,.18);margin:10px auto 0;}
 .mv-sh-head{display:flex;align-items:center;gap:12px;padding:14px 16px 12px;}
@@ -252,7 +266,7 @@ body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
 .mv-match .mn{font-family:"Saira Condensed";font-weight:700;font-size:8px;color:var(--gold);width:22px;flex-shrink:0;}
 .mv-match .mt{flex:1;font-family:"Saira Condensed";font-weight:600;font-size:10px;color:var(--ink);}
 .mv-match .vs{color:var(--gold);margin:0 3px;font-weight:400;}
-.mv-foot{padding:12px 8px 36px;background:#0f1c2e;display:flex;flex-direction:column;gap:8px;}
+.mv-foot{padding:12px 8px calc(36px + env(safe-area-inset-bottom));background:#0f1c2e;display:flex;flex-direction:column;gap:8px;}
 .mv-lnk{display:flex;align-items:center;justify-content:center;font-family:"Saira Condensed";font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:13px;border-radius:3px;text-decoration:none;}
 .mv-lnk-ghost{background:rgba(255,255,255,.07);color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.15);}
 .mv-lnk-gold{background:var(--gold);color:var(--ink);}
@@ -347,6 +361,7 @@ body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
       </div>
       <button class="mv-sh-close" id="mv-sh-close">✕</button>
     </div>
+    <button class="mv-sh-follow" id="mv-sh-follow"><span class="fstar">☆</span><span class="ftxt">Follow</span></button>
     <div class="mv-sh-stats" id="mv-sh-stats"></div>
     <div class="mv-sh-sec">Group Stage Fixtures</div>
     <div class="mv-sh-fx" id="mv-sh-fx"></div>
@@ -474,6 +489,22 @@ window.WC = (function () {
   const flagImg=(iso,extra)=>`<img src="${flag(iso)}" alt="" loading="eager" crossorigin="anonymous"${extra?" "+extra:""}>`;
   const EXPORT=location.search.indexOf("export")!==-1;
   if(EXPORT)document.body.classList.add("exporting");
+
+  /* ---- favorites (shared with schedule page via wc26_favs) ---- */
+  const FAV_KEY="wc26_favs";
+  function getFavs(){try{return JSON.parse(localStorage.getItem(FAV_KEY))||[];}catch(e){return[];}}
+  function setFavs(a){try{localStorage.setItem(FAV_KEY,JSON.stringify(a));}catch(e){}}
+  function isFav(code){return getFavs().indexOf(code)>=0;}
+  function toggleFav(code){const a=getFavs();const i=a.indexOf(code);if(i>=0)a.splice(i,1);else a.push(code);setFavs(a);}
+  function applyFavs(){
+    document.querySelectorAll(".mv-row[data-mvcode]").forEach(row=>{
+      const on=isFav(row.dataset.mvcode);
+      row.classList.toggle("fav",on);
+      let star=row.querySelector(".fstar");
+      if(on&&!star){star=document.createElement("span");star.className="fstar";star.textContent="★";row.appendChild(star);}
+      else if(!on&&star){star.remove();}
+    });
+  }
 
   const hostsEl=document.getElementById("hosts");
   hostsEl.innerHTML=WC.hosts.map((h)=>flagImg(h.iso)).join('<span class="dot"></span>')+'<span class="dot"></span><span>Host Nations</span>';
@@ -739,6 +770,10 @@ window.WC = (function () {
       }
       return `<div class="mv-sh-frow"><img src="https://flagcdn.com/${opp.iso}.svg" alt="${opp.name}"><span class="mv-sh-fmu"><b>${teamInfo.name}</b> vs ${opp.name}</span>${scHTML}</div>`;
     }).join("");
+    const fb=document.getElementById("mv-sh-follow");
+    const syncFollow=()=>{const on=isFav(code);fb.classList.toggle("on",on);fb.querySelector(".fstar").textContent=on?"★":"☆";fb.querySelector(".ftxt").textContent=on?"Following":"Follow";};
+    syncFollow();
+    fb.onclick=()=>{toggleFav(code);syncFollow();applyFavs();};
     document.getElementById("mv-sheet").classList.add("open");
   }
 
@@ -749,7 +784,7 @@ window.WC = (function () {
     document.getElementById("mv-sh-close")?.addEventListener("click",close);
   })();
 
-  function init(){buildBracket();buildMobileView();if(applyPrintLock())return;fitStage();setSize("letter");fetchAndUpdateLive();setInterval(fetchAndUpdateLive,60000);}
+  function init(){buildBracket();buildMobileView();applyFavs();if(applyPrintLock())return;fitStage();setSize("letter");fetchAndUpdateLive();setInterval(fetchAndUpdateLive,60000);}
   if(document.readyState==="complete")init();else window.addEventListener("load",init);
   window.addEventListener("resize",()=>{fitStage();buildBracket();});
 })();
