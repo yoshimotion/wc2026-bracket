@@ -183,16 +183,42 @@ body.exporting{background:#fff;}
 body.exporting .bar{display:none!important;}
 body.exporting .stage{position:static;display:block;overflow:visible;height:auto;align-items:flex-start;justify-content:flex-start;}
 body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
-/* ---------- mobile ---------- */
-@media(max-width:899px){
-  html,body{overflow-x:hidden;overflow-y:auto;height:auto;}
-  .stage{position:static!important;display:block!important;overflow:visible!important;height:auto!important;}
-  .poster{transform:none!important;transform-origin:top left!important;box-shadow:0 4px 24px rgba(0,0,0,.35)!important;}
-  .bar{position:fixed;bottom:0;left:0;right:0;width:100%;border-radius:0;transform:none!important;
-    justify-content:center;flex-wrap:wrap;gap:3px;padding:6px 6px 8px;
-    background:rgba(15,22,40,.96);}
-  .bar .lab,.bar .sep{display:none;}
-  .bar button{padding:5px 10px;font-size:11px;}
+/* ---------- mobile view ---------- */
+.mv{display:none;background:#0f1c2e;min-height:100vh;}
+.mv-head{background:#0f1c2e;padding:20px 16px 16px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;border-bottom:2px solid var(--gold);}
+.mv-brand .mv-kicker{font-family:"Saira Condensed";font-weight:600;font-size:9px;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;margin-bottom:6px;}
+.mv-brand .mv-title{font-family:"Saira Condensed";font-weight:800;font-size:36px;line-height:.88;color:#fff;text-transform:uppercase;}
+.mv-brand .mv-title span{color:var(--gold);}
+.mv-brand .mv-sub{font-family:"Saira";font-weight:500;font-size:11px;color:rgba(255,255,255,.5);margin-top:8px;}
+.mv-flags{display:flex;align-items:center;gap:7px;margin-top:10px;}
+.mv-flags img{width:22px;height:15px;object-fit:cover;border:.5px solid rgba(255,255,255,.2);border-radius:2px;}
+.mv-flags .dot{width:3px;height:3px;border-radius:50%;background:var(--gold);}
+.mv-print-btn{flex-shrink:0;font-family:"Saira Condensed";font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;background:var(--gold);color:var(--ink);padding:8px 12px;border-radius:3px;text-decoration:none;white-space:nowrap;align-self:flex-start;margin-top:22px;}
+.mv-sec{font-family:"Saira Condensed";font-weight:800;font-size:11px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;padding:14px 12px 8px;background:#0f1c2e;}
+.mv-groups{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:0 8px 4px;background:#0f1c2e;}
+.mv-grp{background:var(--card);border:1px solid var(--line);overflow:hidden;}
+.mv-gh{display:flex;align-items:center;height:20px;background:var(--ink);}
+.mv-gl{background:var(--gold);color:var(--ink);font-family:"Saira Condensed";font-weight:800;font-size:11px;width:20px;display:flex;align-items:center;justify-content:center;height:100%;flex-shrink:0;}
+.mv-gn{font-family:"Saira Condensed";font-weight:600;font-size:9.5px;letter-spacing:.06em;color:#fff;padding-left:6px;}
+.mv-row{display:flex;align-items:center;gap:5px;height:22px;padding:0 5px;border-top:1px solid var(--line-soft);}
+.mv-row img{width:15px;height:10px;object-fit:cover;border:.5px solid var(--line);border-radius:1px;flex-shrink:0;}
+.mv-row .nm{font-family:"Saira";font-weight:600;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink);}
+.mv-row .tg{font-family:"Saira Condensed";font-weight:700;font-size:7px;color:var(--red);border:1px solid var(--red);border-radius:2px;padding:0 2px;flex-shrink:0;}
+.mv-rounds{padding:0 8px 4px;background:#0f1c2e;display:flex;flex-direction:column;gap:6px;}
+.mv-round{background:var(--card);border:1px solid var(--line);overflow:hidden;}
+.mv-rh{display:flex;align-items:center;justify-content:space-between;background:var(--ink);color:#fff;height:24px;padding:0 10px;font-family:"Saira Condensed";font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;}
+.mv-rh .mv-rd{font-size:9px;color:rgba(255,255,255,.5);font-weight:400;letter-spacing:0;font-family:"Saira";}
+.mv-match{display:flex;align-items:center;gap:8px;height:27px;padding:0 10px;border-top:1px solid var(--line-soft);}
+.mv-match .mn{font-family:"Saira Condensed";font-weight:700;font-size:8px;color:var(--gold);width:22px;flex-shrink:0;}
+.mv-match .mt{flex:1;font-family:"Saira Condensed";font-weight:600;font-size:10px;color:var(--ink);}
+.mv-match .vs{color:var(--gold);margin:0 3px;font-weight:400;}
+.mv-foot{padding:12px 8px 36px;background:#0f1c2e;display:flex;flex-direction:column;gap:8px;}
+.mv-lnk{display:flex;align-items:center;justify-content:center;font-family:"Saira Condensed";font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:13px;border-radius:3px;text-decoration:none;}
+.mv-lnk-ghost{background:rgba(255,255,255,.07);color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.15);}
+.mv-lnk-gold{background:var(--gold);color:var(--ink);}
+@media(max-width:767px){
+  .stage,.bar{display:none!important;}
+  .mv{display:block!important;}
 }
 </style>
 </head>
@@ -264,6 +290,8 @@ body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
     </footer>
   </div>
 </div>
+
+<div class="mv" id="mv"></div>
 
 <script>
 window.WC = (function () {
@@ -480,14 +508,48 @@ window.WC = (function () {
     if(window.__PRINTLOCK)return;
     const poster=document.getElementById("poster");
     if(EXPORT){poster.style.transform="none";return;}
-    if(window.innerWidth<900){
-      poster.style.transform="none";
-      poster.style.zoom=window.innerWidth/1400;
-    } else {
-      poster.style.zoom="";
-      const pad=24,s=Math.min((window.innerWidth-pad)/1400,(window.innerHeight-pad)/1000);
-      poster.style.transform=`scale(${s})`;
-    }
+    poster.style.zoom="";
+    const pad=24,s=Math.min((window.innerWidth-pad)/1400,(window.innerHeight-pad)/1000);
+    poster.style.transform=`scale(${s})`;
+  }
+
+  function buildMobileView(){
+    const mv=document.getElementById("mv");
+    if(!mv)return;
+    const flagUrl=iso=>`https://flagcdn.com/${iso}.svg`;
+    const hostsFlags=WC.hosts.map(h=>`<img src="${flagUrl(h.iso)}" alt="${h.name}">`).join('<span class="dot"></span>');
+    mv.innerHTML=`<div class="mv-head"><div class="mv-brand"><div class="mv-kicker">FIFA World Cup · Wall Bracket</div><div class="mv-title">World Cup<br><span>2026</span></div><div class="mv-sub">Jun 11 – Jul 19 &nbsp;·&nbsp; USA · Canada · Mexico</div><div class="mv-flags">${hostsFlags}</div></div><a class="mv-print-btn" href="?export" target="_blank">Print Poster</a></div><div class="mv-sec">Group Stage</div><div class="mv-groups" id="mv-groups"></div><div class="mv-sec">Knockout Rounds</div><div class="mv-rounds" id="mv-rounds"></div><div class="mv-foot"><a class="mv-lnk mv-lnk-ghost" href="World Cup 2026 Schedule.html">View Match Schedule &rarr;</a><a class="mv-lnk mv-lnk-gold" href="?export" target="_blank">Print / Download Poster</a></div>`;
+    const grpEl=document.getElementById("mv-groups");
+    Object.keys(WC.groups).forEach(letter=>{
+      const g=WC.groups[letter];
+      const card=document.createElement("div");
+      card.className="mv-grp";
+      const rows=g.teams.map(t=>{
+        const tag=t.tag?`<span class="tg">${t.tag}</span>`:"";
+        return `<div class="mv-row"><img src="${flagUrl(t.iso)}" alt="${t.name}" loading="lazy"><span class="nm">${t.name}${tag}</span></div>`;
+      }).join("");
+      card.innerHTML=`<div class="mv-gh"><div class="mv-gl">${letter}</div><div class="mv-gn">Group ${letter}</div></div>${rows}`;
+      grpEl.appendChild(card);
+    });
+    const rdEl=document.getElementById("mv-rounds");
+    const rounds=[
+      {label:"Round of 32",date:"Jun 28 – Jul 4",matches:[...WC.left.r32,...WC.right.r32]},
+      {label:"Round of 16",date:"Jul 6 – Jul 8",matches:[...WC.left.r16,...WC.right.r16]},
+      {label:"Quarter-Finals",date:"Jul 11 – Jul 12",matches:[...WC.left.qf,...WC.right.qf]},
+      {label:"Semi-Finals",date:"Jul 15 – Jul 16",matches:[...WC.left.sf,...WC.right.sf]},
+      {label:"Third Place",date:"Jul 18 · Miami",matches:[WC.third]},
+      {label:"Final",date:"Jul 19 · MetLife · NJ",matches:[WC.final]},
+    ];
+    rounds.forEach(rd=>{
+      const div=document.createElement("div");
+      div.className="mv-round";
+      const mh=rd.matches.map(m=>{
+        const[a,b]=m.slots;
+        return `<div class="mv-match"><span class="mn">#${m.id}</span><span class="mt">${a} <span class="vs">vs</span> ${b}</span></div>`;
+      }).join("");
+      div.innerHTML=`<div class="mv-rh"><span>${rd.label}</span><span class="mv-rd">${rd.date}</span></div>${mh}`;
+      rdEl.appendChild(div);
+    });
   }
 
   let pageStyle=document.getElementById("pagesize");
@@ -510,7 +572,7 @@ window.WC = (function () {
     document.head.appendChild(st);return true;
   }
 
-  function init(){buildBracket();if(applyPrintLock())return;fitStage();setSize("letter");}
+  function init(){buildBracket();buildMobileView();if(applyPrintLock())return;fitStage();setSize("letter");}
   if(document.readyState==="complete")init();else window.addEventListener("load",init);
   window.addEventListener("resize",()=>{fitStage();buildBracket();});
 })();

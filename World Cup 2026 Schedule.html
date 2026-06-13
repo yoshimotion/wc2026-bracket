@@ -118,16 +118,33 @@ body.exporting{background:#fff;}
 body.exporting .bar{display:none!important;}
 body.exporting .stage{position:static;display:block;overflow:visible;height:auto;align-items:flex-start;justify-content:flex-start;}
 body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
-/* ---------- mobile ---------- */
-@media(max-width:899px){
-  html,body{overflow-x:hidden;overflow-y:auto;height:auto;}
-  .stage{position:static!important;display:block!important;overflow:visible!important;height:auto!important;}
-  .poster{transform:none!important;transform-origin:top left!important;box-shadow:0 4px 24px rgba(0,0,0,.35)!important;}
-  .bar{position:fixed;bottom:0;left:0;right:0;width:100%;border-radius:0;transform:none!important;
-    justify-content:center;flex-wrap:wrap;gap:3px;padding:6px 6px 8px;
-    background:rgba(15,22,40,.96);}
-  .bar .lab,.bar .sep{display:none;}
-  .bar button{padding:5px 10px;font-size:11px;}
+/* ---------- mobile view ---------- */
+.mv{display:none;background:#0f1c2e;min-height:100vh;}
+.mv-head{background:#0f1c2e;padding:20px 16px 16px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;border-bottom:2px solid var(--gold);}
+.mv-brand .mv-kicker{font-family:"Saira Condensed";font-weight:600;font-size:9px;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;margin-bottom:6px;}
+.mv-brand .mv-title{font-family:"Saira Condensed";font-weight:800;font-size:32px;line-height:.88;color:#fff;text-transform:uppercase;}
+.mv-brand .mv-title span{color:var(--gold);}
+.mv-brand .mv-sub{font-family:"Saira";font-weight:500;font-size:11px;color:rgba(255,255,255,.5);margin-top:8px;}
+.mv-flags{display:flex;align-items:center;gap:7px;margin-top:10px;}
+.mv-flags img{width:22px;height:15px;object-fit:cover;border:.5px solid rgba(255,255,255,.2);border-radius:2px;}
+.mv-flags .dot{width:3px;height:3px;border-radius:50%;background:var(--gold);}
+.mv-print-btn{flex-shrink:0;font-family:"Saira Condensed";font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;background:var(--gold);color:var(--ink);padding:8px 12px;border-radius:3px;text-decoration:none;white-space:nowrap;align-self:flex-start;margin-top:22px;}
+.mv-sec{font-family:"Saira Condensed";font-weight:800;font-size:11px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;padding:14px 12px 8px;background:#0f1c2e;}
+.mv-rounds{padding:0 8px 4px;background:#0f1c2e;display:flex;flex-direction:column;gap:6px;}
+.mv-round{background:var(--paper);border:1px solid var(--line);overflow:hidden;}
+.mv-rh{display:flex;align-items:center;justify-content:space-between;background:var(--ink);color:#fff;height:24px;padding:0 10px;font-family:"Saira Condensed";font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;}
+.mv-rh .mv-rd{font-size:9px;color:rgba(255,255,255,.5);font-weight:400;letter-spacing:0;font-family:"Saira";}
+.mv-match{display:grid;grid-template-columns:22px 1fr auto;align-items:center;gap:6px;min-height:28px;padding:4px 8px;border-top:1px solid rgba(21,36,63,.12);}
+.mv-match .mn{font-family:"Saira Condensed";font-weight:700;font-size:8px;color:var(--gold);}
+.mv-match .mt{font-family:"Saira Condensed";font-weight:600;font-size:11px;color:var(--ink);line-height:1.25;}
+.mv-match .mc{font-family:"Saira";font-weight:400;font-size:9px;color:rgba(21,36,63,.55);text-align:right;white-space:nowrap;}
+.mv-foot{padding:12px 8px 36px;background:#0f1c2e;display:flex;flex-direction:column;gap:8px;}
+.mv-lnk{display:flex;align-items:center;justify-content:center;font-family:"Saira Condensed";font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:13px;border-radius:3px;text-decoration:none;}
+.mv-lnk-ghost{background:rgba(255,255,255,.07);color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.15);}
+.mv-lnk-gold{background:var(--gold);color:var(--ink);}
+@media(max-width:767px){
+  .stage,.bar{display:none!important;}
+  .mv{display:block!important;}
 }
 </style>
 </head>
@@ -175,6 +192,8 @@ body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
     </div>
   </div>
 </div>
+
+<div class="mv" id="mv"></div>
 
 <script>
 window.WCS = (function () {
@@ -376,15 +395,51 @@ window.WCS = (function () {
   function fitStage(){
     const poster=document.getElementById("poster");
     if(EXPORT){poster.style.transform="none";return;}
-    if(window.innerWidth<900){
-      poster.style.transform="none";
-      poster.style.zoom=window.innerWidth/1400;
-    } else {
-      poster.style.zoom="";
-      const s=Math.min((window.innerWidth-24)/1400,(window.innerHeight-24)/1000);
-      poster.style.transform=`scale(${s})`;
-    }
+    poster.style.zoom="";
+    const s=Math.min((window.innerWidth-24)/1400,(window.innerHeight-24)/1000);
+    poster.style.transform=`scale(${s})`;
   }
+
+  function buildMobileView(){
+    const mv=document.getElementById("mv");
+    if(!mv)return;
+    const{matches,ISO,NAME}=WCS;
+    const flagUrl=iso=>`https://flagcdn.com/${iso}.svg`;
+    const hostsHTML='<img src="https://flagcdn.com/us.svg" alt="USA"><span class="dot"></span><img src="https://flagcdn.com/ca.svg" alt="Canada"><span class="dot"></span><img src="https://flagcdn.com/mx.svg" alt="Mexico">';
+    mv.innerHTML=`<div class="mv-head"><div class="mv-brand"><div class="mv-kicker">FIFA World Cup · Match Schedule</div><div class="mv-title">World Cup<br><span>2026</span></div><div class="mv-sub">All times Pacific (PT) · 104 Matches</div><div class="mv-flags">${hostsHTML}</div></div><a class="mv-print-btn" href="?export" target="_blank">Print Poster</a></div><div class="mv-sec">Group Stage</div><div class="mv-rounds" id="mv-grps"></div><div class="mv-sec">Knockout Stage</div><div class="mv-rounds" id="mv-knock"></div><div class="mv-foot"><a class="mv-lnk mv-lnk-ghost" href="World Cup 2026 Bracket.html">View Wall Bracket &rarr;</a><a class="mv-lnk mv-lnk-gold" href="?export" target="_blank">Print / Download Poster</a></div>`;
+    const grpMatches={};
+    const knockStages=["R32","R16","QF","SF","3RD","FINAL"];
+    const knockMatches={};
+    matches.forEach(m=>{
+      if(m.stage.length<=2&&m.stage>="A"&&m.stage<="L"){
+        if(!grpMatches[m.stage])grpMatches[m.stage]=[];
+        grpMatches[m.stage].push(m);
+      } else {
+        if(!knockMatches[m.stage])knockMatches[m.stage]=[];
+        knockMatches[m.stage].push(m);
+      }
+    });
+    const grpEl=document.getElementById("mv-grps");
+    const teamLabel=code=>NAME[code]||code;
+    const stageLabel={R32:"Round of 32",R16:"Round of 16",QF:"Quarter-Finals",SF:"Semi-Finals","3RD":"Third Place",FINAL:"Final"};
+    Object.keys(grpMatches).sort().forEach(letter=>{
+      const div=document.createElement("div");
+      div.className="mv-round";
+      const mh=grpMatches[letter].map(m=>`<div class="mv-match"><span class="mn">#${m.n}</span><span class="mt">${teamLabel(m.t1)} <span style="color:var(--gold);margin:0 2px">vs</span> ${teamLabel(m.t2)}</span><span class="mc">${m.date}<br>${m.time}</span></div>`).join("");
+      div.innerHTML=`<div class="mv-rh"><span>Group ${letter}</span><span class="mv-rd">${grpMatches[letter][0].date.replace("Jun ","Jun ")} – ${grpMatches[letter][grpMatches[letter].length-1].date}</span></div>${mh}`;
+      grpEl.appendChild(div);
+    });
+    const knockEl=document.getElementById("mv-knock");
+    knockStages.forEach(stage=>{
+      if(!knockMatches[stage])return;
+      const div=document.createElement("div");
+      div.className="mv-round";
+      const mh=knockMatches[stage].map(m=>`<div class="mv-match"><span class="mn">#${m.n}</span><span class="mt">${m.t1} <span style="color:var(--gold);margin:0 2px">vs</span> ${m.t2}</span><span class="mc">${m.date}<br>${m.time}</span></div>`).join("");
+      div.innerHTML=`<div class="mv-rh"><span>${stageLabel[stage]||stage}</span><span class="mv-rd">${knockMatches[stage][0].date}</span></div>${mh}`;
+      knockEl.appendChild(div);
+    });
+  }
+
   let pageStyle=document.createElement("style");pageStyle.id="pagesize";document.head.appendChild(pageStyle);
   const PAGE={letter:"11in 8.5in",tabloid:"17in 11in",poster:"24in 18in"};
   function setSize(size){
@@ -394,7 +449,7 @@ window.WCS = (function () {
     document.querySelectorAll(".bar button[data-size]").forEach(b=>b.classList.toggle("on",b.dataset.size===size));
   }
   document.querySelectorAll(".bar button[data-size]").forEach(b=>b.addEventListener("click",()=>setSize(b.dataset.size)));
-  fitStage(); setSize("letter");
+  buildMobileView(); fitStage(); setSize("letter");
   window.addEventListener("resize",fitStage);
 })();
 </script>
