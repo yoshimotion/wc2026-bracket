@@ -273,6 +273,86 @@ body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
 .mv-lnk{display:flex;align-items:center;justify-content:center;font-family:"Saira Condensed";font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:13px;border-radius:3px;text-decoration:none;}
 .mv-lnk-ghost{background:rgba(255,255,255,.07);color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.15);}
 .mv-lnk-gold{background:var(--gold);color:var(--ink);}
+/* ---- clickable poster affordances ---- */
+.grp-h{cursor:pointer;transition:background .12s;}
+.grp-h:hover{background:#1d3052;}
+.row[data-code]{cursor:pointer;transition:background .12s;}
+.row[data-code]:hover{background:rgba(168,129,47,.12);}
+.rlbl{cursor:pointer;transition:color .12s;}
+.rlbl:hover{color:var(--gold-bright);}
+.match{cursor:pointer;}
+.match:hover{outline:1.5px solid var(--gold);outline-offset:1px;}
+
+/* ---- full-page detail overlay ---- */
+.detail{position:fixed;inset:0;z-index:500;background:var(--paper);overflow-y:auto;display:none;}
+.detail.open{display:block;}
+.detail::before{content:"";position:fixed;inset:0;background:radial-gradient(120% 80% at 50% -10%,rgba(255,255,255,.5),transparent 55%);pointer-events:none;}
+.dt-bar{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:14px;background:var(--ink);color:#fff;padding:13px 20px;box-shadow:0 2px 12px rgba(0,0,0,.18);}
+.dt-back{display:inline-flex;align-items:center;gap:7px;font-family:"Saira Condensed";font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;background:var(--gold);color:var(--ink);border:none;padding:9px 15px;border-radius:4px;cursor:pointer;flex-shrink:0;}
+.dt-back:hover{background:var(--gold-bright);}
+.dt-crumb{font-family:"Saira Condensed";font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.55);}
+.dt-crumb b{color:#fff;font-weight:800;}
+.dt-live{margin-left:auto;font-family:"Saira";font-weight:500;font-size:11px;color:rgba(255,255,255,.45);}
+.dt-wrap{position:relative;max-width:1000px;margin:0 auto;padding:28px 22px 64px;}
+
+.dt-hero{display:flex;align-items:center;gap:20px;padding-bottom:22px;border-bottom:2px solid var(--gold);margin-bottom:24px;}
+.dt-hero .dt-flag{width:84px;height:56px;object-fit:cover;border:1px solid var(--line);border-radius:4px;flex-shrink:0;box-shadow:0 4px 14px rgba(0,0,0,.18);}
+.dt-hero .dt-badge{width:64px;height:64px;border-radius:8px;background:var(--ink);color:var(--gold);display:flex;align-items:center;justify-content:center;font-family:"Saira Condensed";font-weight:800;font-size:34px;flex-shrink:0;}
+.dt-htext{flex:1;min-width:0;}
+.dt-kick{font-family:"Saira Condensed";font-weight:700;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;}
+.dt-title{font-family:"Saira Condensed";font-weight:800;font-size:clamp(34px,6vw,56px);line-height:.9;text-transform:uppercase;color:var(--ink);}
+.dt-sub{font-family:"Saira";font-weight:500;font-size:14px;color:var(--ink-2);margin-top:6px;}
+.dt-tag{display:inline-block;font-family:"Saira Condensed";font-weight:700;font-size:11px;letter-spacing:.08em;color:var(--red);border:1px solid var(--red);border-radius:3px;padding:1px 6px;margin-left:8px;vertical-align:middle;}
+.dt-follow{flex-shrink:0;display:inline-flex;align-items:center;gap:7px;font-family:"Saira Condensed";font-weight:800;font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:11px 18px;border:1.5px solid var(--gold);background:transparent;color:var(--gold);border-radius:6px;cursor:pointer;}
+.dt-follow.on{background:var(--gold);color:var(--ink);}
+
+.dt-sec{font-family:"Saira Condensed";font-weight:800;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:30px 0 12px;}
+.dt-statgrid{display:grid;grid-template-columns:repeat(8,1fr);gap:10px;}
+.dt-stat{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 6px;text-align:center;}
+.dt-stat b{display:block;font-family:"Saira Condensed";font-weight:800;font-size:30px;color:var(--ink);line-height:1;}
+.dt-stat span{font-family:"Saira Condensed";font-weight:600;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(21,36,63,.45);margin-top:6px;display:block;}
+.dt-stat.pts b{color:var(--gold);}
+
+.dt-table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden;}
+.dt-table th{font-family:"Saira Condensed";font-weight:700;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(21,36,63,.5);text-align:center;padding:10px 6px;background:rgba(21,36,63,.04);border-bottom:1px solid var(--line);}
+.dt-table th.l,.dt-table td.l{text-align:left;}
+.dt-table td{font-family:"Saira Condensed";font-weight:700;font-size:15px;color:var(--ink);text-align:center;padding:11px 6px;border-bottom:1px solid var(--line-soft);}
+.dt-table tr:last-child td{border-bottom:none;}
+.dt-table td.l{font-family:"Saira";font-weight:600;font-size:14px;}
+.dt-table td.l img{width:22px;height:15px;object-fit:cover;border:.5px solid var(--line);border-radius:2px;vertical-align:middle;margin-right:9px;}
+.dt-table td.pos{color:var(--gold);font-weight:800;}
+.dt-table tr.adv td{background:rgba(168,129,47,.09);}
+.dt-table tr.adv td.l{box-shadow:inset 3px 0 0 var(--gold);}
+.dt-table tr.me td{background:rgba(21,36,63,.06);}
+.dt-table tr.clk{cursor:pointer;}
+.dt-table tr.clk:hover td{background:rgba(168,129,47,.14);}
+
+.dt-fx{display:flex;flex-direction:column;gap:8px;}
+.dt-frow{display:grid;grid-template-columns:120px 1fr auto;align-items:center;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:13px 16px;cursor:pointer;transition:transform .1s,box-shadow .1s;}
+.dt-frow:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,.1);}
+.dt-fdate{font-family:"Saira Condensed";font-weight:700;font-size:13px;color:var(--ink-2);}
+.dt-fdate small{display:block;font-family:"Saira";font-weight:400;font-size:11px;color:rgba(21,36,63,.45);margin-top:2px;}
+.dt-fmu{display:flex;align-items:center;gap:9px;font-family:"Saira Condensed";font-weight:700;font-size:16px;color:var(--ink);flex-wrap:wrap;}
+.dt-fmu img{width:24px;height:16px;object-fit:cover;border:.5px solid var(--line);border-radius:2px;}
+.dt-fmu .vs{color:var(--gold);font-weight:600;font-size:12px;margin:0 2px;}
+.dt-fmu .slot{font-weight:600;font-size:13px;color:var(--ink-2);}
+.dt-fmeta{text-align:right;flex-shrink:0;}
+.dt-fcity{font-family:"Saira";font-weight:500;font-size:12px;color:rgba(21,36,63,.5);}
+.dt-fsc{font-family:"Saira Condensed";font-weight:800;font-size:20px;color:var(--ink);}
+.dt-fsc.lv{color:var(--red);animation:lvblink 1.2s infinite;}
+.dt-fsc.win{color:#2d7a3a;} .dt-fsc.loss{color:var(--red);} .dt-fsc.draw{color:var(--ink-2);}
+.dt-mno{font-family:"Saira Condensed";font-weight:700;font-size:11px;color:var(--gold);margin-bottom:3px;}
+.dt-note{font-family:"Saira";font-weight:500;font-size:13px;color:var(--ink-2);background:var(--card);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:6px;padding:13px 16px;line-height:1.5;}
+
+@media(max-width:760px){
+  .dt-statgrid{grid-template-columns:repeat(4,1fr);}
+  .dt-frow{grid-template-columns:88px 1fr;gap:10px;}
+  .dt-fmeta{grid-column:1 / -1;text-align:left;display:flex;align-items:center;gap:12px;}
+  .dt-hero{flex-wrap:wrap;}
+}
+
+@media print{.detail{display:none!important;}}
+
 @media(max-width:767px){
   .stage,.bar{display:none!important;}
   .mv{display:block!important;}
@@ -369,6 +449,15 @@ body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
     <div class="mv-sh-sec">Group Stage Fixtures</div>
     <div class="mv-sh-fx" id="mv-sh-fx"></div>
   </div>
+</div>
+
+<div class="detail" id="detail">
+  <div class="dt-bar">
+    <button class="dt-back" id="dt-back">← Back</button>
+    <div class="dt-crumb" id="dt-crumb"></div>
+    <div class="dt-live" id="dt-live"></div>
+  </div>
+  <div class="dt-wrap" id="dt-wrap"></div>
 </div>
 
 <script>
@@ -512,6 +601,159 @@ window.WC = (function () {
   /* ---- group-stage fixture dates (all times PT), keyed by sorted team pair ---- */
   const GFIX={"MEX|RSA":"Jun 11 · 12:00 PM","CZE|KOR":"Jun 11 · 7:00 PM","BIH|CAN":"Jun 12 · 12:00 PM","PAR|USA":"Jun 12 · 6:00 PM","QAT|SUI":"Jun 13 · 12:00 PM","BRA|MAR":"Jun 13 · 3:00 PM","HAI|SCO":"Jun 13 · 6:00 PM","AUS|TUR":"Jun 13 · 9:00 PM","CUW|GER":"Jun 14 · 10:00 AM","JPN|NED":"Jun 14 · 1:00 PM","CIV|ECU":"Jun 14 · 4:00 PM","SWE|TUN":"Jun 14 · 7:00 PM","CPV|ESP":"Jun 15 · 9:00 AM","BEL|EGY":"Jun 15 · 12:00 PM","KSA|URU":"Jun 15 · 3:00 PM","IRN|NZL":"Jun 15 · 6:00 PM","FRA|SEN":"Jun 16 · 12:00 PM","IRQ|NOR":"Jun 16 · 3:00 PM","ALG|ARG":"Jun 16 · 6:00 PM","AUT|JOR":"Jun 16 · 9:00 PM","COD|POR":"Jun 17 · 10:00 AM","CRO|ENG":"Jun 17 · 1:00 PM","GHA|PAN":"Jun 17 · 4:00 PM","COL|UZB":"Jun 17 · 7:00 PM","CZE|RSA":"Jun 18 · 9:00 AM","BIH|SUI":"Jun 18 · 12:00 PM","CAN|QAT":"Jun 18 · 3:00 PM","KOR|MEX":"Jun 18 · 6:00 PM","AUS|USA":"Jun 19 · 12:00 PM","MAR|SCO":"Jun 19 · 3:00 PM","BRA|HAI":"Jun 19 · 6:00 PM","PAR|TUR":"Jun 19 · 9:00 PM","NED|SWE":"Jun 20 · 10:00 AM","CIV|GER":"Jun 20 · 1:00 PM","CUW|ECU":"Jun 20 · 5:00 PM","JPN|TUN":"Jun 20 · 9:00 PM","ESP|KSA":"Jun 21 · 9:00 AM","BEL|IRN":"Jun 21 · 12:00 PM","CPV|URU":"Jun 21 · 3:00 PM","EGY|NZL":"Jun 21 · 6:00 PM","NOR|SEN":"Jun 22 · 5:00 PM","FRA|IRQ":"Jun 22 · 2:00 PM","ARG|AUT":"Jun 22 · 10:00 AM","ALG|JOR":"Jun 22 · 8:00 PM","ENG|GHA":"Jun 23 · 1:00 PM","CRO|PAN":"Jun 23 · 4:00 PM","POR|UZB":"Jun 23 · 10:00 AM","COD|COL":"Jun 23 · 7:00 PM","BRA|SCO":"Jun 24 · 3:00 PM","HAI|MAR":"Jun 24 · 3:00 PM","CAN|SUI":"Jun 24 · 12:00 PM","BIH|QAT":"Jun 24 · 12:00 PM","CZE|MEX":"Jun 24 · 6:00 PM","KOR|RSA":"Jun 24 · 6:00 PM","CIV|CUW":"Jun 25 · 1:00 PM","ECU|GER":"Jun 25 · 1:00 PM","JPN|SWE":"Jun 25 · 4:00 PM","NED|TUN":"Jun 25 · 4:00 PM","TUR|USA":"Jun 25 · 7:00 PM","AUS|PAR":"Jun 25 · 7:00 PM","BEL|NZL":"Jun 26 · 8:00 PM","EGY|IRN":"Jun 26 · 8:00 PM","ESP|URU":"Jun 26 · 5:00 PM","CPV|KSA":"Jun 26 · 5:00 PM","FRA|NOR":"Jun 26 · 12:00 PM","IRQ|SEN":"Jun 26 · 12:00 PM","ENG|PAN":"Jun 27 · 2:00 PM","CRO|GHA":"Jun 27 · 2:00 PM","ARG|JOR":"Jun 27 · 7:00 PM","ALG|AUT":"Jun 27 · 7:00 PM","COL|POR":"Jun 27 · 4:30 PM","COD|UZB":"Jun 27 · 4:30 PM"};
 
+  /* ================= full-page detail overlay ================= */
+  const _MRAW=[[1,"Jun 11","Thu","12:00 PM","A","MEX","RSA","Mexico City"],[2,"Jun 11","Thu","7:00 PM","A","KOR","CZE","Guadalajara"],[3,"Jun 12","Fri","12:00 PM","B","CAN","BIH","Toronto"],[4,"Jun 12","Fri","6:00 PM","D","USA","PAR","Los Angeles"],[5,"Jun 13","Sat","12:00 PM","B","QAT","SUI","SF Bay Area"],[6,"Jun 13","Sat","3:00 PM","C","BRA","MAR","New York/NJ"],[7,"Jun 13","Sat","6:00 PM","C","HAI","SCO","Boston"],[8,"Jun 13","Sat","9:00 PM","D","AUS","TUR","Vancouver"],[9,"Jun 14","Sun","10:00 AM","E","GER","CUW","Houston"],[10,"Jun 14","Sun","1:00 PM","F","NED","JPN","Dallas"],[11,"Jun 14","Sun","4:00 PM","E","CIV","ECU","Philadelphia"],[12,"Jun 14","Sun","7:00 PM","F","SWE","TUN","Monterrey"],[13,"Jun 15","Mon","9:00 AM","H","ESP","CPV","Atlanta"],[14,"Jun 15","Mon","12:00 PM","G","BEL","EGY","Seattle"],[15,"Jun 15","Mon","3:00 PM","H","KSA","URU","Miami"],[16,"Jun 15","Mon","6:00 PM","G","IRN","NZL","Los Angeles"],[17,"Jun 16","Tue","12:00 PM","I","FRA","SEN","New York/NJ"],[18,"Jun 16","Tue","3:00 PM","I","IRQ","NOR","Boston"],[19,"Jun 16","Tue","6:00 PM","J","ARG","ALG","Kansas City"],[20,"Jun 16","Tue","9:00 PM","J","AUT","JOR","SF Bay Area"],[21,"Jun 17","Wed","10:00 AM","K","POR","COD","Houston"],[22,"Jun 17","Wed","1:00 PM","L","ENG","CRO","Dallas"],[23,"Jun 17","Wed","4:00 PM","L","GHA","PAN","Toronto"],[24,"Jun 17","Wed","7:00 PM","K","UZB","COL","Mexico City"],[25,"Jun 18","Thu","9:00 AM","A","CZE","RSA","Atlanta"],[26,"Jun 18","Thu","12:00 PM","B","SUI","BIH","Los Angeles"],[27,"Jun 18","Thu","3:00 PM","B","CAN","QAT","Vancouver"],[28,"Jun 18","Thu","6:00 PM","A","MEX","KOR","Guadalajara"],[29,"Jun 19","Fri","12:00 PM","D","USA","AUS","Seattle"],[30,"Jun 19","Fri","3:00 PM","C","SCO","MAR","Boston"],[31,"Jun 19","Fri","6:00 PM","C","BRA","HAI","Philadelphia"],[32,"Jun 19","Fri","9:00 PM","D","TUR","PAR","SF Bay Area"],[33,"Jun 20","Sat","10:00 AM","F","NED","SWE","Houston"],[34,"Jun 20","Sat","1:00 PM","E","GER","CIV","Toronto"],[35,"Jun 20","Sat","5:00 PM","E","ECU","CUW","Kansas City"],[36,"Jun 20","Sat","9:00 PM","F","TUN","JPN","Monterrey"],[37,"Jun 21","Sun","9:00 AM","H","ESP","KSA","Atlanta"],[38,"Jun 21","Sun","12:00 PM","G","BEL","IRN","Los Angeles"],[39,"Jun 21","Sun","3:00 PM","H","URU","CPV","Miami"],[40,"Jun 21","Sun","6:00 PM","G","NZL","EGY","Vancouver"],[41,"Jun 22","Mon","5:00 PM","I","NOR","SEN","New York/NJ"],[42,"Jun 22","Mon","2:00 PM","I","FRA","IRQ","Philadelphia"],[43,"Jun 22","Mon","10:00 AM","J","ARG","AUT","Dallas"],[44,"Jun 22","Mon","8:00 PM","J","JOR","ALG","SF Bay Area"],[45,"Jun 23","Tue","1:00 PM","L","ENG","GHA","Boston"],[46,"Jun 23","Tue","4:00 PM","L","PAN","CRO","Toronto"],[47,"Jun 23","Tue","10:00 AM","K","POR","UZB","Houston"],[48,"Jun 23","Tue","7:00 PM","K","COL","COD","Guadalajara"],[49,"Jun 24","Wed","3:00 PM","C","SCO","BRA","Miami"],[50,"Jun 24","Wed","3:00 PM","C","MAR","HAI","Atlanta"],[51,"Jun 24","Wed","12:00 PM","B","SUI","CAN","Vancouver"],[52,"Jun 24","Wed","12:00 PM","B","BIH","QAT","Seattle"],[53,"Jun 24","Wed","6:00 PM","A","CZE","MEX","Mexico City"],[54,"Jun 24","Wed","6:00 PM","A","RSA","KOR","Monterrey"],[55,"Jun 25","Thu","1:00 PM","E","CUW","CIV","Philadelphia"],[56,"Jun 25","Thu","1:00 PM","E","ECU","GER","New York/NJ"],[57,"Jun 25","Thu","4:00 PM","F","JPN","SWE","Dallas"],[58,"Jun 25","Thu","4:00 PM","F","TUN","NED","Kansas City"],[59,"Jun 25","Thu","7:00 PM","D","TUR","USA","Los Angeles"],[60,"Jun 25","Thu","7:00 PM","D","PAR","AUS","SF Bay Area"],[61,"Jun 26","Fri","8:00 PM","G","NZL","BEL","Vancouver"],[62,"Jun 26","Fri","8:00 PM","G","EGY","IRN","Seattle"],[63,"Jun 26","Fri","5:00 PM","H","URU","ESP","Guadalajara"],[64,"Jun 26","Fri","5:00 PM","H","CPV","KSA","Houston"],[65,"Jun 26","Fri","12:00 PM","I","NOR","FRA","Boston"],[66,"Jun 26","Fri","12:00 PM","I","SEN","IRQ","Toronto"],[67,"Jun 27","Sat","2:00 PM","L","PAN","ENG","New York/NJ"],[68,"Jun 27","Sat","2:00 PM","L","CRO","GHA","Philadelphia"],[69,"Jun 27","Sat","7:00 PM","J","JOR","ARG","Dallas"],[70,"Jun 27","Sat","7:00 PM","J","ALG","AUT","Kansas City"],[71,"Jun 27","Sat","4:30 PM","K","COL","POR","Miami"],[72,"Jun 27","Sat","4:30 PM","K","COD","UZB","Atlanta"],[73,"Jun 28","Sun","12:00 PM","R32","2A","2B","Los Angeles"],[74,"Jun 29","Mon","1:30 PM","R32","1E","3rd ABCDF","Boston"],[75,"Jun 29","Mon","6:00 PM","R32","1F","2C","Monterrey"],[76,"Jun 29","Mon","10:00 AM","R32","1C","2F","Houston"],[77,"Jun 30","Tue","2:00 PM","R32","1I","3rd CDFGH","New York/NJ"],[78,"Jun 30","Tue","10:00 AM","R32","2E","2I","Dallas"],[79,"Jun 30","Tue","6:00 PM","R32","1A","3rd CEFHI","Mexico City"],[80,"Jul 1","Wed","9:00 AM","R32","1L","3rd EHIJK","Atlanta"],[81,"Jul 1","Wed","5:00 PM","R32","1D","3rd BEFIJ","SF Bay Area"],[82,"Jul 1","Wed","1:00 PM","R32","1G","3rd AEHIJ","Seattle"],[83,"Jul 2","Thu","4:00 PM","R32","2K","2L","Toronto"],[84,"Jul 2","Thu","12:00 PM","R32","1H","2J","Los Angeles"],[85,"Jul 2","Thu","8:00 PM","R32","1B","3rd EFGIJ","Vancouver"],[86,"Jul 3","Fri","3:00 PM","R32","1J","2H","Miami"],[87,"Jul 3","Fri","6:30 PM","R32","1K","3rd DEIJL","Kansas City"],[88,"Jul 3","Fri","11:00 AM","R32","2D","2G","Dallas"],[89,"Jul 4","Sat","2:00 PM","R16","W74","W77","Philadelphia"],[90,"Jul 4","Sat","10:00 AM","R16","W73","W75","Houston"],[91,"Jul 5","Sun","1:00 PM","R16","W76","W78","New York/NJ"],[92,"Jul 5","Sun","5:00 PM","R16","W79","W80","Mexico City"],[93,"Jul 6","Mon","12:00 PM","R16","W83","W84","Dallas"],[94,"Jul 6","Mon","5:00 PM","R16","W81","W82","Seattle"],[95,"Jul 7","Tue","9:00 AM","R16","W86","W88","Atlanta"],[96,"Jul 7","Tue","1:00 PM","R16","W85","W87","Vancouver"],[97,"Jul 9","Thu","1:00 PM","QF","W89","W90","Boston"],[98,"Jul 10","Fri","12:00 PM","QF","W93","W94","Los Angeles"],[99,"Jul 11","Sat","2:00 PM","QF","W91","W92","Miami"],[100,"Jul 11","Sat","6:00 PM","QF","W95","W96","Kansas City"],[101,"Jul 14","Tue","12:00 PM","SF","W97","W98","Dallas"],[102,"Jul 15","Wed","12:00 PM","SF","W99","W100","Atlanta"],[103,"Jul 18","Sat","2:00 PM","3RD","L101","L102","Miami"],[104,"Jul 19","Sun","12:00 PM","FINAL","W101","W102","New York/NJ"]];
+  const MATCHES=_MRAW.map(r=>({n:r[0],date:r[1],day:r[2],time:r[3],stage:r[4],t1:r[5],t2:r[6],city:r[7]}));
+  const byN={}; MATCHES.forEach(m=>byN[m.n]=m);
+  const TEAM={}; Object.entries(WC.groups).forEach(([letter,g])=>g.teams.forEach(t=>{TEAM[t.code]={name:t.name,iso:t.iso,code:t.code,tag:t.tag||"",group:letter};}));
+
+  const STAGE_NAMES={R32:"Round of 32",R16:"Round of 16",QF:"Quarter-Finals",SF:"Semi-Finals","3RD":"Third-Place Play-off",FINAL:"Final"};
+  const ROUND_DATES={R32:"Jun 28 – Jul 3",R16:"Jul 4 – Jul 7",QF:"Jul 9 – Jul 11",SF:"Jul 14 – Jul 15","3RD":"Jul 18 · Miami",FINAL:"Jul 19 · MetLife, NJ"};
+  const ROUND_LABELS={"Round of 32":"R32","Round of 16":"R16","Quarter-Finals":"QF","Semi-Finals":"SF","Final":"FINAL"};
+
+  function ordinal(n){return n+(["th","st","nd","rd"][(n%100>10&&n%100<14)?0:(n%10<4?n%10:0)]);}
+  function slotLabel(s){
+    if(TEAM[s])return TEAM[s].name;
+    if(/^W\d+$/.test(s))return "Winner of Match "+s.slice(1);
+    if(/^L\d+$/.test(s))return "Loser of Match "+s.slice(1);
+    if(/^[12][A-L]$/.test(s))return (s[0]==="1"?"Winner Group ":"Runner-up Group ")+s[1];
+    if(/^3rd/.test(s))return "Best 3rd ("+s.slice(3).trim()+")";
+    return s;
+  }
+  const teamMatches=code=>MATCHES.filter(m=>m.t1===code||m.t2===code).sort((a,b)=>a.n-b.n);
+  const groupMatches=letter=>MATCHES.filter(m=>m.stage===letter).sort((a,b)=>a.n-b.n);
+  const roundMatches=stage=>MATCHES.filter(m=>m.stage===stage).sort((a,b)=>a.n-b.n);
+
+  function statVal(stats,name){const s=(stats||[]).find(x=>x.name===name);return s!=null?Math.round(s.value):null;}
+  function rankOf(e){const v=statVal(e.stats,"rank");return v==null?99:v;}
+  function groupEntries(letter){
+    const grp=(_standingsData&&_standingsData.children||[]).find(g=>g.name===`Group ${letter}`);
+    const entries=(grp&&grp.standings&&grp.standings.entries)||[];
+    return [...entries].sort((a,b)=>rankOf(a)-rankOf(b));
+  }
+  function eventForPair(a,b){
+    return _events.find(ev=>{const cs=(ev.competitions&&ev.competitions[0]&&ev.competitions[0].competitors)||[];const ab=cs.map(c=>c.team&&c.team.abbreviation);return ab.indexOf(a)>=0&&ab.indexOf(b)>=0;});
+  }
+  function matchScore(m){
+    if(!TEAM[m.t1]||!TEAM[m.t2])return null;
+    const ev=eventForPair(m.t1,m.t2);if(!ev)return null;
+    const comp=ev.competitions[0],stype=comp.status&&comp.status.type;
+    if(!stype||(!stype.completed&&stype.state!=="in"))return null;
+    const cs=comp.competitors;
+    const c1=cs.find(c=>c.team&&c.team.abbreviation===m.t1),c2=cs.find(c=>c.team&&c.team.abbreviation===m.t2);
+    return {s1:parseInt(c1&&c1.score||0),s2:parseInt(c2&&c2.score||0),live:stype.state==="in",completed:!!stype.completed};
+  }
+
+  function fxRowHTML(m,opts){
+    opts=opts||{};
+    const perspective=opts.perspective||null;
+    const sc=matchScore(m);
+    const side=code=>{const t=TEAM[code];return t?`<img src="${flag(t.iso)}"> ${t.name}`:`<span class="slot">${slotLabel(code)}</span>`;};
+    let scHTML="";
+    if(sc){
+      let res="";
+      if(sc.completed&&perspective){const mine=perspective===m.t1?sc.s1:sc.s2,th=perspective===m.t1?sc.s2:sc.s1;res=mine>th?"win":mine<th?"loss":"draw";}
+      scHTML=`<div class="dt-fsc ${sc.live?"lv":""} ${res}">${sc.s1}–${sc.s2}</div>`;
+    }
+    const clickTeam=perspective?(perspective===m.t1?m.t2:m.t1):null;
+    const clickable=clickTeam&&TEAM[clickTeam];
+    const mno=opts.showNo?`<div class="dt-mno">Match ${m.n}</div>`:"";
+    return `<div class="dt-frow${clickable?"":" static"}"${clickable?` data-team="${clickTeam}"`:""}><div class="dt-fdate">${mno}${m.date}<small>${m.time} PT</small></div><div class="dt-fmu">${side(m.t1)} <span class="vs">vs</span> ${side(m.t2)}</div><div class="dt-fmeta"><div class="dt-fcity">${m.city}</div>${scHTML}</div></div>`;
+  }
+
+  function groupTableHTML(letter,me){
+    const g=WC.groups[letter];
+    const entries=groupEntries(letter);
+    const order=entries.length?entries.map(e=>e.team&&e.team.abbreviation):g.teams.map(t=>t.code);
+    const rows=order.map((code,idx)=>{
+      const t=TEAM[code];if(!t)return"";
+      const entry=entries.find(e=>e.team&&e.team.abbreviation===code);
+      const st=entry?entry.stats:[];
+      const v=n=>{const x=statVal(st,n);return x==null?"–":x;};
+      const w=v("wins"),d=v("ties"),l=v("losses"),gf=v("pointsFor"),ga=v("pointsAgainst"),pts=v("points");
+      const pld=(w!=="–")?(+w+ +d+ +l):"–";
+      const gd=(gf!=="–")?((gf-ga>=0?"+":"")+(gf-ga)):"–";
+      const rank=entry?rankOf(entry):(idx+1);
+      const adv=entries.length&&rank<=2;
+      const cls=[adv?"adv":"",code===me?"me":"","clk"].filter(Boolean).join(" ");
+      return `<tr class="${cls}" data-team="${code}"><td class="pos">${entries.length?rank:"–"}</td><td class="l"><img src="${flag(t.iso)}">${t.name}${t.tag?` <span class="dt-tag">${t.tag}</span>`:""}</td><td>${pld}</td><td>${w}</td><td>${d}</td><td>${l}</td><td>${gf}</td><td>${ga}</td><td>${gd}</td><td>${pts}</td></tr>`;
+    }).join("");
+    return `<table class="dt-table"><thead><tr><th>#</th><th class="l">Team</th><th>PLD</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>PTS</th></tr></thead><tbody>${rows}</tbody></table>`;
+  }
+
+  function setCrumb(h){document.getElementById("dt-crumb").innerHTML=h;}
+  function setBody(h){document.getElementById("dt-wrap").innerHTML=h;document.getElementById("detail").scrollTop=0;}
+
+  function renderTeam(code){
+    const t=TEAM[code];if(!t)return;
+    setCrumb(`Wall Bracket / <b>${t.name}</b>`);
+    const entries=groupEntries(t.group);
+    const entry=entries.find(e=>e.team&&e.team.abbreviation===code);
+    const st=entry?entry.stats:[];
+    const g=n=>{const v=statVal(st,n);return v==null?"–":v;};
+    const w=g("wins"),d=g("ties"),l=g("losses"),gf=g("pointsFor"),ga=g("pointsAgainst"),pts=g("points");
+    const pld=(w!=="–"&&d!=="–"&&l!=="–")?(+w+ +d+ +l):"–";
+    const gd=(gf!=="–"&&ga!=="–")?((gf-ga>=0?"+":"")+(gf-ga)):"–";
+    const rank=entry?rankOf(entry):null;
+    const pos=(rank&&rank<99)?ordinal(rank)+" place":"Group stage";
+    const fav=isFav(code);
+    const stats=[["PLD",pld],["W",w],["D",d],["L",l],["GF",gf],["GA",ga],["GD",gd],["PTS",pts]];
+    let html=`<div class="dt-hero"><img class="dt-flag" src="${flag(t.iso)}" alt=""><div class="dt-htext"><div class="dt-kick">Group ${t.group} · ${pos}</div><div class="dt-title">${t.name}${t.tag?`<span class="dt-tag">${t.tag}</span>`:""}</div><div class="dt-sub">vs ${teamMatches(code).map(m=>{const o=m.t1===code?m.t2:m.t1;return TEAM[o]?TEAM[o].name:o;}).join(" · ")}</div></div><button class="dt-follow${fav?" on":""}" id="dt-follow"><span>${fav?"★":"☆"}</span><span>${fav?"Following":"Follow"}</span></button></div>`;
+    html+=`<div class="dt-sec">Group Stage Record</div><div class="dt-statgrid">`+stats.map(s=>`<div class="dt-stat${s[0]==="PTS"?" pts":""}"><b>${s[1]}</b><span>${s[0]}</span></div>`).join("")+`</div>`;
+    html+=`<div class="dt-sec">Group ${t.group} Standings</div>`+groupTableHTML(t.group,code);
+    html+=`<div class="dt-sec">${t.name} — Group Fixtures</div><div class="dt-fx">`+teamMatches(code).map(m=>fxRowHTML(m,{perspective:code})).join("")+`</div>`;
+    setBody(html);
+    const fb=document.getElementById("dt-follow");
+    if(fb)fb.onclick=()=>{toggleFav(code);applyFavs();renderTeam(code);};
+  }
+
+  function renderGroup(letter){
+    const g=WC.groups[letter];if(!g)return;
+    setCrumb(`Wall Bracket / <b>Group ${letter}</b>`);
+    let html=`<div class="dt-hero"><div class="dt-badge">${letter}</div><div class="dt-htext"><div class="dt-kick">Group Stage</div><div class="dt-title">Group ${letter}</div><div class="dt-sub">${g.teams.map(t=>t.name).join(" · ")} · First match ${g.from}</div></div></div>`;
+    html+=`<div class="dt-sec">Standings</div>`+groupTableHTML(letter,null);
+    html+=`<div class="dt-sec">All Fixtures</div><div class="dt-fx">`+groupMatches(letter).map(m=>fxRowHTML(m,{})).join("")+`</div>`;
+    html+=`<div class="dt-sec">Advancement</div><div class="dt-note">The top two teams advance directly to the Round of 32. The eight best third-placed teams across the twelve groups also qualify.</div>`;
+    setBody(html);
+  }
+
+  function renderRound(stage){
+    const name=STAGE_NAMES[stage]||stage;const ms=roundMatches(stage);
+    setCrumb(`Wall Bracket / <b>${name}</b>`);
+    let html=`<div class="dt-hero"><div class="dt-badge">${ms.length}</div><div class="dt-htext"><div class="dt-kick">Knockout Stage</div><div class="dt-title">${name}</div><div class="dt-sub">${ROUND_DATES[stage]||""} · ${ms.length} match${ms.length!==1?"es":""} · single elimination</div></div></div>`;
+    html+=`<div class="dt-sec">Matches</div><div class="dt-fx">`+ms.map(m=>fxRowHTML(m,{showNo:true})).join("")+`</div>`;
+    html+=`<div class="dt-note">Slot codes resolve once group standings are final — e.g. “1A” = winner of Group A, “W74” = winner of Match 74.</div>`;
+    setBody(html);
+  }
+
+  let _view=null;
+  function renderView(v){if(v.type==="team")renderTeam(v.key);else if(v.type==="group")renderGroup(v.key);else if(v.type==="round")renderRound(v.key);}
+  function openDetail(v){_view=v;renderView(v);document.getElementById("detail").classList.add("open");document.body.style.overflow="hidden";history.pushState({dv:v},"");}
+  function closeDetail(){_view=null;document.getElementById("detail").classList.remove("open");document.body.style.overflow="";}
+  function refreshDetail(){if(_view)renderView(_view);}
+  window.openDetail=openDetail; // expose for testing/links
+
+  window.addEventListener("popstate",e=>{
+    if(e.state&&e.state.dv){_view=e.state.dv;renderView(_view);document.getElementById("detail").classList.add("open");document.body.style.overflow="hidden";}
+    else closeDetail();
+  });
+  document.getElementById("dt-back").addEventListener("click",()=>{if(history.state&&history.state.dv)history.back();else closeDetail();});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&_view){if(history.state&&history.state.dv)history.back();else closeDetail();}});
+  document.getElementById("dt-wrap").addEventListener("click",e=>{const t=e.target.closest("[data-team]");if(t&&TEAM[t.dataset.team])openDetail({type:"team",key:t.dataset.team});});
+
+  function wirePoster(){
+    document.querySelectorAll(".grp[data-group]").forEach(card=>{
+      const letter=card.dataset.group;
+      const head=card.querySelector(".grp-h");
+      if(head)head.addEventListener("click",()=>openDetail({type:"group",key:letter}));
+      card.querySelectorAll(".row[data-code]").forEach(row=>row.addEventListener("click",()=>openDetail({type:"team",key:row.dataset.code})));
+    });
+    document.querySelectorAll("#rounds .rlbl").forEach(lbl=>{const st=ROUND_LABELS[lbl.textContent.trim()];if(st)lbl.addEventListener("click",()=>openDetail({type:"round",key:st}));});
+    const C=document.getElementById("bracket");
+    if(C)C.addEventListener("click",e=>{const box=e.target.closest(".match[data-mid]");if(!box)return;const m=byN[+box.dataset.mid];if(m)openDetail({type:"round",key:m.stage});});
+  }
+  /* =============== end detail overlay =============== */
+
   const hostsEl=document.getElementById("hosts");
   hostsEl.innerHTML=WC.hosts.map((h)=>flagImg(h.iso)).join('<span class="dot"></span>')+'<span class="dot"></span><span>Host Nations</span>';
 
@@ -559,6 +801,7 @@ window.WC = (function () {
     const elbow=(cax,ctY,cbY,pax,pY)=>{const midX=(cax+pax)/2;line(cax,ctY,midX,ctY);line(cax,cbY,midX,cbY);line(midX,ctY,midX,cbY);line(midX,pY,pax,pY);};
     function makeBox(x,cy,m,big){
       const box=el("div","match"+(big?" big":""));
+      if(m.id)box.dataset.mid=m.id;
       box.style.left=x+"px";const h=big?50:bh;box.style.top=(cy-h/2)+"px";
       const mno=m.id?`<span class="mno">M${m.id}</span>`:"";
       box.innerHTML=mno+m.slots.map((s,idx)=>`<div class="slot${idx===1?" div":""}"><span class="guide">${s}</span><span class="score"></span></div>`).join("");
@@ -587,7 +830,7 @@ window.WC = (function () {
     const champ=el("div","champ");champ.style.left=(W/2)+"px";champ.style.top=(fcy+40)+"px";
     champ.innerHTML=`<div class="cl">★ &nbsp; World Champion &nbsp; ★</div><div class="cb"></div>`;C.appendChild(champ);
     const third=el("div","third");third.style.left=(W/2)+"px";third.style.top=(H-98)+"px";
-    third.innerHTML=`<div class="tl">Third-Place Play-off · Jul 18 · Miami</div><div class="tb"><div class="match" style="position:relative;left:0;top:0;width:100%;border:none;background:transparent">`+WC.third.slots.map((s,idx)=>`<div class="slot${idx===1?" div":""}"><span class="guide">${s}</span><span class="score"></span></div>`).join("")+`</div></div>`;
+    third.innerHTML=`<div class="tl">Third-Place Play-off · Jul 18 · Miami</div><div class="tb"><div class="match" data-mid="103" style="position:relative;left:0;top:0;width:100%;border:none;background:transparent">`+WC.third.slots.map((s,idx)=>`<div class="slot${idx===1?" div":""}"><span class="guide">${s}</span><span class="score"></span></div>`).join("")+`</div></div>`;
     C.appendChild(third);
     const Lr=bw;
     for(let j=0;j<4;j++)elbow(colX(0)+Lr,lr32[2*j].cy,lr32[2*j+1].cy,colX(1),lr16[j].cy);
@@ -734,6 +977,8 @@ window.WC = (function () {
         if(mvcard)ranked.forEach(e=>{const r=mvcard.querySelector(`.mv-row[data-mvcode="${e.team?.abbreviation}"]`);if(r)mvcard.appendChild(r);});
       });
       if(badge){const t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});badge.textContent="Updated "+t;badge.className="lv-badge";}
+      const dl=document.getElementById("dt-live");if(dl){const t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});dl.textContent="Live · updated "+t;}
+      refreshDetail();
     } catch(e){if(badge){badge.textContent="Live data unavailable";badge.className="lv-badge";}}
   }
 
@@ -792,7 +1037,7 @@ window.WC = (function () {
     document.getElementById("mv-sh-close")?.addEventListener("click",close);
   })();
 
-  function init(){buildBracket();buildMobileView();applyFavs();if(applyPrintLock())return;fitStage();setSize("letter");fetchAndUpdateLive();setInterval(fetchAndUpdateLive,60000);}
+  function init(){buildBracket();buildMobileView();applyFavs();wirePoster();if(applyPrintLock())return;fitStage();setSize("letter");fetchAndUpdateLive();setInterval(fetchAndUpdateLive,60000);}
   if(document.readyState==="complete")init();else window.addEventListener("load",init);
   window.addEventListener("resize",()=>{fitStage();buildBracket();});
 })();
