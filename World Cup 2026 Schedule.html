@@ -788,7 +788,7 @@ window.WCS = (function () {
     for(let i=0;i<12&&!id;i++){await new Promise(r=>setTimeout(r,300));id=teamIdFromStandings(code);}
     if(!id)return null;
     try{const j=await fetch(`${ESPN_BASE}/teams/${id}/roster`).then(r=>r.json());
-      const players=(j.athletes||[]).map(a=>({name:a.displayName,jersey:a.jersey,age:a.age,posName:a.position&&a.position.displayName,headshot:a.headshot&&a.headshot.href}));
+      const players=(j.athletes||[]).map(a=>({name:a.displayName,jersey:a.jersey,age:a.age,height:a.displayHeight,posName:a.position&&a.position.displayName,headshot:a.headshot&&a.headshot.href}));
       _rosterCache[code]=players; return players;
     }catch(e){return null;}
   }
@@ -801,10 +801,10 @@ window.WCS = (function () {
   }
   function watchCardHTML(p){
     const photo=p.headshot?`<img class="dt-wphoto" src="${p.headshot}" alt="" onerror="this.outerHTML='<div class=\\'dt-wbadge\\'>'+(this.dataset.j||'★')+'</div>'" data-j="${p.jersey||""}">`:`<div class="dt-wbadge">${p.jersey||"★"}</div>`;
-    const meta=[p.jersey?("#"+p.jersey):"",p.posName||"",p.age?("Age "+p.age):""].filter(Boolean).join(" · ");
+    const meta=[p.jersey?("#"+p.jersey):"",p.posName||"",p.age?("Age "+p.age):"",p.height||""].filter(Boolean).join(" · ");
     return `<div class="dt-watch">${photo}<div class="dt-wtext"><div class="dt-wlabel">★ Player to Watch</div><div class="dt-wname">${p.name}</div><div class="dt-wmeta">${meta}</div></div></div>`;
   }
-  function playerRow(p){return `<div class="dt-player"><span class="dt-jno">${p.jersey||"–"}</span><span class="dt-pname">${p.name}</span><span class="dt-page">${p.age||""}</span></div>`;}
+  function playerRow(p){const meta=[p.age?p.age+"y":"",p.height||""].filter(Boolean).join(" · ");return `<div class="dt-player"><span class="dt-jno">${p.jersey||"–"}</span><span class="dt-pname">${p.name}</span><span class="dt-page">${meta}</span></div>`;}
   function squadHTML(players){
     const buckets=[["Goalkeepers","Goalkeeper"],["Defenders","Defender"],["Midfielders","Midfielder"],["Forwards","Forward"]];
     let out=""; const used=new Set();
