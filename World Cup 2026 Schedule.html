@@ -321,6 +321,20 @@ body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
 .dt-fsc.lv{color:var(--red);animation:lvblink 1.2s infinite;}
 .dt-mno{font-family:"Saira Condensed";font-weight:700;font-size:11px;color:var(--gold);margin-bottom:3px;}
 .dt-note{font-family:"Saira";font-weight:500;font-size:13px;color:var(--ink-2);background:var(--card);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:6px;padding:13px 16px;line-height:1.5;}
+.dt-loading{font-family:"Saira";font-weight:500;font-size:13px;color:var(--ink-2);padding:4px 2px;}
+.dt-watch{display:flex;align-items:center;gap:18px;background:linear-gradient(100deg,var(--ink),#1d3358);border:1px solid var(--gold);border-radius:12px;padding:16px 20px;margin-bottom:6px;}
+.dt-wphoto{width:84px;height:84px;border-radius:50%;object-fit:cover;object-position:top;background:#0c1626;border:2px solid var(--gold);flex-shrink:0;}
+.dt-wbadge{width:84px;height:84px;border-radius:50%;background:#0c1626;border:2px solid var(--gold);color:var(--gold);display:flex;align-items:center;justify-content:center;font-family:"Saira Condensed";font-weight:800;font-size:34px;flex-shrink:0;}
+.dt-wtext{min-width:0;}
+.dt-wlabel{font-family:"Saira Condensed";font-weight:700;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;}
+.dt-wname{font-family:"Saira Condensed";font-weight:800;font-size:30px;text-transform:uppercase;color:#fff;line-height:1;}
+.dt-wmeta{font-family:"Saira";font-weight:500;font-size:13px;color:rgba(255,255,255,.6);margin-top:6px;}
+.dt-poshdr{font-family:"Saira Condensed";font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);margin:18px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--line);}
+.dt-players{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:6px;}
+.dt-player{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:7px;padding:9px 13px;}
+.dt-jno{font-family:"Saira Condensed";font-weight:800;font-size:15px;color:var(--gold);width:26px;text-align:center;flex-shrink:0;}
+.dt-pname{flex:1;font-family:"Saira";font-weight:600;font-size:14px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.dt-page{font-family:"Saira Condensed";font-weight:700;font-size:13px;color:rgba(21,36,63,.45);flex-shrink:0;}
 
 @media(max-width:760px){
   .dt-statgrid{grid-template-columns:repeat(4,1fr);}
@@ -328,6 +342,9 @@ body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
   .dt-fmeta{grid-column:1 / -1;text-align:left;display:flex;align-items:center;gap:12px;}
   .dt-hero{flex-wrap:wrap;}
   .dt-meta{grid-template-columns:1fr;}
+  .dt-players{grid-template-columns:1fr;}
+  .dt-wname{font-size:24px;}
+  .dt-wphoto,.dt-wbadge{width:64px;height:64px;}
   .dt-mrow:nth-child(2){border-top:1px solid var(--line-soft);}
 }
 @media print{.detail{display:none!important;}}
@@ -725,7 +742,9 @@ window.WCS = (function () {
     html+=`<div class="dt-sec">Group Stage Record</div><div class="dt-statgrid">`+stats.map(s=>`<div class="dt-stat${s[0]==="PTS"?" pts":""}"><b>${s[1]}</b><span>${s[0]}</span></div>`).join("")+`</div>`;
     html+=`<div class="dt-sec">Group ${t.group} Standings</div>`+groupTableHTML(t.group,[code]);
     html+=`<div class="dt-sec">${t.name} — Fixtures</div><div class="dt-fx">`+teamMatches(code).map(m=>fxRowHTML(m)).join("")+`</div>`;
+    html+=`<div class="dt-sec">Squad &amp; Player to Watch</div><div id="dt-squad" data-code="${code}"><div class="dt-loading">Loading squad…</div></div>`;
     setBody(html);
+    loadSquad(code,"dt-squad");
     const fb=document.getElementById("dt-follow");
     if(fb)fb.onclick=()=>{toggleFav(code);rebuild();renderTeam(code);};
   }
@@ -746,6 +765,65 @@ window.WCS = (function () {
     let html=`<div class="dt-hero"><div class="dt-badge">${ms.length}</div><div class="dt-htext"><div class="dt-kick">Knockout Stage</div><div class="dt-title">${name}</div><div class="dt-sub">${STAGE_DATES[stage]||""} · ${ms.length} match${ms.length!==1?"es":""} · single elimination</div></div></div>`;
     html+=`<div class="dt-sec">Matches</div><div class="dt-fx">`+ms.map(m=>fxRowHTML(m)).join("")+`</div>`;
     setBody(html);
+  }
+
+  /* ---- squads & player to watch (live from ESPN) ---- */
+  const PWATCH={MEX:"Santiago Giménez",RSA:"Percy Tau",KOR:"Son Heung-min",CZE:"Patrik Schick",CAN:"Alphonso Davies",BIH:"Edin Džeko",QAT:"Akram Afif",SUI:"Granit Xhaka",BRA:"Vinícius Júnior",MAR:"Achraf Hakimi",HAI:"Frantzdy Pierrot",SCO:"Scott McTominay",USA:"Christian Pulisic",PAR:"Miguel Almirón",AUS:"Mathew Ryan",TUR:"Arda Güler",GER:"Jamal Musiala",CUW:"Leandro Bacuna",CIV:"Sébastien Haller",ECU:"Moisés Caicedo",NED:"Virgil van Dijk",JPN:"Kaoru Mitoma",SWE:"Alexander Isak",TUN:"Hannibal Mejbri",BEL:"Kevin De Bruyne",EGY:"Mohamed Salah",IRN:"Mehdi Taremi",NZL:"Chris Wood",ESP:"Lamine Yamal",CPV:"Ryan Mendes",KSA:"Salem Al-Dawsari",URU:"Federico Valverde",FRA:"Kylian Mbappé",SEN:"Sadio Mané",IRQ:"Aymen Hussein",NOR:"Erling Haaland",ARG:"Lionel Messi",ALG:"Riyad Mahrez",AUT:"David Alaba",JOR:"Mousa Al-Tamari",POR:"Cristiano Ronaldo",COD:"Yoane Wissa",UZB:"Eldor Shomurodov",COL:"Luis Díaz",ENG:"Jude Bellingham",CRO:"Luka Modrić",GHA:"Mohammed Kudus",PAN:"Adalberto Carrasquilla"};
+  const ESPN_BASE="https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world";
+  const _norm=s=>(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
+  const _rosterCache={};
+  function teamIdFromStandings(code){
+    const data=_standings;
+    if(!data||!data.children)return null;
+    for(const g of data.children){
+      for(const e of (g.standings&&g.standings.entries||[])){
+        if(e.team&&e.team.abbreviation===code)return e.team.id;
+      }
+    }
+    return null;
+  }
+  async function getRoster(code){
+    if(_rosterCache[code])return _rosterCache[code];
+    let id=teamIdFromStandings(code);
+    for(let i=0;i<12&&!id;i++){await new Promise(r=>setTimeout(r,300));id=teamIdFromStandings(code);}
+    if(!id)return null;
+    try{const j=await fetch(`${ESPN_BASE}/teams/${id}/roster`).then(r=>r.json());
+      const players=(j.athletes||[]).map(a=>({name:a.displayName,jersey:a.jersey,age:a.age,posName:a.position&&a.position.displayName,headshot:a.headshot&&a.headshot.href}));
+      _rosterCache[code]=players; return players;
+    }catch(e){return null;}
+  }
+  function pickWatch(players,code){
+    const want=PWATCH[code];
+    if(want){const ww=_norm(want).split(/[\s-]+/).filter(x=>x.length>=3); let best=null,bs=0;
+      players.forEach(p=>{const pw=_norm(p.name).split(/[\s-]+/); const sc=ww.filter(x=>pw.includes(x)).length; if(sc>bs){bs=sc;best=p;}});
+      if(best)return best;}
+    return players.find(p=>p.posName==="Forward")||players[0];
+  }
+  function watchCardHTML(p){
+    const photo=p.headshot?`<img class="dt-wphoto" src="${p.headshot}" alt="" onerror="this.outerHTML='<div class=\\'dt-wbadge\\'>'+(this.dataset.j||'★')+'</div>'" data-j="${p.jersey||""}">`:`<div class="dt-wbadge">${p.jersey||"★"}</div>`;
+    const meta=[p.jersey?("#"+p.jersey):"",p.posName||"",p.age?("Age "+p.age):""].filter(Boolean).join(" · ");
+    return `<div class="dt-watch">${photo}<div class="dt-wtext"><div class="dt-wlabel">★ Player to Watch</div><div class="dt-wname">${p.name}</div><div class="dt-wmeta">${meta}</div></div></div>`;
+  }
+  function playerRow(p){return `<div class="dt-player"><span class="dt-jno">${p.jersey||"–"}</span><span class="dt-pname">${p.name}</span><span class="dt-page">${p.age||""}</span></div>`;}
+  function squadHTML(players){
+    const buckets=[["Goalkeepers","Goalkeeper"],["Defenders","Defender"],["Midfielders","Midfielder"],["Forwards","Forward"]];
+    let out=""; const used=new Set();
+    buckets.forEach(([label,pos])=>{
+      const grp=players.filter(p=>p.posName===pos).sort((a,b)=>(+a.jersey||99)-(+b.jersey||99));
+      grp.forEach(p=>used.add(p));
+      if(grp.length)out+=`<div class="dt-poshdr">${label}</div><div class="dt-players">`+grp.map(playerRow).join("")+`</div>`;
+    });
+    const other=players.filter(p=>!used.has(p));
+    if(other.length)out+=`<div class="dt-poshdr">Squad</div><div class="dt-players">`+other.map(playerRow).join("")+`</div>`;
+    return out;
+  }
+  async function loadSquad(code,hostId){
+    const players=await getRoster(code);
+    const host=document.getElementById(hostId);
+    if(!host||host.dataset.code!==code)return;
+    if(!players||!players.length){host.innerHTML='<div class="dt-note">Squad data isn’t available yet for this team.</div>';return;}
+    const w=pickWatch(players,code);
+    host.innerHTML=(w?watchCardHTML(w):"")+squadHTML(players);
   }
 
   let _view=null;
