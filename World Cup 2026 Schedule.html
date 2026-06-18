@@ -340,8 +340,10 @@ body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
 .dt-page{font-family:"Saira Condensed";font-weight:700;font-size:13px;color:rgba(21,36,63,.45);flex-shrink:0;}
 .dt-citylink{cursor:pointer;text-decoration:underline;text-decoration-color:rgba(21,36,63,.25);text-underline-offset:2px;}
 .dt-citylink:hover{color:var(--gold);text-decoration-color:var(--gold);}
-.st-hero{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);margin-bottom:6px;}
+.st-hero{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);margin-bottom:6px;background:#0f1c2e;}
 .st-hero svg{display:block;width:100%;height:auto;}
+.st-img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;}
+.st-credit{position:absolute;top:8px;right:8px;background:rgba(8,14,24,.62);color:rgba(255,255,255,.88);font-family:"Saira";font-weight:400;font-size:9.5px;letter-spacing:.02em;padding:2px 8px;border-radius:10px;}
 .st-hcap{position:absolute;left:0;right:0;bottom:0;padding:46px 22px 18px;background:linear-gradient(transparent,rgba(8,14,24,.9));}
 .st-hcap .st-kick{font-family:"Saira Condensed";font-weight:700;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:5px;}
 .st-hcap .st-name{font-family:"Saira Condensed";font-weight:800;font-size:clamp(26px,4.6vw,42px);text-transform:uppercase;color:#fff;line-height:.92;}
@@ -802,6 +804,25 @@ window.WCS = (function () {
     "Toronto":{stadium:"BMO Field",city:"Toronto, Ontario",country:"Canada",cap:"45,000",opened:2007,roof:"Open",surface:"Grass",note:"Home of Toronto FC, temporarily expanded for the tournament on the Exhibition Place lakeshore."},
     "Vancouver":{stadium:"BC Place",city:"Vancouver, B.C.",country:"Canada",cap:"54,500",opened:1983,roof:"Retractable",surface:"Grass",note:"Downtown landmark with one of the world's largest cable-supported retractable roofs."},
   };
+  // Freely-licensed venue photos from Wikimedia Commons (credit required by license)
+  const SPHOTO={
+    "Atlanta":{f:"atlanta.jpg",by:"Atlanta Falcons / CC BY 3.0"},
+    "Boston":{f:"boston.jpg",by:"Art N. / CC BY 2.0"},
+    "Dallas":{f:"dallas.jpg",by:"Michael Barera / CC BY-SA 4.0"},
+    "Guadalajara":{f:"guadalajara.jpg",by:"Alejan98 / CC0"},
+    "Houston":{f:"houston.jpg",by:"Carlos.dkfi / CC0"},
+    "Kansas City":{f:"kansas-city.jpg",by:"Ichabod / CC BY-SA 3.0"},
+    "Los Angeles":{f:"los-angeles.jpg",by:"Troutfarm27 / CC BY-SA 4.0"},
+    "Mexico City":{f:"mexico-city.jpg",by:"ProtoplasmaKid / CC BY 4.0"},
+    "Miami":{f:"miami.jpg",by:"elisfkc2 / CC BY-SA 2.0"},
+    "Monterrey":{f:"monterrey.jpg",by:"Arne Müseler / CC BY-SA 3.0"},
+    "New York/NJ":{f:"new-york-nj.jpg",by:"Anthony Quintano / CC BY 2.0"},
+    "Philadelphia":{f:"philadelphia.jpg",by:"Ron Reiring / CC BY 2.0"},
+    "SF Bay Area":{f:"sf-bay-area.jpg",by:"U.S. CBP / Public domain"},
+    "Seattle":{f:"seattle.jpg",by:"SounderBruce / CC BY-SA 4.0"},
+    "Toronto":{f:"toronto.jpg",by:"H4stings / CC BY-SA 4.0"},
+    "Vancouver":{f:"vancouver.jpg",by:"GoToVan / CC BY 2.0"},
+  };
 
   function stadiumSVG(s){
     const open=/open|partial/i.test(s.roof);
@@ -837,12 +858,14 @@ window.WCS = (function () {
       setBody(`<div class="dt-hero"><div class="dt-htext"><div class="dt-kick">Host City</div><div class="dt-title">${city}</div></div></div><div class="dt-sec">Matches at this Venue</div><div class="dt-fx">${ms.map(m=>fxRowHTML(m)).join("")}</div>`);
       return;
     }
-    const hosts=ms.filter(m=>isGroup(m.stage)).length, ko=ms.length-hosts;
     const stats=[["Capacity",s.cap],["Opened",s.opened],["Roof",s.roof],["Surface",s.surface],["Country",s.country],["WC Matches",ms.length]];
-    let html=`<div class="st-hero">${stadiumSVG(s)}<div class="st-hcap"><div class="st-kick">${s.city}</div><div class="st-name">${s.stadium}</div><div class="st-sub">${s.note}</div></div></div>`;
+    const ph=SPHOTO[city];
+    const heroInner=ph?`<img class="st-img" src="icons/stadiums/${ph.f}" alt="${s.stadium}" loading="eager">`:stadiumSVG(s);
+    const credit=ph?`<div class="st-credit">Photo: ${ph.by}</div>`:"";
+    let html=`<div class="st-hero">${heroInner}<div class="st-hcap"><div class="st-kick">${s.city}</div><div class="st-name">${s.stadium}</div><div class="st-sub">${s.note}</div></div>${credit}</div>`;
     html+=`<div class="dt-sec">Venue Stats</div><div class="st-grid">`+stats.map(x=>`<div class="st-card"><b>${x[1]}</b><span>${x[0]}</span></div>`).join("")+`</div>`;
     html+=`<div class="dt-sec">Matches at this Venue</div><div class="dt-fx">`+ms.map(m=>fxRowHTML(m)).join("")+`</div>`;
-    html+=`<div class="dt-note">Illustration shown — drop in venue photos anytime. Capacities are approximate tournament configurations.</div>`;
+    html+=`<div class="dt-note">${ph?"Photo via Wikimedia Commons under its respective license. ":""}Capacities are approximate tournament configurations.</div>`;
     setBody(html);
   }
 

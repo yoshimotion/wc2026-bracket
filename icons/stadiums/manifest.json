@@ -1,0 +1,114 @@
+{
+  "Atlanta": {
+    "file": "atlanta.jpg",
+    "artist": "Atlanta Falcons",
+    "license": "CC BY 3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Mercedes_Benz_Stadium_time_lapse_capture_2017-08-13.jpg",
+    "kb": 173
+  },
+  "Boston": {
+    "file": "boston.jpg",
+    "artist": "Art N.",
+    "license": "CC BY 2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Gillette_Stadium_(Top_View).jpg",
+    "kb": 390
+  },
+  "Dallas": {
+    "file": "dallas.jpg",
+    "artist": "Michael Barera",
+    "license": "CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Arlington_June_2020_4_(AT%26T_Stadium).jpg",
+    "kb": 215
+  },
+  "Guadalajara": {
+    "file": "guadalajara.jpg",
+    "artist": "Alejan98",
+    "license": "CC0",
+    "source": "https://commons.wikimedia.org/wiki/File:Estadio_Akron_02-07-2022_cabecera_sur_lado_derecho_(3).jpg",
+    "kb": 367
+  },
+  "Houston": {
+    "file": "houston.jpg",
+    "artist": "Carlos.dkfi",
+    "license": "CC0",
+    "source": "https://commons.wikimedia.org/wiki/File:Nrg_stadium.jpg",
+    "kb": 370
+  },
+  "Kansas City": {
+    "file": "kansas-city.jpg",
+    "artist": "Ichabod",
+    "license": "CC BY-SA 3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Aerial_view_of_Arrowhead_Stadium_08-31-2013.jpg",
+    "kb": 321
+  },
+  "Los Angeles": {
+    "file": "los-angeles.jpg",
+    "artist": "Troutfarm27",
+    "license": "CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:SoFi_Stadium_2023.jpg",
+    "kb": 215
+  },
+  "Mexico City": {
+    "file": "mexico-city.jpg",
+    "artist": "ProtoplasmaKid",
+    "license": "CC BY 4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Vista_a%C3%A9rea_del_Estadio_Azteca_-_2026_-_02.jpg",
+    "kb": 425
+  },
+  "Miami": {
+    "file": "miami.jpg",
+    "artist": "elisfkc2",
+    "license": "CC BY-SA 2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Hard_Rock_Stadium_for_Super_Bowl_LIV_(49606710103).jpg",
+    "kb": 266
+  },
+  "Monterrey": {
+    "file": "monterrey.jpg",
+    "artist": "Arne Müseler",
+    "license": "CC BY-SA 3.0 de",
+    "source": "https://commons.wikimedia.org/wiki/File:Mexico_Guadalupe_Monterrey_Estadio_BBVA_Bancomer_fifa_world_cup_2026_6.JPG",
+    "kb": 445
+  },
+  "New York/NJ": {
+    "file": "new-york-nj.jpg",
+    "artist": "Anthony Quintano from Hillsborough, NJ, United States",
+    "license": "CC BY 2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Metlife_stadium_(Aerial_view).jpg",
+    "kb": 449
+  },
+  "Philadelphia": {
+    "file": "philadelphia.jpg",
+    "artist": "Ron Reiring",
+    "license": "CC BY 2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Lincoln_Financial_Field_(Aerial_view).jpg",
+    "kb": 440
+  },
+  "SF Bay Area": {
+    "file": "sf-bay-area.jpg",
+    "artist": "U.S. Customs and Border Protection",
+    "license": "Public domain",
+    "source": "https://commons.wikimedia.org/wiki/File:Levi%27s_Stadium_in_February_2016_prior_to_Super_Bowl_50_(24398261729).jpg",
+    "kb": 410
+  },
+  "Seattle": {
+    "file": "seattle.jpg",
+    "artist": "SounderBruce",
+    "license": "CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:2026_FIFA_World_Cup_-_Belgium_v._Egypt_in_Seattle_-_04.jpg",
+    "kb": 542
+  },
+  "Toronto": {
+    "file": "toronto.jpg",
+    "artist": "H4stings",
+    "license": "CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Toronto_BMO_Field_in_2024.jpg",
+    "kb": 377
+  },
+  "Vancouver": {
+    "file": "vancouver.jpg",
+    "artist": "GoToVan",
+    "license": "CC BY 2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:BC_Place_2015_Women%27s_FIFA_World_Cup.jpg",
+    "kb": 455
+  }
+}
