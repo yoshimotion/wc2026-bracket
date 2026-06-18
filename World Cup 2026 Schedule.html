@@ -93,6 +93,8 @@ body{background:#2a2a2a;font-family:"Saira",system-ui,sans-serif;color:var(--ink
 .fx .mu .c{font-family:"Saira Condensed";font-weight:700;font-size:10px;color:var(--ink);letter-spacing:.02em;}
 .fx .mu .v{font-family:"Saira";font-weight:400;font-size:8px;color:var(--gold);font-style:italic;margin:0 1px;}
 .fx .cty{font-family:"Saira";font-weight:500;font-size:8.5px;color:var(--ink-2);white-space:nowrap;text-align:right;}
+.cty-link{cursor:pointer;}
+.cty-link:hover{color:var(--gold);text-decoration:underline;}
 
 /* knockout */
 .knock{display:grid;grid-template-columns:repeat(4,1fr);gap:8px 10px;flex:1;min-height:0;}
@@ -167,7 +169,9 @@ body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
 .mv-match{display:flex;align-items:center;gap:8px;min-height:38px;padding:7px 12px;border-top:1px solid rgba(21,36,63,.09);overflow:hidden;}
 .mv-match .mn{font-family:"Saira Condensed";font-weight:700;font-size:14px;color:var(--gold);flex-shrink:0;}
 .mv-match .mt{font-family:"Saira Condensed";font-weight:600;font-size:14px;color:var(--ink);white-space:nowrap;flex-shrink:0;}
+.mv-match .mt .mvf{width:16px;height:11px;object-fit:cover;border-radius:1.5px;border:.5px solid rgba(21,36,63,.15);vertical-align:-1px;margin-right:3px;}
 .mv-match .mc{font-family:"Saira Condensed";font-weight:500;font-size:14px;color:rgba(21,36,63,.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;}
+.mv-match .mc-link{cursor:pointer;text-decoration:underline;text-decoration-color:rgba(21,36,63,.2);text-underline-offset:2px;}
 .mv-match .mv-sc{font-family:"Saira Condensed";font-weight:800;font-size:14px;color:var(--ink-2);text-align:right;white-space:nowrap;flex-shrink:0;}
 .mv-match .mv-sc.lv{color:var(--red);animation:lvblink 1.2s infinite;}
 .mv-match .mv-sc.done{color:var(--ink);}
@@ -334,6 +338,18 @@ body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
 .dt-jno{font-family:"Saira Condensed";font-weight:800;font-size:15px;color:var(--gold);width:26px;text-align:center;flex-shrink:0;}
 .dt-pname{flex:1;font-family:"Saira";font-weight:600;font-size:14px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .dt-page{font-family:"Saira Condensed";font-weight:700;font-size:13px;color:rgba(21,36,63,.45);flex-shrink:0;}
+.dt-citylink{cursor:pointer;text-decoration:underline;text-decoration-color:rgba(21,36,63,.25);text-underline-offset:2px;}
+.dt-citylink:hover{color:var(--gold);text-decoration-color:var(--gold);}
+.st-hero{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);margin-bottom:6px;}
+.st-hero svg{display:block;width:100%;height:auto;}
+.st-hcap{position:absolute;left:0;right:0;bottom:0;padding:46px 22px 18px;background:linear-gradient(transparent,rgba(8,14,24,.9));}
+.st-hcap .st-kick{font-family:"Saira Condensed";font-weight:700;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:5px;}
+.st-hcap .st-name{font-family:"Saira Condensed";font-weight:800;font-size:clamp(26px,4.6vw,42px);text-transform:uppercase;color:#fff;line-height:.92;}
+.st-hcap .st-sub{font-family:"Saira";font-weight:400;font-size:13px;color:rgba(255,255,255,.72);margin-top:8px;max-width:640px;line-height:1.4;}
+.st-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.st-card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:13px 15px;}
+.st-card b{display:block;font-family:"Saira Condensed";font-weight:800;font-size:22px;color:var(--ink);line-height:1;}
+.st-card span{font-family:"Saira Condensed";font-weight:600;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(21,36,63,.45);margin-top:6px;display:block;}
 
 @media(max-width:760px){
   .dt-statgrid{grid-template-columns:repeat(4,1fr);}
@@ -345,6 +361,7 @@ body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
   .dt-wname{font-size:24px;}
   .dt-wphoto,.dt-wbadge{width:64px;height:64px;}
   .dt-mrow:nth-child(2){border-top:1px solid var(--line-soft);}
+  .st-grid{grid-template-columns:repeat(2,1fr);}
 }
 @media print{.detail{display:none!important;}}
 
@@ -664,7 +681,7 @@ window.WCS = (function () {
     const side=code=>{const t=TEAM[code];return t?`<img src="${flagSrc(t.iso)}"> ${t.name}`:`<span class="slot">${slotLabel(code)}</span>`;};
     let scH="";
     if(s&&s.byCode&&s.byCode[m.t1]!=null&&s.byCode[m.t2]!=null){scH=`<div class="dt-fsc ${s.live?"lv":""}">${s.byCode[m.t1]}–${s.byCode[m.t2]}</div>`;}
-    return `<div class="dt-frow" data-match="${m.n}"><div class="dt-fdate"><div class="dt-mno">Match ${m.n}</div>${m.date}<small>${m.time} PT</small></div><div class="dt-fmu">${side(m.t1)} <span class="vs">vs</span> ${side(m.t2)}</div><div class="dt-fmeta"><div class="dt-fcity">${m.city}</div>${scH}</div></div>`;
+    return `<div class="dt-frow" data-match="${m.n}"><div class="dt-fdate"><div class="dt-mno">Match ${m.n}</div>${m.date}<small>${m.time} PT</small></div><div class="dt-fmu">${side(m.t1)} <span class="vs">vs</span> ${side(m.t2)}</div><div class="dt-fmeta"><div class="dt-fcity dt-citylink" data-city="${m.city}">${m.city}</div>${scH}</div></div>`;
   }
 
   function groupTableHTML(letter,hi){
@@ -710,7 +727,7 @@ window.WCS = (function () {
     };
     html+=`<div class="dt-mteams">${teamRow(m.t1)}<div class="dt-mvs">VS</div>${teamRow(m.t2)}</div>`;
     html+=`<div class="dt-sec">Match Details</div><div class="dt-meta">`
-      +`<div class="dt-mrow"><span class="k">Venue</span><span class="vv">${m.city}</span></div>`
+      +`<div class="dt-mrow"><span class="k">Venue</span><span class="vv dt-citylink" data-city="${m.city}">${m.city} <i style="font-style:normal;color:var(--gold)">›</i></span></div>`
       +`<div class="dt-mrow"><span class="k">Date</span><span class="vv">${DOW[m.day]||m.day}, ${m.date}</span></div>`
       +`<div class="dt-mrow"><span class="k">Kick-off</span><span class="vv">${kickoffStr(m)}</span></div>`
       +`<div class="dt-mrow"><span class="k">Stage</span><span class="vv">${stageFull(m.stage)}</span></div>`
@@ -763,6 +780,69 @@ window.WCS = (function () {
     setCrumb(`Schedule / <b>${name}</b>`);
     let html=`<div class="dt-hero"><div class="dt-badge">${ms.length}</div><div class="dt-htext"><div class="dt-kick">Knockout Stage</div><div class="dt-title">${name}</div><div class="dt-sub">${STAGE_DATES[stage]||""} · ${ms.length} match${ms.length!==1?"es":""} · single elimination</div></div></div>`;
     html+=`<div class="dt-sec">Matches</div><div class="dt-fx">`+ms.map(m=>fxRowHTML(m)).join("")+`</div>`;
+    setBody(html);
+  }
+
+  /* ---- stadium / venue pages ---- */
+  const STADIUM={
+    "Atlanta":{stadium:"Mercedes-Benz Stadium",city:"Atlanta, Georgia",country:"USA",cap:"71,000",opened:2017,roof:"Retractable",surface:"Grass",note:"Futuristic home of Atlanta United, crowned by a signature pinwheel retractable roof."},
+    "Boston":{stadium:"Gillette Stadium",city:"Foxborough, Mass.",country:"USA",cap:"65,900",opened:2002,roof:"Open",surface:"Grass",note:"Home of the Patriots and Revolution, about 25 miles southwest of downtown Boston."},
+    "Dallas":{stadium:"AT&T Stadium",city:"Arlington, Texas",country:"USA",cap:"80,000",opened:2009,roof:"Retractable",surface:"Grass",note:"The colossal home of the Dallas Cowboys, expandable beyond 100,000 — a marquee venue."},
+    "Guadalajara":{stadium:"Estadio Akron",city:"Zapopan, Jalisco",country:"Mexico",cap:"48,000",opened:2010,roof:"Open",surface:"Grass",note:"Home of Chivas, with a grass-covered sloping roof that blends into the landscape."},
+    "Houston":{stadium:"NRG Stadium",city:"Houston, Texas",country:"USA",cap:"72,000",opened:2002,roof:"Retractable",surface:"Grass",note:"The first NFL stadium with a retractable roof, home of the Houston Texans."},
+    "Kansas City":{stadium:"Arrowhead Stadium",city:"Kansas City, Missouri",country:"USA",cap:"76,400",opened:1972,roof:"Open",surface:"Grass",note:"One of the loudest venues in sport — the Chiefs' fortress and a crowd-noise record holder."},
+    "Los Angeles":{stadium:"SoFi Stadium",city:"Inglewood, California",country:"USA",cap:"70,000",opened:2020,roof:"Fixed canopy",surface:"Grass",note:"A multi-billion-dollar landmark beneath a translucent canopy, shared by the Rams and Chargers."},
+    "Mexico City":{stadium:"Estadio Azteca",city:"Mexico City",country:"Mexico",cap:"87,500",opened:1966,roof:"Open",surface:"Grass",note:"The only stadium to host three men's World Cups — 1970, 1986 and 2026. Hallowed ground."},
+    "Miami":{stadium:"Hard Rock Stadium",city:"Miami Gardens, Florida",country:"USA",cap:"65,300",opened:1987,roof:"Canopy",surface:"Grass",note:"Home of the Dolphins and the Miami Grand Prix, shaded by a vast cantilevered canopy."},
+    "Monterrey":{stadium:"Estadio BBVA",city:"Guadalupe, Nuevo León",country:"Mexico",cap:"53,500",opened:2015,roof:"Open",surface:"Grass",note:"“El Gigante de Acero,” framed by the dramatic Cerro de la Silla mountain backdrop."},
+    "New York/NJ":{stadium:"MetLife Stadium",city:"East Rutherford, N.J.",country:"USA",cap:"82,500",opened:2010,roof:"Open",surface:"Grass",note:"Host of the 2026 Final — shared by the Giants and Jets in the New York metro area."},
+    "Philadelphia":{stadium:"Lincoln Financial Field",city:"Philadelphia, Penn.",country:"USA",cap:"69,200",opened:2003,roof:"Open",surface:"Grass",note:"“The Linc” — the famously passionate home of the Philadelphia Eagles."},
+    "SF Bay Area":{stadium:"Levi's Stadium",city:"Santa Clara, California",country:"USA",cap:"68,500",opened:2014,roof:"Open",surface:"Grass",note:"Tech-forward home of the San Francisco 49ers, in the heart of Silicon Valley."},
+    "Seattle":{stadium:"Lumen Field",city:"Seattle, Washington",country:"USA",cap:"68,700",opened:2002,roof:"Partial cover",surface:"Grass",note:"Home of the Seahawks and Sounders, with a partial roof that traps a deafening atmosphere."},
+    "Toronto":{stadium:"BMO Field",city:"Toronto, Ontario",country:"Canada",cap:"45,000",opened:2007,roof:"Open",surface:"Grass",note:"Home of Toronto FC, temporarily expanded for the tournament on the Exhibition Place lakeshore."},
+    "Vancouver":{stadium:"BC Place",city:"Vancouver, B.C.",country:"Canada",cap:"54,500",opened:1983,roof:"Retractable",surface:"Grass",note:"Downtown landmark with one of the world's largest cable-supported retractable roofs."},
+  };
+
+  function stadiumSVG(s){
+    const open=/open|partial/i.test(s.roof);
+    const tower=(x,y)=>`<g><line x1="${x}" y1="${y}" x2="${x}" y2="${y-44}" stroke="#7c889c" stroke-width="3"/><rect x="${x-15}" y="${y-58}" width="30" height="14" rx="2" fill="#2b3e60"/><circle cx="${x-7}" cy="${y-51}" r="1.7" fill="#f4d98b"/><circle cx="${x}" cy="${y-51}" r="1.7" fill="#f4d98b"/><circle cx="${x+7}" cy="${y-51}" r="1.7" fill="#f4d98b"/></g>`;
+    return `<svg viewBox="0 0 800 420" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of ${s.stadium}">
+      <defs><clipPath id="pc"><ellipse cx="400" cy="248" rx="208" ry="82"/></clipPath></defs>
+      <rect width="800" height="420" fill="#15243f"/>
+      <rect width="800" height="150" fill="#1b2c4a"/>
+      <circle cx="650" cy="56" r="26" fill="#f4d98b" opacity=".85"/>
+      <ellipse cx="400" cy="262" rx="372" ry="150" fill="#1d3358"/>
+      <ellipse cx="400" cy="248" rx="316" ry="126" fill="#0f1c2e"/>
+      ${open?[tower(150,205),tower(650,205),tower(238,338),tower(562,338)].join(""):""}
+      <ellipse cx="400" cy="248" rx="316" ry="126" fill="none" stroke="#a8812f" stroke-width="3"/>
+      <ellipse cx="400" cy="248" rx="258" ry="101" fill="#0e3f28"/>
+      <g clip-path="url(#pc)">
+        <rect x="190" y="164" width="420" height="170" fill="#1f7a3d"/>
+        <rect x="190" y="164" width="70" height="170" fill="#1b6e36"/><rect x="330" y="164" width="70" height="170" fill="#1b6e36"/><rect x="470" y="164" width="70" height="170" fill="#1b6e36"/>
+      </g>
+      <ellipse cx="400" cy="248" rx="208" ry="82" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="2"/>
+      <line x1="400" y1="166" x2="400" y2="330" stroke="#fff" stroke-opacity=".45" stroke-width="1.5"/>
+      <ellipse cx="400" cy="248" rx="33" ry="15" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="1.5"/>
+      <rect x="192" y="226" width="26" height="44" fill="none" stroke="#fff" stroke-opacity=".4" stroke-width="1.5"/>
+      <rect x="582" y="226" width="26" height="44" fill="none" stroke="#fff" stroke-opacity=".4" stroke-width="1.5"/>
+      ${open?"":`<ellipse cx="400" cy="234" rx="296" ry="116" fill="#27395a" fill-opacity=".5"/><ellipse cx="400" cy="234" rx="296" ry="116" fill="none" stroke="#42567a" stroke-width="2"/>`}
+    </svg>`;
+  }
+
+  function renderStadium(city){
+    const s=STADIUM[city];
+    const ms=M.filter(m=>m.city===city).sort((a,b)=>a.n-b.n);
+    setCrumb(`Schedule / <b>${s?s.stadium:city}</b>`);
+    if(!s){
+      setBody(`<div class="dt-hero"><div class="dt-htext"><div class="dt-kick">Host City</div><div class="dt-title">${city}</div></div></div><div class="dt-sec">Matches at this Venue</div><div class="dt-fx">${ms.map(m=>fxRowHTML(m)).join("")}</div>`);
+      return;
+    }
+    const hosts=ms.filter(m=>isGroup(m.stage)).length, ko=ms.length-hosts;
+    const stats=[["Capacity",s.cap],["Opened",s.opened],["Roof",s.roof],["Surface",s.surface],["Country",s.country],["WC Matches",ms.length]];
+    let html=`<div class="st-hero">${stadiumSVG(s)}<div class="st-hcap"><div class="st-kick">${s.city}</div><div class="st-name">${s.stadium}</div><div class="st-sub">${s.note}</div></div></div>`;
+    html+=`<div class="dt-sec">Venue Stats</div><div class="st-grid">`+stats.map(x=>`<div class="st-card"><b>${x[1]}</b><span>${x[0]}</span></div>`).join("")+`</div>`;
+    html+=`<div class="dt-sec">Matches at this Venue</div><div class="dt-fx">`+ms.map(m=>fxRowHTML(m)).join("")+`</div>`;
+    html+=`<div class="dt-note">Illustration shown — drop in venue photos anytime. Capacities are approximate tournament configurations.</div>`;
     setBody(html);
   }
 
@@ -826,7 +906,7 @@ window.WCS = (function () {
   }
 
   let _view=null;
-  function renderView(v){if(v.type==="match")renderMatch(v.key);else if(v.type==="team")renderTeam(v.key);else if(v.type==="group")renderGroup(v.key);else if(v.type==="round")renderRound(v.key);}
+  function renderView(v){if(v.type==="match")renderMatch(v.key);else if(v.type==="team")renderTeam(v.key);else if(v.type==="group")renderGroup(v.key);else if(v.type==="round")renderRound(v.key);else if(v.type==="stadium")renderStadium(v.key);}
   function openDetail(v){_view=v;renderView(v);document.getElementById("detail").classList.add("open");document.body.style.overflow="hidden";history.pushState({dv:v},"");}
   function closeDetail(){_view=null;document.getElementById("detail").classList.remove("open");document.body.style.overflow="";}
   function refreshDetail(){if(_view)renderView(_view);}
@@ -839,6 +919,7 @@ window.WCS = (function () {
   document.getElementById("dt-back").addEventListener("click",()=>{if(history.state&&history.state.dv)history.back();else closeDetail();});
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&_view){if(history.state&&history.state.dv)history.back();else closeDetail();}});
   document.getElementById("dt-wrap").addEventListener("click",e=>{
+    const cy=e.target.closest("[data-city]");if(cy){openDetail({type:"stadium",key:cy.dataset.city});return;}
     const tm=e.target.closest("[data-team]");if(tm&&TEAM[tm.dataset.team]){openDetail({type:"team",key:tm.dataset.team});return;}
     const mt=e.target.closest("[data-match]");if(mt){openDetail({type:"match",key:+mt.dataset.match});return;}
   });
@@ -849,7 +930,10 @@ window.WCS = (function () {
       const head=card.querySelector(".gc-h");
       if(head)head.addEventListener("click",()=>openDetail({type:"group",key:letter}));
     });
-    document.querySelectorAll(".fx[data-n],.kfx[data-n]").forEach(row=>row.addEventListener("click",()=>openDetail({type:"match",key:+row.dataset.n})));
+    document.querySelectorAll(".fx[data-n],.kfx[data-n]").forEach(row=>row.addEventListener("click",e=>{
+      const cy=e.target.closest("[data-city]");if(cy){openDetail({type:"stadium",key:cy.dataset.city});return;}
+      openDetail({type:"match",key:+row.dataset.n});
+    }));
     document.querySelectorAll(".kblock .kb-h").forEach(h=>{const st=KB_STAGE[(h.querySelector(".kt")||{}).textContent];if(st)h.addEventListener("click",()=>openDetail({type:"round",key:st}));});
   }
 
@@ -876,7 +960,7 @@ window.WCS = (function () {
         + `<span class="dt"><span class="d">${m.date.replace(/^([A-Za-z]+) /,(x,mo)=>mo.toUpperCase().slice(0,3)+" ")}</span><span class="tm">${m.time}</span></span>`
         + `<span class="mu">${flag(m.t1)}<span class="c">${m.t1}</span><span class="v">v</span><span class="c">${m.t2}</span>${flag(m.t2)}</span>`
         + `<span class="sc"></span>`
-        + `<span class="cty">${m.city}</span>`
+        + `<span class="cty cty-link" data-city="${m.city}">${m.city}</span>`
         + `</div>`;
     });
     card.innerHTML = `<div class="gc-h"><span class="gl">${L}</span><span class="gn">Group ${L}</span></div>${rows}`;
@@ -891,7 +975,7 @@ window.WCS = (function () {
     + `<span class="dt"><span class="d">${m.date.replace(/^([A-Za-z]+) /,(x,mo)=>mo.toUpperCase().slice(0,3)+" ")}</span><span class="tm">${m.time}</span></span>`
     + `<span class="mu">${m.t1}<span class="v">v</span>${m.t2}</span>`
     + `<span class="sc"></span>`
-    + `<span class="cty">${m.city}</span>`
+    + `<span class="cty cty-link" data-city="${m.city}">${m.city}</span>`
     + `</div>`;
   const block = (cls,title,dates,matches,tall)=>{
     return `<div class="kblock${cls}"><div class="kb-h"><span class="kt">${title}</span><span class="kd">${dates}</span></div>`
@@ -925,14 +1009,15 @@ window.WCS = (function () {
 
   const teamLabel=code=>NAME[code]||code;
 
+  const mflag=c=>NAME[c]?`<img class="mvf" src="https://flagcdn.com/${ISO[c]}.svg" alt="" loading="lazy">`:"";
   function matchRowHTML(m,isPast){
     const favHit=[m.t1,m.t2].some(c=>NAME[c]&&isFav(c));
     const star=favHit?'<span class="star">★</span>':'';
     const teams=isGroup(m.stage)
-      ?`${teamLabel(m.t1)} <span style="color:var(--gold);margin:0 2px">vs</span> ${teamLabel(m.t2)}`
+      ?`${mflag(m.t1)}${teamLabel(m.t1)} <span style="color:var(--gold);margin:0 2px">vs</span> ${mflag(m.t2)}${teamLabel(m.t2)}`
       :`${m.t1} <span style="color:var(--gold);margin:0 2px">vs</span> ${m.t2}`;
     const right=isPast?"–":timeStr(m);
-    return `<div class="mv-match${favHit?" fav":""}" data-mvn="${m.n}"><span class="mn">#${m.n}</span><span class="mt">${teams}${star}</span><span class="mc">${m.city}</span><span class="mv-sc">${right}</span></div>`;
+    return `<div class="mv-match${favHit?" fav":""}" data-mvn="${m.n}"><span class="mn">#${m.n}</span><span class="mt">${teams}${star}</span><span class="mc mc-link" data-city="${m.city}">${m.city}</span><span class="mv-sc">${right}</span></div>`;
   }
 
   function buildMobileView(){
@@ -1004,7 +1089,10 @@ window.WCS = (function () {
       tzMode=b.dataset.tz; try{localStorage.setItem("wc26_tz",tzMode);}catch(e){} rebuild();
     }));
     document.getElementById("mv-status").addEventListener("click",fetchAndUpdateScores);
-    mv.querySelectorAll(".mv-match[data-mvn]").forEach(row=>row.addEventListener("click",()=>openMatchSheet(+row.dataset.mvn)));
+    mv.querySelectorAll(".mv-match[data-mvn]").forEach(row=>row.addEventListener("click",e=>{
+      const cy=e.target.closest("[data-city]");if(cy){openDetail({type:"stadium",key:cy.dataset.city});return;}
+      openMatchSheet(+row.dataset.mvn);
+    }));
   }
 
   function rebuild(){buildMobileView();renderScores();}
@@ -1094,10 +1182,12 @@ window.WCS = (function () {
 
     const metaRow=(ic,lb,vl)=>`<div class="ms-mrow"><span class="ms-ic">${ic}</span><span class="ms-lb">${lb}</span><span class="ms-vl">${vl}</span></div>`;
     document.getElementById("ms-meta").innerHTML=
-      metaRow("📍","Venue",m.city)
+      metaRow("📍","Venue",`<span class="dt-citylink" data-city="${m.city}">${m.city} <i style="font-style:normal;color:var(--gold)">›</i></span>`)
      +metaRow("📅","Date",`${DOW[m.day]||m.day}, ${m.date}`)
      +((s&&s.completed)?"":metaRow("⏱","Kick-off",kickoffStr(m)))
      +metaRow("🏆","Stage",stageFull(m.stage));
+    const vlink=document.querySelector("#ms-meta [data-city]");
+    if(vlink)vlink.addEventListener("click",()=>{document.getElementById("ms-sheet").classList.remove("open");openDetail({type:"stadium",key:vlink.dataset.city});});
 
     document.querySelectorAll("#ms-teams .ms-star").forEach(btn=>btn.addEventListener("click",e=>{
       e.stopPropagation();
