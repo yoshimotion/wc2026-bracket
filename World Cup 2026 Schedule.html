@@ -1055,13 +1055,11 @@ window.WCS = (function () {
     try {
       const pad=n=>String(n).padStart(2,"0");
       const fmt=d=>`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}`;
-      const today=new Date(), yesterday=new Date(today-864e5);
-      const urls=[
-        `https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${fmt(yesterday)}`,
-        `https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${fmt(today)}`,
-      ];
-      const responses=await Promise.all(urls.map(u=>fetch(u).then(r=>r.json()).catch(()=>null)));
-      const events=responses.flatMap(d=>d?.events||[]);
+      // Fetch the whole tournament window so every completed game gets a score,
+      // not just yesterday/today (ESPN supports a YYYYMMDD-YYYYMMDD range).
+      const today=new Date();
+      const url=`https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=20260611-${fmt(today)}`;
+      const events=await fetch(url).then(r=>r.json()).then(d=>d?.events||[]).catch(()=>[]);
       const seen=new Set();
       _lastEvents=events.filter(e=>{if(seen.has(e.id))return false;seen.add(e.id);return true;});
       renderScores();
