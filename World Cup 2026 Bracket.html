@@ -192,6 +192,8 @@ body{
 .bar .sep{width:1px;height:20px;background:rgba(255,255,255,.15);margin:0 3px;}
 .bar-nav{font-family:"Saira Condensed";font-weight:700;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink);background:var(--gold);border-radius:7px;padding:6px 12px;text-decoration:none;transition:.15s;white-space:nowrap;}
 .bar-nav:hover{background:var(--gold-bright);}
+.bar .zbtn{min-width:32px;font-size:15px;font-weight:800;padding:5px 9px;line-height:1;}
+.bar .zbtn.zfit{min-width:46px;font-size:11px;}
 .bar .print{background:var(--gold);color:var(--ink);}
 .bar .print:hover{background:var(--gold-bright);color:var(--ink);}
 .lv-badge{font-family:"Saira";font-weight:600;font-size:9px;color:rgba(255,255,255,.45);letter-spacing:.03em;padding:0 6px;}
@@ -416,6 +418,10 @@ body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
   <button data-size="poster">Poster 18×24</button>
   <span class="sep"></span>
   <button class="print" onclick="window.print()">Print / PDF</button>
+  <span class="sep"></span>
+  <button class="zbtn" id="zoom-out" title="Zoom out (Ctrl + scroll)">−</button>
+  <button class="zbtn zfit" id="zoom-fit" title="Reset to fit"><span id="zoom-label">100%</span></button>
+  <button class="zbtn" id="zoom-in" title="Zoom in (Ctrl + scroll)">+</button>
   <span class="sep"></span>
   <span class="lv-badge" id="lv-badge">Loading scores…</span>
 </div>
@@ -985,14 +991,44 @@ window.WC = (function () {
     [...svg.querySelectorAll("line")].forEach((l)=>{l.setAttribute("stroke","#a8812f");l.setAttribute("stroke-width","1");});
   }
 
+  let userZoom=1, panX=0, panY=0, fitScale=1;
+  function applyTransform(){
+    const poster=document.getElementById("poster");
+    poster.style.transform=`translate(${panX}px,${panY}px) scale(${fitScale*userZoom})`;
+    const lbl=document.getElementById("zoom-label");if(lbl)lbl.textContent=Math.round(userZoom*100)+"%";
+    const stage=document.querySelector(".stage");if(stage)stage.style.cursor=userZoom>1?"grab":"default";
+  }
+  function clampPan(){
+    const exX=Math.max(0,(1400*fitScale*userZoom-window.innerWidth)/2+40);
+    const exY=Math.max(0,(1000*fitScale*userZoom-window.innerHeight)/2+40);
+    panX=Math.max(-exX,Math.min(exX,panX)); panY=Math.max(-exY,Math.min(exY,panY));
+  }
+  function setZoom(z){userZoom=Math.max(0.5,Math.min(5,z));if(userZoom<=1){panX=0;panY=0;}clampPan();applyTransform();}
   function fitStage(){
     if(window.__PRINTLOCK)return;
     const poster=document.getElementById("poster");
     if(EXPORT){poster.style.transform="none";return;}
     poster.style.zoom="";
-    const pad=24,s=Math.min((window.innerWidth-pad)/1400,(window.innerHeight-pad)/1000);
-    poster.style.transform=`scale(${s})`;
+    const pad=24;
+    fitScale=Math.min((window.innerWidth-pad)/1400,(window.innerHeight-pad)/1000);
+    clampPan(); applyTransform();
   }
+  (function(){
+    const stage=document.querySelector(".stage"); if(!stage)return;
+    const ob=document.getElementById("zoom-out"), ib=document.getElementById("zoom-in"), fb=document.getElementById("zoom-fit");
+    if(ob)ob.addEventListener("click",()=>setZoom(userZoom*0.8));
+    if(ib)ib.addEventListener("click",()=>setZoom(userZoom*1.25));
+    if(fb)fb.addEventListener("click",()=>setZoom(1));
+    stage.addEventListener("wheel",e=>{if(e.ctrlKey){e.preventDefault();setZoom(userZoom*(e.deltaY<0?1.12:0.9));}},{passive:false});
+    let drag=false,sx,sy,bx,by,moved=false;
+    stage.addEventListener("mousedown",e=>{
+      if(userZoom<=1||e.button!==0||e.target.closest(".bar"))return;
+      drag=true;moved=false;sx=e.clientX;sy=e.clientY;bx=panX;by=panY;stage.style.cursor="grabbing";
+    });
+    window.addEventListener("mousemove",e=>{if(!drag)return;if(Math.abs(e.clientX-sx)+Math.abs(e.clientY-sy)>3)moved=true;panX=bx+(e.clientX-sx);panY=by+(e.clientY-sy);clampPan();applyTransform();});
+    window.addEventListener("mouseup",()=>{if(drag){drag=false;applyTransform();}});
+    stage.addEventListener("click",e=>{if(moved){e.stopPropagation();e.preventDefault();moved=false;}},true);
+  })();
 
   function buildMobileView(){
     const mv=document.getElementById("mv");
