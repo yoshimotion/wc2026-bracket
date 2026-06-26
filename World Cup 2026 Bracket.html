@@ -141,6 +141,7 @@ body{
 .slot:last-child{border-bottom:none;}
 .slot.div{border-top:1px solid var(--line-soft);}
 .guide{font-family:"Saira Condensed";font-weight:600;font-size:8px;letter-spacing:.02em;color:var(--gold);padding-left:4px;white-space:nowrap;opacity:.9;}
+.guide .bx-flag{width:10px;height:7px;object-fit:cover;border-radius:1px;margin-right:3px;vertical-align:middle;}
 .score{position:absolute;right:0;top:0;bottom:0;width:13px;border-left:1px solid var(--line-soft);background:rgba(21,36,63,.025);}
 .mno{position:absolute;top:-9px;left:50%;transform:translateX(-50%);font-family:"Saira Condensed";font-weight:600;font-size:7px;color:var(--ink-2);background:var(--paper);padding:0 3px;letter-spacing:.04em;}
 
@@ -938,7 +939,7 @@ window.WC = (function () {
       if(m.id)box.dataset.mid=m.id;
       box.style.left=x+"px";const h=big?50:bh;box.style.top=(cy-h/2)+"px";
       const mno=m.id?`<span class="mno">M${m.id}</span>`:"";
-      box.innerHTML=mno+m.slots.map((s,idx)=>`<div class="slot${idx===1?" div":""}"><span class="guide">${s}</span><span class="score"></span></div>`).join("");
+      box.innerHTML=mno+m.slots.map((s,idx)=>`<div class="slot${idx===1?" div":""}"><span class="guide">${TEAM[s]?`<img class="bx-flag" src="${flag(TEAM[s].iso)}" alt="">`:""}${s}</span><span class="score"></span></div>`).join("");
       C.appendChild(box);return{x,cy,w:big?bwF:bw,h};
     }
     const L=WC.left;
@@ -964,7 +965,7 @@ window.WC = (function () {
     const champ=el("div","champ");champ.style.left=(W/2)+"px";champ.style.top=(fcy+40)+"px";
     champ.innerHTML=`<div class="cl">★ &nbsp; World Champion &nbsp; ★</div><div class="cb"></div>`;C.appendChild(champ);
     const third=el("div","third");third.style.left=(W/2)+"px";third.style.top=(H-98)+"px";
-    third.innerHTML=`<div class="tl">Third-Place Play-off · Jul 18 · Miami</div><div class="tb"><div class="match" data-mid="103" style="position:relative;left:0;top:0;width:100%;border:none;background:transparent">`+WC.third.slots.map((s,idx)=>`<div class="slot${idx===1?" div":""}"><span class="guide">${s}</span><span class="score"></span></div>`).join("")+`</div></div>`;
+    third.innerHTML=`<div class="tl">Third-Place Play-off · Jul 18 · Miami</div><div class="tb"><div class="match" data-mid="103" style="position:relative;left:0;top:0;width:100%;border:none;background:transparent">`+WC.third.slots.map((s,idx)=>`<div class="slot${idx===1?" div":""}"><span class="guide">${TEAM[s]?`<img class="bx-flag" src="${flag(TEAM[s].iso)}" alt="">`:""}${s}</span><span class="score"></span></div>`).join("")+`</div></div>`;
     C.appendChild(third);
     const Lr=bw;
     for(let j=0;j<4;j++)elbow(colX(0)+Lr,lr32[2*j].cy,lr32[2*j+1].cy,colX(1),lr16[j].cy);
