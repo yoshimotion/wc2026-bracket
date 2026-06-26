@@ -112,6 +112,7 @@ body{background:#2a2a2a;font-family:"Saira",system-ui,sans-serif;color:var(--ink
 .kfx .dt .d{font-family:"Saira Condensed";font-weight:700;font-size:9px;color:var(--ink);}
 .kfx .dt .tm{font-family:"Saira";font-weight:600;font-size:8px;color:var(--ink-2);display:inline;white-space:nowrap;margin-left:7px;}
 .kfx .mu{font-family:"Saira Condensed";font-weight:700;font-size:9.5px;color:var(--ink);letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kfx .mu img{width:14px;height:10px;object-fit:cover;border:.5px solid var(--line);border-radius:1.5px;vertical-align:middle;margin-right:3px;}
 .kfx .mu .v{color:var(--gold);font-weight:600;margin:0 3px;}
 .kfx .cty{font-family:"Saira";font-weight:500;font-size:8.5px;color:var(--ink-2);white-space:nowrap;text-align:right;}
 .kfx.tall{height:30px;}
@@ -605,6 +606,8 @@ window.WCS = (function () {
   const flag = (code)=>`<img src="https://flagcdn.com/${ISO[code]}.svg" alt="" loading="eager" crossorigin="anonymous">`;
   const esc=(s)=>String(s);
   const NAME = S.NAME;
+  // knockout team cell: flag + code once resolved, plain slot label otherwise
+  const kteam = (code)=>S.NAME[code]?`${flag(code)}${code}`:code;
 
   /* ---- time / timezone ---- */
   // All matches fall in Jun–Jul 2026, firmly Pacific Daylight Time (UTC−7).
@@ -1006,7 +1009,7 @@ window.WCS = (function () {
   const krow = (m, tall)=>`<div class="kfx${tall?' tall':''}" data-n="${m.n}">`
     + `<span class="mno">${m.n}</span>`
     + `<span class="dt"><span class="d">${m.date.replace(/^([A-Za-z]+) /,(x,mo)=>mo.toUpperCase().slice(0,3)+" ")}</span><span class="tm">${m.time}</span></span>`
-    + `<span class="mu">${m.t1}<span class="v">v</span>${m.t2}</span>`
+    + `<span class="mu">${kteam(m.t1)}<span class="v">v</span>${kteam(m.t2)}</span>`
     + `<span class="sc"></span>`
     + `<span class="cty cty-link" data-city="${m.city}">${m.city}</span>`
     + `</div>`;
@@ -1200,7 +1203,7 @@ window.WCS = (function () {
         if(ha&&NAME[ha]&&m.t1!==ha){m.t1=ha;resolved=true;}
         if(aa&&NAME[aa]&&m.t2!==aa){m.t2=aa;resolved=true;}
         const mu=document.querySelector(`.kfx[data-n="${m.n}"] .mu`);
-        if(mu)mu.innerHTML=`${m.t1}<span class="v">v</span>${m.t2}`;
+        if(mu)mu.innerHTML=`${kteam(m.t1)}<span class="v">v</span>${kteam(m.t2)}`;
       }
       if(!completed&&!live)return;
       let s1,s2;
