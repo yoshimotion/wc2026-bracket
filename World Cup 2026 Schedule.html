@@ -682,7 +682,7 @@ window.WCS = (function () {
     const s=_scoreByN[m.n];
     const side=code=>{const t=TEAM[code];return t?`<img src="${flagSrc(t.iso)}"> ${t.name}`:`<span class="slot">${slotLabel(code)}</span>`;};
     let scH="";
-    if(s&&s.byCode&&s.byCode[m.t1]!=null&&s.byCode[m.t2]!=null){scH=`<div class="dt-fsc ${s.live?"lv":""}">${s.byCode[m.t1]}–${s.byCode[m.t2]}</div>`;}
+    if(s&&s.s1!=null&&s.s2!=null){scH=`<div class="dt-fsc ${s.live?"lv":""}">${s.s1}–${s.s2}</div>`;}
     return `<div class="dt-frow" data-match="${m.n}"><div class="dt-fdate"><div class="dt-mno">Match ${m.n}</div>${m.date}<small>${m.time} PT</small></div><div class="dt-fmu">${side(m.t1)} <span class="vs">vs</span> ${side(m.t2)}</div><div class="dt-fmeta"><div class="dt-fcity dt-citylink" data-city="${m.city}">${m.city}</div>${scH}</div></div>`;
   }
 
@@ -723,7 +723,7 @@ window.WCS = (function () {
       const named=NAME[code];
       const fl=named?`<img src="${flagSrc(ISO[code])}">`:`<div class="dt-ph">${code.length<=3?code:"?"}</div>`;
       const nm=named?`<span class="dt-mnm">${named}</span>`:`<span class="dt-mnm slot">${slotLabel(code)}</span>`;
-      const sv=s&&s.byCode&&s.byCode[code]!=null?s.byCode[code]:null;
+      const sv=s?(code===m.t1?s.s1:code===m.t2?s.s2:null):null;
       const sc=sv!=null?`<span class="dt-mscore">${sv}</span>`:`<span class="dt-mscore dim">–</span>`;
       return `<div class="dt-mteam${named?" clk":""}"${named?` data-team="${code}"`:""}>${fl}${nm}${sc}</div>`;
     };
@@ -1036,9 +1036,8 @@ window.WCS = (function () {
   function matchRowHTML(m,isPast){
     const favHit=[m.t1,m.t2].some(c=>NAME[c]&&isFav(c));
     const star=favHit?'<span class="star">★</span>':'';
-    const teams=isGroup(m.stage)
-      ?`${mflag(m.t1)}${teamLabel(m.t1)} <span style="color:var(--gold);margin:0 2px">vs</span> ${mflag(m.t2)}${teamLabel(m.t2)}`
-      :`${m.t1} <span style="color:var(--gold);margin:0 2px">vs</span> ${m.t2}`;
+    const disp=c=>NAME[c]?`${mflag(c)}${teamLabel(c)}`:c;
+    const teams=`${disp(m.t1)} <span style="color:var(--gold);margin:0 2px">vs</span> ${disp(m.t2)}`;
     const right=isPast?"–":timeStr(m);
     return `<div class="mv-match${favHit?" fav":""}" data-mvn="${m.n}"><span class="mn">#${m.n}</span><span class="mt">${teams}${star}</span><span class="mc mc-link" data-city="${m.city}">${m.city}</span><span class="mv-sc">${right}</span></div>`;
   }
@@ -1131,6 +1130,12 @@ window.WCS = (function () {
   document.querySelectorAll(".bar button[data-size]").forEach(b=>b.addEventListener("click",()=>setSize(b.dataset.size)));
   let _lastEvents=[]; const _scoreByN={};
 
+  // Match ESPN events to our matches by venue + date (works for knockout slots
+  // too, where team abbreviations are placeholders like "1E"/"W74").
+  const VEN={"Estadio Banorte":"Mexico City","Estadio Azteca":"Mexico City","Estadio Akron":"Guadalajara","Estadio BBVA":"Monterrey","Mercedes-Benz Stadium":"Atlanta","Gillette Stadium":"Boston","AT&T Stadium":"Dallas","NRG Stadium":"Houston","Arrowhead Stadium":"Kansas City","GEHA Field at Arrowhead Stadium":"Kansas City","SoFi Stadium":"Los Angeles","Hard Rock Stadium":"Miami","MetLife Stadium":"New York/NJ","Lincoln Financial Field":"Philadelphia","Levi's Stadium":"SF Bay Area","Lumen Field":"Seattle","BMO Field":"Toronto","BC Place":"Vancouver"};
+  const ptDateStr=iso=>{try{return new Date(iso).toLocaleDateString("en-US",{timeZone:"America/Los_Angeles",month:"short",day:"numeric"});}catch(e){return"";}};
+  const _byCityDate={}; S.matches.forEach(m=>{_byCityDate[m.city+"|"+m.date]=m;});
+
   function setStatus(txt,fetching){
     _statusTxt=txt;
     const wrap=document.getElementById("mv-status");
@@ -1141,38 +1146,48 @@ window.WCS = (function () {
   }
 
   function renderScores(){
+    let resolved=false;
     _lastEvents.forEach(ev=>{
       const comp=ev.competitions?.[0]; if(!comp)return;
+      const city=VEN[comp.venue?.fullName]; if(!city)return;
+      const m=_byCityDate[city+"|"+ptDateStr(ev.date)]; if(!m)return;
       const status=comp.status?.type, completed=status?.completed, live=status?.state==="in";
-      if(!completed&&!live)return;
       const comps=comp.competitors||[];
       const home=comps.find(c=>c.homeAway==="home"), away=comps.find(c=>c.homeAway==="away");
       if(!home||!away)return;
-      const abbrs=comps.map(c=>c.team?.abbreviation);
-      const match=S.matches.find(m=>{const a=abbrs[0],b=abbrs[1];return (m.t1===a&&m.t2===b)||(m.t1===b&&m.t2===a);});
-      if(!match)return;
-      const scoreStr=`${home.score}–${away.score}`;
-      _scoreByN[match.n]={byCode:{[home.team?.abbreviation]:home.score,[away.team?.abbreviation]:away.score},live:!!live,completed:!!completed,detail:status?.shortDetail||status?.description||""};
-      const drow=document.querySelector(`[data-n="${match.n}"] .sc`);
+      const ha=home.team?.abbreviation, aa=away.team?.abbreviation;
+      // resolve knockout slot codes ("1E"/"W74") into real teams as ESPN fills them
+      if(!isGroup(m.stage)){
+        if(ha&&NAME[ha]&&m.t1!==ha){m.t1=ha;resolved=true;}
+        if(aa&&NAME[aa]&&m.t2!==aa){m.t2=aa;resolved=true;}
+      }
+      if(!completed&&!live)return;
+      let s1,s2;
+      if(m.t1===ha){s1=home.score;s2=away.score;}
+      else if(m.t1===aa){s1=away.score;s2=home.score;}
+      else {s1=home.score;s2=away.score;}
+      _scoreByN[m.n]={s1,s2,live:!!live,completed:!!completed,detail:status?.shortDetail||status?.description||""};
+      const scoreStr=`${s1}–${s2}`;
+      const drow=document.querySelector(`[data-n="${m.n}"] .sc`);
       if(drow){drow.textContent=scoreStr;drow.className=live?"sc lv":"sc";}
-      document.querySelectorAll(`.mv-match[data-mvn="${match.n}"] .mv-sc`).forEach(el=>{el.textContent=scoreStr;el.className="mv-sc "+(live?"lv":"done");});
+      document.querySelectorAll(`.mv-match[data-mvn="${m.n}"] .mv-sc`).forEach(el=>{el.textContent=scoreStr;el.className="mv-sc "+(live?"lv":"done");});
+      if(!isGroup(m.stage)){const mu=document.querySelector(`.kfx[data-n="${m.n}"] .mu`);if(mu)mu.innerHTML=`${m.t1}<span class="v">v</span>${m.t2}`;}
     });
     refreshDetail();
+    return resolved;
   }
+  function refreshLive(){ if(renderScores()){ buildMobileView(); renderScores(); } }
 
   async function fetchAndUpdateScores(){
     setStatus(_statusTxt,true);
     try {
-      const pad=n=>String(n).padStart(2,"0");
-      const fmt=d=>`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}`;
-      // Fetch the whole tournament window so every completed game gets a score,
-      // not just yesterday/today (ESPN supports a YYYYMMDD-YYYYMMDD range).
-      const today=new Date();
-      const url=`https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=20260611-${fmt(today)}`;
+      // Fetch the entire tournament window (not capped at the device clock) so
+      // every played game — and resolved knockout matchups — comes through.
+      const url=`https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=20260611-20260719`;
       const events=await fetch(url).then(r=>r.json()).then(d=>d?.events||[]).catch(()=>[]);
       const seen=new Set();
       _lastEvents=events.filter(e=>{if(seen.has(e.id))return false;seen.add(e.id);return true;});
-      renderScores();
+      refreshLive();
       const t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
       setStatus("Updated "+t,false);
     } catch(e){
@@ -1191,7 +1206,7 @@ window.WCS = (function () {
       const flagOrPh=named?`<img src="https://flagcdn.com/${ISO[code]}.svg" alt="">`:`<div class="ms-ph">${code.length<=3?code:"?"}</div>`;
       const nameHTML=named?`<div class="ms-tn">${named}</div>`
         :`<div class="ms-tn" style="font-size:15px;letter-spacing:0;text-transform:none;color:rgba(21,36,63,.55)">${slotLabel(code)}</div>`;
-      const sv=s&&s.byCode&&s.byCode[code]!=null?s.byCode[code]:null;
+      const sv=s?(code===m.t1?s.s1:code===m.t2?s.s2:null):null;
       const scoreHTML=sv!=null?`<div class="ms-tscore">${sv}</div>`:`<div class="ms-tscore dim">–</div>`;
       const starHTML=named?`<button class="ms-star" data-fav="${code}">${isFav(code)?"★":"☆"}</button>`:"";
       return `<div class="ms-team">${flagOrPh}${nameHTML}${scoreHTML}${starHTML}</div>`;
