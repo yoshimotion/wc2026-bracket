@@ -285,6 +285,7 @@ body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
 .mv-match{display:flex;align-items:center;gap:8px;height:27px;padding:0 10px;border-top:1px solid var(--line-soft);}
 .mv-match .mn{font-family:"Saira Condensed";font-weight:700;font-size:8px;color:var(--gold);width:22px;flex-shrink:0;}
 .mv-match .mt{flex:1;font-family:"Saira Condensed";font-weight:600;font-size:10px;color:var(--ink);}
+.mv-match .mvkf{width:13px;height:9px;object-fit:cover;border:.5px solid var(--line);border-radius:1px;vertical-align:middle;margin-right:3px;}
 .mv-match .vs{color:var(--gold);margin:0 3px;font-weight:400;}
 .mv-foot{padding:12px 8px calc(36px + env(safe-area-inset-bottom));background:#0f1c2e;display:flex;flex-direction:column;gap:8px;}
 .mv-lnk{display:flex;align-items:center;justify-content:center;font-family:"Saira Condensed";font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:13px;border-radius:3px;text-decoration:none;}
@@ -654,6 +655,30 @@ window.WC = (function () {
   const byN={}; MATCHES.forEach(m=>byN[m.n]=m);
   const TEAM={}; Object.entries(WC.groups).forEach(([letter,g])=>g.teams.forEach(t=>{TEAM[t.code]={name:t.name,iso:t.iso,code:t.code,tag:t.tag||"",group:letter};}));
 
+  // Resolve knockout slot codes ("2A"/"W74") into real teams as ESPN fills the bracket.
+  const VEN={"Estadio Banorte":"Mexico City","Estadio Azteca":"Mexico City","Estadio Akron":"Guadalajara","Estadio BBVA":"Monterrey","Mercedes-Benz Stadium":"Atlanta","Gillette Stadium":"Boston","AT&T Stadium":"Dallas","NRG Stadium":"Houston","Arrowhead Stadium":"Kansas City","GEHA Field at Arrowhead Stadium":"Kansas City","SoFi Stadium":"Los Angeles","Hard Rock Stadium":"Miami","MetLife Stadium":"New York/NJ","Lincoln Financial Field":"Philadelphia","Levi's Stadium":"SF Bay Area","Lumen Field":"Seattle","BMO Field":"Toronto","BC Place":"Vancouver"};
+  const ptDateStr=iso=>{try{return new Date(iso).toLocaleDateString("en-US",{timeZone:"America/Los_Angeles",month:"short",day:"numeric"});}catch(e){return"";}};
+  const _byCityDate={}; MATCHES.forEach(m=>{_byCityDate[m.city+"|"+m.date]=m;});
+  const koById={};
+  ["r32","r16","qf","sf"].forEach(r=>{(WC.left[r]||[]).concat(WC.right[r]||[]).forEach(m=>{koById[m.id]=m;});});
+  koById[WC.third.id]=WC.third; koById[WC.final.id]=WC.final;
+  function resolveKnockout(){
+    let changed=false;
+    (_events||[]).forEach(ev=>{
+      const c=ev.competitions&&ev.competitions[0]; if(!c)return;
+      const city=VEN[c.venue&&c.venue.fullName]; if(!city)return;
+      const m=_byCityDate[city+"|"+ptDateStr(ev.date)]; if(!m||m.stage.length<=1)return;
+      const cs=c.competitors||[];
+      const home=cs.find(x=>x.homeAway==="home"), away=cs.find(x=>x.homeAway==="away");
+      if(!home||!away)return;
+      const ha=home.team&&home.team.abbreviation, aa=away.team&&away.team.abbreviation;
+      const ko=koById[m.n];
+      if(ha&&TEAM[ha]){ if(m.t1!==ha){m.t1=ha;changed=true;} if(ko&&ko.slots[0]!==ha){ko.slots[0]=ha;changed=true;} }
+      if(aa&&TEAM[aa]){ if(m.t2!==aa){m.t2=aa;changed=true;} if(ko&&ko.slots[1]!==aa){ko.slots[1]=aa;changed=true;} }
+    });
+    return changed;
+  }
+
   const STAGE_NAMES={R32:"Round of 32",R16:"Round of 16",QF:"Quarter-Finals",SF:"Semi-Finals","3RD":"Third-Place Play-off",FINAL:"Final"};
   const ROUND_DATES={R32:"Jun 28 – Jul 3",R16:"Jul 4 – Jul 7",QF:"Jul 9 – Jul 11",SF:"Jul 14 – Jul 15","3RD":"Jul 18 · Miami",FINAL:"Jul 19 · MetLife, NJ"};
   const ROUND_LABELS={"Round of 32":"R32","Round of 16":"R16","Quarter-Finals":"QF","Semi-Finals":"SF","Final":"FINAL"};
@@ -1000,9 +1025,10 @@ window.WC = (function () {
     rounds.forEach(rd=>{
       const div=document.createElement("div");
       div.className="mv-round";
+      const disp=s=>TEAM[s]?`<img class="mvkf" src="${flagUrl(TEAM[s].iso)}" alt="" loading="lazy">${TEAM[s].name}`:s;
       const mh=rd.matches.map(m=>{
         const[a,b]=m.slots;
-        return `<div class="mv-match"><span class="mn">#${m.id}</span><span class="mt">${a} <span class="vs">vs</span> ${b}</span></div>`;
+        return `<div class="mv-match"><span class="mn">#${m.id}</span><span class="mt">${disp(a)} <span class="vs">vs</span> ${disp(b)}</span></div>`;
       }).join("");
       div.innerHTML=`<div class="mv-rh"><span>${rd.label}</span><span class="mv-rd">${rd.date}</span></div>${mh}`;
       rdEl.appendChild(div);
@@ -1035,17 +1061,17 @@ window.WC = (function () {
     const badge=document.getElementById("lv-badge");
     if(badge)badge.className="lv-badge fetching";
     try {
-      const pad=n=>String(n).padStart(2,"0");
-      const fmt=d=>`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}`;
-      const today=new Date(), yesterday=new Date(today-864e5);
       const [stdRes,sb]=await Promise.all([
         fetch("https://site.api.espn.com/apis/v2/sports/soccer/fifa.world/standings"),
-        fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=20260611-${fmt(today)}`).then(r=>r.json()).catch(()=>null),
+        fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=20260611-20260719`).then(r=>r.json()).catch(()=>null),
       ]);
       if(!stdRes.ok)throw new Error(stdRes.status);
       _standingsData=await stdRes.json();
       const seen=new Set();
       _events=(sb?.events||[]).filter(e=>{if(seen.has(e.id))return false;seen.add(e.id);return true;});
+
+      // Fill in resolved knockout matchups, then re-render before painting standings.
+      if(resolveKnockout()){ buildBracket(); buildMobileView(); applyFavs(); }
 
       const get=(stats,name)=>{const s=(stats||[]).find(x=>x.name===name);return s!=null?Math.round(s.value):"";};
 
