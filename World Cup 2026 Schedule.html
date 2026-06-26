@@ -1160,6 +1160,8 @@ window.WCS = (function () {
       if(!isGroup(m.stage)){
         if(ha&&NAME[ha]&&m.t1!==ha){m.t1=ha;resolved=true;}
         if(aa&&NAME[aa]&&m.t2!==aa){m.t2=aa;resolved=true;}
+        const mu=document.querySelector(`.kfx[data-n="${m.n}"] .mu`);
+        if(mu)mu.innerHTML=`${m.t1}<span class="v">v</span>${m.t2}`;
       }
       if(!completed&&!live)return;
       let s1,s2;
@@ -1171,7 +1173,6 @@ window.WCS = (function () {
       const drow=document.querySelector(`[data-n="${m.n}"] .sc`);
       if(drow){drow.textContent=scoreStr;drow.className=live?"sc lv":"sc";}
       document.querySelectorAll(`.mv-match[data-mvn="${m.n}"] .mv-sc`).forEach(el=>{el.textContent=scoreStr;el.className="mv-sc "+(live?"lv":"done");});
-      if(!isGroup(m.stage)){const mu=document.querySelector(`.kfx[data-n="${m.n}"] .mu`);if(mu)mu.innerHTML=`${m.t1}<span class="v">v</span>${m.t2}`;}
     });
     refreshDetail();
     return resolved;
