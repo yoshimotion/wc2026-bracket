@@ -327,6 +327,12 @@ body.exporting .poster{transform:none!important;box-shadow:none;margin:0;}
 .dt-fcity{font-family:"Saira";font-weight:500;font-size:12px;color:rgba(21,36,63,.5);}
 .dt-fsc{font-family:"Saira Condensed";font-weight:800;font-size:20px;color:var(--ink);}
 .dt-fsc.lv{color:var(--red);animation:lvblink 1.2s infinite;}
+/* penalty shootout scores */
+.pen{font-weight:700;color:var(--gold);font-size:.7em;letter-spacing:0;}
+.pen .pl{font-size:.85em;}
+.mv-match .mv-sc .pen{font-size:11px;}
+.fx .sc .pen,.kfx .sc .pen{display:block;font-size:7px;line-height:1;margin-top:1px;}
+.dt-pen{font-family:"Saira Condensed";font-weight:700;font-size:.42em;color:var(--gold);vertical-align:super;margin-left:1px;}
 .dt-mno{font-family:"Saira Condensed";font-weight:700;font-size:11px;color:var(--gold);margin-bottom:3px;}
 .dt-note{font-family:"Saira";font-weight:500;font-size:13px;color:var(--ink-2);background:var(--card);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:6px;padding:13px 16px;line-height:1.5;}
 .dt-loading{font-family:"Saira";font-weight:500;font-size:13px;color:var(--ink-2);padding:4px 2px;}
@@ -695,7 +701,7 @@ window.WCS = (function () {
     const s=_scoreByN[m.n];
     const side=code=>{const t=TEAM[code];return t?`<img src="${flagSrc(t.iso)}"> ${t.name}`:`<span class="slot">${slotLabel(code)}</span>`;};
     let scH="";
-    if(s&&s.s1!=null&&s.s2!=null){scH=`<div class="dt-fsc ${s.live?"lv":""}">${s.s1}–${s.s2}</div>`;}
+    if(s&&s.s1!=null&&s.s2!=null){scH=`<div class="dt-fsc ${s.live?"lv":""}">${scoreHTML(s)}</div>`;}
     return `<div class="dt-frow" data-match="${m.n}"><div class="dt-fdate"><div class="dt-mno">Match ${m.n}</div>${m.date}<small>${m.time} PT</small></div><div class="dt-fmu">${side(m.t1)} <span class="vs">vs</span> ${side(m.t2)}</div><div class="dt-fmeta"><div class="dt-fcity dt-citylink" data-city="${m.city}">${m.city}</div>${scH}</div></div>`;
   }
 
@@ -731,13 +737,18 @@ window.WCS = (function () {
       :`${slotLabel(m.t1)} <span style="color:var(--gold)">vs</span> ${slotLabel(m.t2)}`;
     let html=`<div class="dt-hero"><div class="dt-badge">#${m.n}</div><div class="dt-htext"><div class="dt-kick">${stageFull(m.stage)}</div><div class="dt-title">${title}</div><div class="dt-sub">${DOW[m.day]||m.day}, ${m.date} · ${m.city}</div></div></div>`;
     if(s&&s.live)html+=`<div class="dt-status live">● Live${s.detail?" · "+s.detail:""}</div>`;
+    else if(s&&s.completed&&s.p1!=null){
+      const t1w=s.p1>s.p2; const wn=t1w?(NAME[m.t1]||m.t1):(NAME[m.t2]||m.t2);
+      html+=`<div class="dt-status">Full Time, ${s.s1}–${s.s2} · ${wn} win ${t1w?s.p1:s.p2}–${t1w?s.p2:s.p1} on penalties</div>`;
+    }
     else if(s&&s.completed)html+=`<div class="dt-status">Full Time</div>`;
     const teamRow=code=>{
       const named=NAME[code];
       const fl=named?`<img src="${flagSrc(ISO[code])}">`:`<div class="dt-ph">${code.length<=3?code:"?"}</div>`;
       const nm=named?`<span class="dt-mnm">${named}</span>`:`<span class="dt-mnm slot">${slotLabel(code)}</span>`;
       const sv=s?(code===m.t1?s.s1:code===m.t2?s.s2:null):null;
-      const sc=sv!=null?`<span class="dt-mscore">${sv}</span>`:`<span class="dt-mscore dim">–</span>`;
+      const pv=s?(code===m.t1?s.p1:code===m.t2?s.p2:null):null;
+      const sc=sv!=null?`<span class="dt-mscore">${sv}${pv!=null?`<small class="dt-pen">(${pv})</small>`:""}</span>`:`<span class="dt-mscore dim">–</span>`;
       return `<div class="dt-mteam${named?" clk":""}"${named?` data-team="${code}"`:""}>${fl}${nm}${sc}</div>`;
     };
     html+=`<div class="dt-mteams">${teamRow(m.t1)}<div class="dt-mvs">VS</div>${teamRow(m.t2)}</div>`;
@@ -1187,6 +1198,12 @@ window.WCS = (function () {
     const dl=document.getElementById("dt-live");if(dl&&!fetching)dl.textContent="Live · "+txt.toLowerCase();
   }
 
+  function scoreHTML(s){
+    if(!s||s.s1==null)return "";
+    let h=`${s.s1}–${s.s2}`;
+    if(s.p1!=null)h+=` <span class="pen">(${s.p1}–${s.p2}<span class="pl">p</span>)</span>`;
+    return h;
+  }
   function renderScores(){
     let resolved=false;
     _lastEvents.forEach(ev=>{
@@ -1206,15 +1223,15 @@ window.WCS = (function () {
         if(mu)mu.innerHTML=`${kteam(m.t1)}<span class="v">v</span>${kteam(m.t2)}`;
       }
       if(!completed&&!live)return;
-      let s1,s2;
-      if(m.t1===ha){s1=home.score;s2=away.score;}
-      else if(m.t1===aa){s1=away.score;s2=home.score;}
-      else {s1=home.score;s2=away.score;}
-      _scoreByN[m.n]={s1,s2,live:!!live,completed:!!completed,detail:status?.shortDetail||status?.description||""};
-      const scoreStr=`${s1}–${s2}`;
+      let s1,s2,p1,p2;
+      if(m.t1===aa){s1=away.score;s2=home.score;p1=away.shootoutScore;p2=home.shootoutScore;}
+      else {s1=home.score;s2=away.score;p1=home.shootoutScore;p2=away.shootoutScore;}
+      const pens=(p1!=null&&p2!=null);
+      _scoreByN[m.n]={s1,s2,p1:pens?p1:null,p2:pens?p2:null,live:!!live,completed:!!completed,detail:status?.shortDetail||status?.description||""};
+      const scH=scoreHTML(_scoreByN[m.n]);
       const drow=document.querySelector(`[data-n="${m.n}"] .sc`);
-      if(drow){drow.textContent=scoreStr;drow.className=live?"sc lv":"sc";}
-      document.querySelectorAll(`.mv-match[data-mvn="${m.n}"] .mv-sc`).forEach(el=>{el.textContent=scoreStr;el.className="mv-sc "+(live?"lv":"done");});
+      if(drow){drow.innerHTML=scH;drow.className=live?"sc lv":"sc";}
+      document.querySelectorAll(`.mv-match[data-mvn="${m.n}"] .mv-sc`).forEach(el=>{el.innerHTML=scH;el.className="mv-sc "+(live?"lv":"done");});
     });
     refreshDetail();
     return resolved;
@@ -1250,14 +1267,16 @@ window.WCS = (function () {
       const nameHTML=named?`<div class="ms-tn">${named}</div>`
         :`<div class="ms-tn" style="font-size:15px;letter-spacing:0;text-transform:none;color:rgba(21,36,63,.55)">${slotLabel(code)}</div>`;
       const sv=s?(code===m.t1?s.s1:code===m.t2?s.s2:null):null;
-      const scoreHTML=sv!=null?`<div class="ms-tscore">${sv}</div>`:`<div class="ms-tscore dim">–</div>`;
+      const pv=s?(code===m.t1?s.p1:code===m.t2?s.p2:null):null;
+      const scoreCell=sv!=null?`<div class="ms-tscore">${sv}${pv!=null?`<small class="dt-pen">(${pv})</small>`:""}</div>`:`<div class="ms-tscore dim">–</div>`;
       const starHTML=named?`<button class="ms-star" data-fav="${code}">${isFav(code)?"★":"☆"}</button>`:"";
-      return `<div class="ms-team">${flagOrPh}${nameHTML}${scoreHTML}${starHTML}</div>`;
+      return `<div class="ms-team">${flagOrPh}${nameHTML}${scoreCell}${starHTML}</div>`;
     };
     document.getElementById("ms-teams").innerHTML=teamRowHTML(m.t1)+`<div class="ms-vs">vs</div>`+teamRowHTML(m.t2);
 
     const st=document.getElementById("ms-status");
     if(s&&s.live){st.textContent="● Live"+(s.detail?" · "+s.detail:"");st.className="ms-status live";st.style.display="";}
+    else if(s&&s.completed&&s.p1!=null){const t1w=s.p1>s.p2;const wn=t1w?(NAME[m.t1]||m.t1):(NAME[m.t2]||m.t2);st.textContent=`Penalties · ${wn} win ${t1w?s.p1:s.p2}–${t1w?s.p2:s.p1}`;st.className="ms-status";st.style.display="";}
     else if(s&&s.completed){st.textContent="Full Time";st.className="ms-status";st.style.display="";}
     else{st.textContent="";st.className="ms-status";st.style.display="none";}
 
